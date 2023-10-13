@@ -5,17 +5,19 @@ using UnityEngine;
 using DG.Tweening;
 using System.Linq;
 
-public class Bubble : MonoBehaviour
+public abstract class Bubble : MonoBehaviour
 {
     //Only for viewning and Debug
-    [SerializeField] private Vector3 positionID;
-    [SerializeField] private List<NeighbourData> neighbourBubbles;
+    [Header("Only Debug Purpose")]
+    [SerializeField] protected Vector3 positionID;
+    [SerializeField] protected List<NeighbourData> neighbourBubbles;
 
     //Need to be filled by user
-    [SerializeField] private BubbleColor bubbleColor;
+    [Header("Required Data")]
+    [SerializeField] protected BubbleType bubbleColor;
 
     public List<NeighbourData> NeighbourBubbles => neighbourBubbles;
-    public BubbleColor BubbleColor => bubbleColor;
+    public BubbleType BubbleColor => bubbleColor;
     public Vector3 PositionID => positionID;
 
     public bool isLaunchBubble = false;
@@ -54,42 +56,10 @@ public class Bubble : MonoBehaviour
 
             isLaunchBubble = false;
 
-            //Disable Rigid body and stop it
-            transform.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-            Destroy(transform.GetComponent<Rigidbody2D>());
-
-            //Calculate nearest Bubble and setting this bubble there
-            Vector3 pointToMoveTo = BubbleShooter_HelperFunctions.GetNearestNeighbourBubblePoint(collidedBubble, transform.position);
-            SetPositionID(pointToMoveTo);
-            transform.DOMove(pointToMoveTo, 0.2f);
-
-            //Updating Level Data, as new bubble got added
-            LevelData.bubblesLevelData.Add(pointToMoveTo, this);
-
-            //Recalculating neighbour Data
-            BubbleShooter_HelperFunctions.RecalculateAllBubblesNeighboursData(LevelData.bubblesLevelData, LevelGenerator.bubbleGap);
-
-            StartCoroutine(CheckIfAnyOfTheNeighbourBubbleIsSameColor());
+            OnTriggerEnterWithABubble(collidedBubble);
         }
     }
 
-    private IEnumerator CheckIfAnyOfTheNeighbourBubbleIsSameColor()
-    {
-        yield return new WaitForSeconds(0.5f);
-
-        List<Bubble> chainSameColorBubbles = BubbleShooter_HelperFunctions.GetAllChainBubblesNeighbourOfAColor(this);
-
-        if (chainSameColorBubbles.Count >= 3)
-        {
-            foreach (var item in chainSameColorBubbles)
-            {
-                LevelData.bubblesLevelData.Remove(item.positionID);
-                item.gameObject.SetActive(false);
-            }
-
-            //Recalculating neighbour Data
-            BubbleShooter_HelperFunctions.RecalculateAllBubblesNeighboursData(LevelData.bubblesLevelData, LevelGenerator.bubbleGap);
-        }
-    }
+    protected abstract void OnTriggerEnterWithABubble(Bubble collidedBubble);
 }
 

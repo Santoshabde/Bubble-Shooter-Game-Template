@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Data
   m_EditorClassIdentifier: 
   bubblePrefabsInGame:
-  - {fileID: 4545730898734580113, guid: 640f2233ec5df0142805cecb10716ebb, type: 3}
-  - {fileID: 8273751473245613384, guid: d7113261c5366c24d9620975796a5fa5, type: 3}
-  - {fileID: 3781711505163402357, guid: efe49f34b89dd1e42803ca51eacedd97, type: 3}
-  - {fileID: 5804535803536785878, guid: 842194f4879a33641bf5e88177d44dee, type: 3}
-  - {fileID: 5789327383996788200, guid: 7fa2ad233c1292e40b6081aec341a247, type: 3}
+  - {fileID: 335245049364073392, guid: 640f2233ec5df0142805cecb10716ebb, type: 3}
+  - {fileID: 52718512866345437, guid: d7113261c5366c24d9620975796a5fa5, type: 3}
+  - {fileID: 1979440615413592246, guid: efe49f34b89dd1e42803ca51eacedd97, type: 3}
+  - {fileID: 6346385270583433936, guid: 842194f4879a33641bf5e88177d44dee, type: 3}
+  - {fileID: 3423964376077334255, guid: 7fa2ad233c1292e40b6081aec341a247, type: 3}

@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 143645387092857146}
-  - component: {fileID: 3781711505163402357}
   - component: {fileID: 3085047822555223539}
+  - component: {fileID: 1979440615413592246}
   m_Layer: 0
   m_Name: Bubble Red
   m_TagString: Untagged
@@ -34,21 +34,6 @@ Transform:
   - {fileID: 4022757626762146238}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3781711505163402357
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 430763015101322033}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81ae6af1042b1db459b72a09fa30f873, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bubbleColor: 2
-  neighbourBubbles: []
-  isLaunchBubble: 0
 --- !u!58 &3085047822555223539
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -84,6 +69,22 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.26
+--- !u!114 &1979440615413592246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 430763015101322033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e7ef29d603c3024cad4710e44e80dc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  positionID: {x: 0, y: 0, z: 0}
+  neighbourBubbles: []
+  bubbleColor: 2
+  isLaunchBubble: 0
 --- !u!1 &3382717121502750010
 GameObject:
   m_ObjectHideFlags: 0

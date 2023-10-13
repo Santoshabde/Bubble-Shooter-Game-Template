@@ -7,15 +7,15 @@ public class InGameBubblesData : ScriptableObject
 {
     [SerializeField] private List<Bubble> bubblePrefabsInGame;
 
-    private Dictionary<BubbleColor, Bubble> bubblePrefabsData = null;
+    private Dictionary<BubbleType, Bubble> bubblePrefabsData = null;
 
-    public Dictionary<BubbleColor, Bubble> BubblePrefabsData
+    public Dictionary<BubbleType, Bubble> BubblePrefabsData
     {
         get
         {
             if (bubblePrefabsData == null)
             {
-                bubblePrefabsData = new Dictionary<BubbleColor, Bubble>();
+                bubblePrefabsData = new Dictionary<BubbleType, Bubble>();
                 foreach (var bubblePrefab in bubblePrefabsInGame)
                 {
                     bubblePrefabsData.Add(bubblePrefab.BubbleColor, bubblePrefab);
@@ -30,7 +30,7 @@ public class InGameBubblesData : ScriptableObject
     {
         Bubble randomBubbleColor = null;
 
-        BubbleColor randomColor = BubbleShooter_HelperFunctions.GiveRandomBubbleColor();
+        BubbleType randomColor = BubbleShooter_HelperFunctions.GiveRandomBubbleColor();
         if (BubblePrefabsData.ContainsKey(randomColor))
             randomBubbleColor = BubblePrefabsData[randomColor];
 

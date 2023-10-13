@@ -1,4 +1,4 @@
-public enum BubbleColor
+public enum BubbleType
 {
     Green,
     Yellow,

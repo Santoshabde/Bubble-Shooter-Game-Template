@@ -8,25 +8,25 @@ public class BubbleShooter_HelperFunctions
     /// Get a random bubble color
     /// </summary>
     /// <returns></returns>
-    public static BubbleColor GiveRandomBubbleColor()
+    public static BubbleType GiveRandomBubbleColor()
     {
-        BubbleColor randomColor = BubbleColor.Green;
+        BubbleType randomColor = BubbleType.Green;
 
         int random = Random.Range(0, 5);
         if (random == 0)
-            randomColor = BubbleColor.Green;
+            randomColor = BubbleType.Green;
 
         if (random == 1)
-            randomColor = BubbleColor.Pink;
+            randomColor = BubbleType.Pink;
 
         if (random == 2)
-            randomColor = BubbleColor.Red;
+            randomColor = BubbleType.Red;
 
         if (random == 3)
-            randomColor = BubbleColor.White;
+            randomColor = BubbleType.White;
 
         if (random == 4)
-            randomColor = BubbleColor.Yellow;
+            randomColor = BubbleType.Yellow;
 
         return randomColor;
     }

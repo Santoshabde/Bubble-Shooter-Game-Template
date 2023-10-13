@@ -93,8 +93,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7388350307812137842}
-  - component: {fileID: 5804535803536785878}
   - component: {fileID: 5630838696420255545}
+  - component: {fileID: 6346385270583433936}
   m_Layer: 0
   m_Name: Bubble White
   m_TagString: Untagged
@@ -118,21 +118,6 @@ Transform:
   - {fileID: 5319047794771058250}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5804535803536785878
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4101079048729915118}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81ae6af1042b1db459b72a09fa30f873, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bubbleColor: 5
-  neighbourBubbles: []
-  isLaunchBubble: 0
 --- !u!58 &5630838696420255545
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -168,6 +153,22 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.26
+--- !u!114 &6346385270583433936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4101079048729915118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e7ef29d603c3024cad4710e44e80dc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  positionID: {x: 0, y: 0, z: 0}
+  neighbourBubbles: []
+  bubbleColor: 5
+  isLaunchBubble: 0
 --- !u!1 &4826078504031427323
 GameObject:
   m_ObjectHideFlags: 0

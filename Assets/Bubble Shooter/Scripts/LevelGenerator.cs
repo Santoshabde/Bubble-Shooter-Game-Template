@@ -37,8 +37,6 @@ namespace SNGames.BubbleShooter
             {
                 bubblesLevelData.Add(item.Key, item.Value);
             }
-
-            Debug.Log("#san Dictionary Count: " + bubblesLevelData.Count);
         }
         #endregion
 
