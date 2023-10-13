@@ -4,62 +4,65 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System.Linq;
+using NaughtyAttributes;
 
-public abstract class Bubble : MonoBehaviour
+namespace SNGames.BubbleShooter
 {
-    //Only for viewning and Debug
-    [Header("Only Debug Purpose")]
-    [SerializeField] protected Vector3 positionID;
-    [SerializeField] protected List<NeighbourData> neighbourBubbles;
-
-    //Need to be filled by user
-    [Header("Required Data")]
-    [SerializeField] protected BubbleType bubbleColor;
-
-    public List<NeighbourData> NeighbourBubbles => neighbourBubbles;
-    public BubbleType BubbleColor => bubbleColor;
-    public Vector3 PositionID => positionID;
-
-    public bool isLaunchBubble = false;
-
-    public void SetPositionID(Vector3 poitionID)
+    public abstract class Bubble : MonoBehaviour
     {
-        this.positionID = poitionID;
-    }
+        //Only for viewning and Debug
+        [Header("Only Debug Purpose")]
+        [SerializeField, ReadOnly] protected Vector3 positionID;
+        [SerializeField, ReadOnly] protected List<NeighbourData> neighbourBubbles;
+        [SerializeField, ReadOnly] public bool isLaunchBubble = false;
 
-    public void SetNeighbourBubblesData(List<NeighbourData> neighbourBubbles)
-    {
-        this.neighbourBubbles = neighbourBubbles;
-    }
+        //Need to be filled by user
+        [BoxGroup("Required Data")]
+        [SerializeField] protected BubbleType bubbleColor;
 
-    public List<Vector3> GetAllPositionNeighbourPoints()
-    {
-        List<Vector3> possibleNeighbourPoints = new List<Vector3>();
+        public List<NeighbourData> NeighbourBubbles => neighbourBubbles;
+        public BubbleType BubbleColor => bubbleColor;
+        public Vector3 PositionID => positionID;
 
-        possibleNeighbourPoints.Add(positionID + new Vector3(LevelGenerator.bubbleGap, 0, 0));
-        possibleNeighbourPoints.Add(positionID + new Vector3(-LevelGenerator.bubbleGap, 0, 0));
-        possibleNeighbourPoints.Add(positionID + new Vector3(LevelGenerator.bubbleGap / 2, LevelGenerator.bubbleGap, 0));
-        possibleNeighbourPoints.Add(positionID + new Vector3(-LevelGenerator.bubbleGap / 2, LevelGenerator.bubbleGap, 0));
-        possibleNeighbourPoints.Add(positionID + new Vector3(LevelGenerator.bubbleGap / 2, -LevelGenerator.bubbleGap, 0));
-        possibleNeighbourPoints.Add(positionID + new Vector3(-LevelGenerator.bubbleGap / 2, -LevelGenerator.bubbleGap, 0));
 
-        return possibleNeighbourPoints;
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Bubble collidedBubble;
-        if (collision.TryGetComponent<Bubble>(out collidedBubble))
+        public void SetPositionID(Vector3 poitionID)
         {
-            if (!isLaunchBubble)
-                return;
-
-            isLaunchBubble = false;
-
-            OnTriggerEnterWithABubble(collidedBubble);
+            this.positionID = poitionID;
         }
+
+        public void SetNeighbourBubblesData(List<NeighbourData> neighbourBubbles)
+        {
+            this.neighbourBubbles = neighbourBubbles;
+        }
+
+        public List<Vector3> GetAllPositionNeighbourPoints()
+        {
+            List<Vector3> possibleNeighbourPoints = new List<Vector3>();
+
+            possibleNeighbourPoints.Add(positionID + new Vector3(LevelGenerator.bubbleGap, 0, 0));
+            possibleNeighbourPoints.Add(positionID + new Vector3(-LevelGenerator.bubbleGap, 0, 0));
+            possibleNeighbourPoints.Add(positionID + new Vector3(LevelGenerator.bubbleGap / 2, LevelGenerator.bubbleGap, 0));
+            possibleNeighbourPoints.Add(positionID + new Vector3(-LevelGenerator.bubbleGap / 2, LevelGenerator.bubbleGap, 0));
+            possibleNeighbourPoints.Add(positionID + new Vector3(LevelGenerator.bubbleGap / 2, -LevelGenerator.bubbleGap, 0));
+            possibleNeighbourPoints.Add(positionID + new Vector3(-LevelGenerator.bubbleGap / 2, -LevelGenerator.bubbleGap, 0));
+
+            return possibleNeighbourPoints;
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            Bubble collidedBubble;
+            if (collision.TryGetComponent<Bubble>(out collidedBubble))
+            {
+                if (!isLaunchBubble)
+                    return;
+
+                isLaunchBubble = false;
+
+                OnTriggerEnterWithABubble(collidedBubble);
+            }
+        }
+
+        protected abstract void OnTriggerEnterWithABubble(Bubble collidedBubble);
     }
-
-    protected abstract void OnTriggerEnterWithABubble(Bubble collidedBubble);
 }
-

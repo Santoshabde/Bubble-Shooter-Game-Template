@@ -2,38 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/BubblesData", order = 1)]
-public class InGameBubblesData : ScriptableObject
+namespace SNGames.BubbleShooter
 {
-    [SerializeField] private List<Bubble> bubblePrefabsInGame;
-
-    private Dictionary<BubbleType, Bubble> bubblePrefabsData = null;
-
-    public Dictionary<BubbleType, Bubble> BubblePrefabsData
+    [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/BubblesData", order = 1)]
+    public class InGameBubblesData : ScriptableObject
     {
-        get
+        [SerializeField] private List<Bubble> bubblePrefabsInGame;
+
+        private Dictionary<BubbleType, Bubble> bubblePrefabsData = null;
+
+        public Dictionary<BubbleType, Bubble> BubblePrefabsData
         {
-            if (bubblePrefabsData == null)
+            get
             {
-                bubblePrefabsData = new Dictionary<BubbleType, Bubble>();
-                foreach (var bubblePrefab in bubblePrefabsInGame)
+                if (bubblePrefabsData == null)
                 {
-                    bubblePrefabsData.Add(bubblePrefab.BubbleColor, bubblePrefab);
+                    bubblePrefabsData = new Dictionary<BubbleType, Bubble>();
+                    foreach (var bubblePrefab in bubblePrefabsInGame)
+                    {
+                        bubblePrefabsData.Add(bubblePrefab.BubbleColor, bubblePrefab);
+                    }
                 }
+
+                return bubblePrefabsData;
             }
-
-            return bubblePrefabsData;
         }
-    }
 
-    public Bubble GetRandomBubbleColorPrefab()
-    {
-        Bubble randomBubbleColor = null;
+        public Bubble GetRandomBubbleColorPrefab()
+        {
+            Bubble randomBubbleColor = null;
 
-        BubbleType randomColor = BubbleShooter_HelperFunctions.GiveRandomBubbleColor();
-        if (BubblePrefabsData.ContainsKey(randomColor))
-            randomBubbleColor = BubblePrefabsData[randomColor];
+            BubbleType randomColor = BubbleShooter_HelperFunctions.GiveRandomBubbleColor();
+            if (BubblePrefabsData.ContainsKey(randomColor))
+                randomBubbleColor = BubblePrefabsData[randomColor];
 
-        return randomBubbleColor;
+            return randomBubbleColor;
+        }
     }
 }

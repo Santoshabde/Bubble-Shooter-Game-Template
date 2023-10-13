@@ -1,26 +1,34 @@
-public enum BubbleType
+namespace SNGames.BubbleShooter
 {
-    Green,
-    Yellow,
-    Red,
-    Blue,
-    Pink,
-    White
-}
+    public enum BubbleType
+    {
+        Green,
+        Yellow,
+        Red,
+        Blue,
+        Pink,
+        White
+    }
 
-public enum NeighbourDirection
-{
-    Right,
-    Left,
-    TopRight,
-    TopLeft,
-    BottomRight,
-    BottomLeft
-}
+    public enum NeighbourDirection
+    {
+        Right,
+        Left,
+        TopRight,
+        TopLeft,
+        BottomRight,
+        BottomLeft
+    }
 
-[System.Serializable]
-public class NeighbourData
-{
-    public Bubble bubble;
-    public NeighbourDirection direction;
+    [System.Serializable]
+    public class NeighbourData
+    {
+        public Bubble bubble;
+        public NeighbourDirection direction;
+    }
+
+    public enum InGameEvents
+    {
+        OnBubbleCollisionClearDataComplete
+    }
 }

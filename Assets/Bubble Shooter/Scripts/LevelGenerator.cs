@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AYellowpaper.SerializedCollections;
+using SNGames.CommonModule;
+using System.Linq;
 
 namespace SNGames.BubbleShooter
 {
@@ -9,10 +11,6 @@ namespace SNGames.BubbleShooter
     {
         public static float bubbleGap = 0.5f;
 
-        #region Testing Only
-        [SerializedDictionary]
-        public SerializedDictionary<Vector3, Bubble> bubblesLevelData = new SerializedDictionary<Vector3, Bubble>();
-        #endregion
 
         [SerializeField] private InGameBubblesData inGameBubblesData;
         [SerializeField] private float startX;
@@ -22,27 +20,18 @@ namespace SNGames.BubbleShooter
 
         private void Start()
         {
+            SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnBubbleCollisionClearDataComplete, ClearTheIsolatedBubblesInLevel);
+
             //Generates Level - All bubbles - And Fill up the level data
             GenerateLevel(startX, startY, initialNumberOfRows, initialNumberOfColumns);
 
             //Calculates all neighbours 
-            BubbleShooter_HelperFunctions.RecalculateAllBubblesNeighboursData(LevelData.bubblesLevelData, bubbleGap);
+            BubbleShooter_HelperFunctions.RecalculateAllBubblesNeighboursData(LevelData.bubblesLevelDataDictionary, bubbleGap);
         }
-
-        #region Testing Only
-        private void Update()
-        {
-            bubblesLevelData = new SerializedDictionary<Vector3, Bubble>();
-            foreach (var item in LevelData.bubblesLevelData)
-            {
-                bubblesLevelData.Add(item.Key, item.Value);
-            }
-        }
-        #endregion
 
         private void GenerateLevel(float startX, float startY, int rows, int columns)
         {
-            LevelData.bubblesLevelData = new Dictionary<Vector3, Bubble>();
+            LevelData.bubblesLevelDataDictionary = new Dictionary<Vector3, Bubble>();
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < columns; j++)
@@ -58,9 +47,36 @@ namespace SNGames.BubbleShooter
                     Bubble instantiatedBubble = Instantiate(bubbleChoosen, positionBubbleShouldSpawn, Quaternion.identity);
                     instantiatedBubble.SetPositionID(positionBubbleShouldSpawn);
                     instantiatedBubble.transform.SetParent(transform);
-                    LevelData.bubblesLevelData.Add(positionBubbleShouldSpawn, instantiatedBubble);
+                    LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
                 }
             }
+        }
+
+        private void ClearTheIsolatedBubblesInLevel()
+        {
+            Bubble nodeBubbleToCalculateBFS = LevelData.bubblesLevelDataDictionary[new Vector3(-2.5f, 5.5f, 0)];
+            List<Bubble> allNodes;
+            List<Bubble> allVisitedNodes;
+            List<Bubble> leftOutNodes;
+
+            allNodes = new List<Bubble>();
+            foreach (var item in LevelData.bubblesLevelDataDictionary)
+            {
+                allNodes.Add(item.Value);
+            }
+
+            allVisitedNodes = BubbleShooter_HelperFunctions.GetAllReachableNodesOfAnyColor(nodeBubbleToCalculateBFS);
+
+            leftOutNodes = new List<Bubble>();
+            leftOutNodes = allNodes.Except(allVisitedNodes).ToList();
+
+            foreach (var item in leftOutNodes)
+            {
+                item.gameObject.AddComponent<Rigidbody2D>();
+                LevelData.bubblesLevelDataDictionary.Remove(item.PositionID);
+            }
+
+            BubbleShooter_HelperFunctions.RecalculateAllBubblesNeighboursData(LevelData.bubblesLevelDataDictionary, LevelGenerator.bubbleGap);
         }
     }
 }
