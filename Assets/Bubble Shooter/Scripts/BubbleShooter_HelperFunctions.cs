@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class BubbleShooter_HelperFunctions
 {
+    /// <summary>
+    /// Get a random bubble color
+    /// </summary>
+    /// <returns></returns>
     public static BubbleColor GiveRandomBubbleColor()
     {
         BubbleColor randomColor = BubbleColor.Green;
@@ -27,6 +31,12 @@ public class BubbleShooter_HelperFunctions
         return randomColor;
     }
 
+    /// <summary>
+    /// Each bubble has 6 neighbour points in the game, so this function returns the nearest neighbour point to the given point(passed as function parameter)
+    /// </summary>
+    /// <param name="bubble">Bubble on which this function is executed</param>
+    /// <param name="point">Point on which the nearest neighbour point is calculated</param>
+    /// <returns></returns>
     public static Vector3 GetNearestNeighbourBubblePoint(Bubble bubble, Vector3 point)
     {
         Vector3 nearestPoint = Vector3.zero;
@@ -45,6 +55,9 @@ public class BubbleShooter_HelperFunctions
         return nearestPoint;
     }
 
+    /// <summary>
+    /// Recaculates neighbour data for all bubble in game
+    /// </summary>
     public static void RecalculateAllBubblesNeighboursData(Dictionary<Vector3, Bubble> bubblesLevelData, float bubbleGap)
     {
         foreach (var bubbleData in bubblesLevelData)
@@ -131,6 +144,11 @@ public class BubbleShooter_HelperFunctions
         }
     }
 
+    /// <summary>
+    /// Uses BFS algorithm to get all connecting chain bubbles of the 'startingBubble' color
+    /// </summary>
+    /// <param name="startingBubble"></param>
+    /// <returns></returns>
     public static List<Bubble> GetAllChainBubblesNeighbourOfAColor(Bubble startingBubble)
     {
         List<Bubble> resultBubbles = new List<Bubble>();

@@ -7,14 +7,18 @@ using System.Linq;
 
 public class Bubble : MonoBehaviour
 {
+    //Only for viewning and Debug
     [SerializeField] private Vector3 positionID;
-    [SerializeField] private BubbleColor bubbleColor;
     [SerializeField] private List<NeighbourData> neighbourBubbles;
 
+    //Need to be filled by user
+    [SerializeField] private BubbleColor bubbleColor;
+
     public List<NeighbourData> NeighbourBubbles => neighbourBubbles;
-    public bool isLaunchBubble = false;
     public BubbleColor BubbleColor => bubbleColor;
     public Vector3 PositionID => positionID;
+
+    public bool isLaunchBubble = false;
 
     public void SetPositionID(Vector3 poitionID)
     {
@@ -55,7 +59,6 @@ public class Bubble : MonoBehaviour
             Destroy(transform.GetComponent<Rigidbody2D>());
 
             //Calculate nearest Bubble and setting this bubble there
-            //TODO: San - Pick only unoccupied spaces
             Vector3 pointToMoveTo = BubbleShooter_HelperFunctions.GetNearestNeighbourBubblePoint(collidedBubble, transform.position);
             SetPositionID(pointToMoveTo);
             transform.DOMove(pointToMoveTo, 0.2f);
