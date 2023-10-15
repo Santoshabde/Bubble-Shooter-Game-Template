@@ -56,6 +56,7 @@ namespace SNGames.BubbleShooter
 
             yield return new WaitForSeconds(0.2f);
             cachedBubblesToDeactivate.ForEach(t => t.gameObject.SetActive(false));
+            SNEventsController<InGameEvents>.TriggerEvent(InGameEvents.MoveNextBubbleToCurrentBubble);
         }
 
         public void ActivateDeactivatedVFX()

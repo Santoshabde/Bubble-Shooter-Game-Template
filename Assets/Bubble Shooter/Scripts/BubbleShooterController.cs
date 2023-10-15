@@ -1,85 +1,111 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+using SNGames.CommonModule;
+using TMPro;
 
 namespace SNGames.BubbleShooter
 {
     public class BubbleShooterController : MonoBehaviour
     {
+        [SerializeField] private TextMeshPro bubbleShotsLeftCountText;
+        [SerializeField] private int bubbleShotsLeftCount;
         [SerializeField] private InGameBubblesData inGameBubbleData;
         [SerializeField] private LineRenderer initialPathRenderer;
-        [SerializeField] private Transform initialLaunchPoint;
+        [SerializeField] private Transform currentBubbleLaunchPoint;
+        [SerializeField] private Transform nextBubblePoint;
         [SerializeField] private LayerMask ignoreLayerMask;
 
         private Bubble currentlyPlacedBubble = null;
-        private Vector3 currentlyPlacedBallPosition;
         private Bubble nextBubble;
+
+        private void Start()
+        {
+            SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.MoveNextBubbleToCurrentBubble, MoveNextShootBubbleToCurrentShootBubble);
+            bubbleShotsLeftCountText.text = bubbleShotsLeftCount.ToString();
+
+            PlaceCurrentShootBubble();
+            PlaceNextShootBubble();
+        }
 
         void Update()
         {
-            DrawInitialLineRenderer();
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                PlaceCurrentShootBubble();
-            }
-
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                ApplyForceOnCurrenlyPlacedBubble();
-            }
+            RayCastToBubblesOnBoardAndCheckForLaunchInput();
         }
 
         public void PlaceCurrentShootBubble()
         {
             //Choose a random color
             Bubble randomColorBubblePrefab = inGameBubbleData.GetRandomBubbleColorPrefab();
-
-            currentlyPlacedBubble = Instantiate(randomColorBubblePrefab, initialLaunchPoint.position, Quaternion.identity);
+            
+            //Spawn current bubble shoot!! 
+            currentlyPlacedBubble = Instantiate(randomColorBubblePrefab, currentBubbleLaunchPoint.position, Quaternion.identity);
             currentlyPlacedBubble.isLaunchBubble = true;
             currentlyPlacedBubble.gameObject.layer = LayerMask.NameToLayer("LaunchBubble");
         }
 
         public void PlaceNextShootBubble()
         {
+            Bubble randomColorBubblePrefab = inGameBubbleData.GetRandomBubbleColorPrefab();
 
+            nextBubble = Instantiate(randomColorBubblePrefab, nextBubblePoint.position, Quaternion.identity);
+            nextBubble.isLaunchBubble = true;
+            nextBubble.gameObject.layer = LayerMask.NameToLayer("LaunchBubble");
         }
 
         public void MoveNextShootBubbleToCurrentShootBubble()
         {
+            StartCoroutine(PlaceNextBubbleToCurrent());
 
+            IEnumerator PlaceNextBubbleToCurrent()
+            {
+                yield return new WaitForSeconds(0.1f);
+                nextBubble.transform.DOMove(currentBubbleLaunchPoint.position, 0.4f);
+                currentlyPlacedBubble = nextBubble;
+                PlaceNextShootBubble();
+                initialPathRenderer.enabled = true;
+            }
         }
 
-        private void DrawInitialLineRenderer()
+        private void RayCastToBubblesOnBoardAndCheckForLaunchInput()
         {
             Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mouseWorldPos.z = 0f;
 
-            Vector3 rayCastDirection = (mouseWorldPos - initialLaunchPoint.position).normalized;
-
-            Debug.DrawRay(initialLaunchPoint.position, rayCastDirection * 20f);
+            Vector3 rayCastDirection = (mouseWorldPos - currentBubbleLaunchPoint.position).normalized;
 
             RaycastHit2D hit;
-            hit = Physics2D.Raycast(initialLaunchPoint.position, rayCastDirection, Mathf.Infinity,~ignoreLayerMask);
+            hit = Physics2D.Raycast(currentBubbleLaunchPoint.position, rayCastDirection, Mathf.Infinity,~ignoreLayerMask);
             if (hit.collider != null)
             {
                 if (hit.collider.GetComponent<Bubble>() != null)
-                    CalculateFinalBallSettlePoint(hit.collider.GetComponent<Bubble>(), hit.point);
+                {
+                    Vector3 finalPositionIfCurrentBubbleShot = BubbleShooter_HelperFunctions.GetNearestNeighbourBubblePoint(hit.collider.GetComponent<Bubble>(), hit.point);
 
-                initialPathRenderer.SetPosition(0, initialLaunchPoint.position);
-                initialPathRenderer.SetPosition(1, hit.point);
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        OnShootingTheCurrentBubble(finalPositionIfCurrentBubbleShot);
+                    }
+                }
+
+                initialPathRenderer.SetPosition(0, currentBubbleLaunchPoint.position + new Vector3(0, 0, 2));
+                initialPathRenderer.SetPosition(1, (Vector3)hit.point + new Vector3(0, 0, 2));
             }
         }
 
-        private void CalculateFinalBallSettlePoint(Bubble hitBubble, Vector2 hitPoint)
-        {
-            currentlyPlacedBallPosition = BubbleShooter_HelperFunctions.GetNearestNeighbourBubblePoint(hitBubble, hitPoint);
-        }
-
-        private void ApplyForceOnCurrenlyPlacedBubble()
+        private void OnShootingTheCurrentBubble(Vector3 currentlyPlacedBallPosition)
         {
             if (currentlyPlacedBubble != null)
             {
+                //Updating bubble left
+                bubbleShotsLeftCount -= 1;
+                bubbleShotsLeftCountText.text = bubbleShotsLeftCount.ToString();
+
+                //Disabling the line renderer
+                initialPathRenderer.enabled = false;
+
+                //Moving the current bubble to final positions
                 currentlyPlacedBubble.MoveLaunchBubbleToFinalPositionOnBoard(currentlyPlacedBallPosition);
             }
         }

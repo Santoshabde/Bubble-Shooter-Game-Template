@@ -7,7 +7,8 @@ namespace SNGames.BubbleShooter
         Red,
         Blue,
         Pink,
-        White
+        White,
+        NonDestructable
     }
 
     public enum NeighbourDirection
@@ -29,6 +30,7 @@ namespace SNGames.BubbleShooter
 
     public enum InGameEvents
     {
-        OnBubbleCollisionClearDataComplete
+        OnBubbleCollisionClearDataComplete,
+        MoveNextBubbleToCurrentBubble
     }
 }
