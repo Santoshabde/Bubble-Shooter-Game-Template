@@ -5,6 +5,7 @@ using UnityEngine;
 using DG.Tweening;
 using System.Linq;
 using NaughtyAttributes;
+using SNGames.CommonModule;
 
 namespace SNGames.BubbleShooter
 {
@@ -23,7 +24,6 @@ namespace SNGames.BubbleShooter
         public List<NeighbourData> NeighbourBubbles => neighbourBubbles;
         public BubbleType BubbleColor => bubbleColor;
         public Vector3 PositionID => positionID;
-
 
         public void SetPositionID(Vector3 poitionID)
         {
@@ -49,20 +49,25 @@ namespace SNGames.BubbleShooter
             return possibleNeighbourPoints;
         }
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        public void MoveLaunchBubbleToFinalPositionOnBoard(Vector3 finalPoint)
         {
-            Bubble collidedBubble;
-            if (collision.TryGetComponent<Bubble>(out collidedBubble))
+            if(isLaunchBubble)
             {
-                if (!isLaunchBubble)
-                    return;
-
                 isLaunchBubble = false;
 
-                OnTriggerEnterWithABubble(collidedBubble);
+                StartCoroutine(MoveBallToFinalPosition(finalPoint));
+
+                IEnumerator MoveBallToFinalPosition(Vector3 finalPoint)
+                {
+                    transform.DOMove(finalPoint, 0.5f);
+
+                    yield return new WaitForSeconds(0.85f);
+
+                    OnLaunchBallSettleAtFinalPosition(finalPoint);
+                }
             }
         }
 
-        protected abstract void OnTriggerEnterWithABubble(Bubble collidedBubble);
+        protected abstract void OnLaunchBallSettleAtFinalPosition(Vector3 finalPoint);
     }
 }
