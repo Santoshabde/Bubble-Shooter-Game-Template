@@ -38,5 +38,12 @@ namespace SNGames.BubbleShooter
 
             return randomBubbleColor;
         }
+
+        public Bubble GetBubbleOfAColor(BubbleType bubbleType)
+        {
+            Bubble result = null;
+            result = bubblePrefabsInGame.Find(t => t.BubbleColor == bubbleType);
+            return result;
+        }
     }
 }

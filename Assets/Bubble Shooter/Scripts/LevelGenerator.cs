@@ -17,6 +17,8 @@ namespace SNGames.BubbleShooter
         [SerializeField] private int initialNumberOfRows;
         [SerializeField] private int initialNumberOfColumns;
 
+        private Bubble nodeBubbleToCalculateBFS;
+
         private void Start()
         {
             SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnBubbleCollisionClearDataComplete, ClearTheIsolatedBubblesInLevel);
@@ -49,11 +51,26 @@ namespace SNGames.BubbleShooter
                     LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
                 }
             }
+
+            //Spawn a indestructable bubble row as final row
+            Bubble indestructableBubblePrefab = inGameBubblesData.GetBubbleOfAColor(BubbleType.NonDestructable);
+            for (int i = 0; i < columns; i++)
+            {
+                float xOffset = 0;
+                if(rows % 2 != 0)
+                    xOffset = xOffset = bubbleGap / 2;
+
+                Vector3 positionBubbleShouldSpawn = new Vector3(startX + (i * bubbleGap) + xOffset, startY + (rows * bubbleGap), 0);
+                Bubble instantiatedBubble = Instantiate(indestructableBubblePrefab, positionBubbleShouldSpawn, Quaternion.identity);
+                instantiatedBubble.SetPositionID(positionBubbleShouldSpawn);
+                instantiatedBubble.transform.SetParent(transform);
+                LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
+                nodeBubbleToCalculateBFS = instantiatedBubble;
+            }
         }
 
         private void ClearTheIsolatedBubblesInLevel()
         {
-            Bubble nodeBubbleToCalculateBFS = LevelData.bubblesLevelDataDictionary[new Vector3(-2.5f, 5.5f, 0)];
             List<Bubble> allNodes;
             List<Bubble> allVisitedNodes;
             List<Bubble> leftOutNodes;
