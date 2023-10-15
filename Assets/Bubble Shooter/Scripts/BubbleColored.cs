@@ -50,12 +50,20 @@ namespace SNGames.BubbleShooter
                 //Recalculating neighbour Data
                 BubbleShooter_HelperFunctions.RecalculateAllBubblesNeighboursData(LevelData.bubblesLevelDataDictionary, LevelGenerator.bubbleGap);
             }
+            else
+            {
+                foreach (var neighbourData in neighbourBubbles)
+                {
+                    ((BubbleColored)neighbourData.bubble).PlayImpactMotionAnimationForBubble((neighbourData.bubble.transform.position - transform.position).normalized);
+                }
+            }
 
             //Once bubble clears the similar colors, we need to seperate isolated bubbles from the level
             SNEventsController<InGameEvents>.TriggerEvent(InGameEvents.OnBubbleCollisionClearDataComplete);
 
             yield return new WaitForSeconds(0.2f);
             cachedBubblesToDeactivate.ForEach(t => t.gameObject.SetActive(false));
+
             SNEventsController<InGameEvents>.TriggerEvent(InGameEvents.MoveNextBubbleToCurrentBubble);
         }
 
@@ -64,6 +72,13 @@ namespace SNGames.BubbleShooter
             bubbleMesh.SetActive(false);
             ringEffect.gameObject.SetActive(true);
             splashEffect.gameObject.SetActive(true);
+        }
+
+        public void PlayImpactMotionAnimationForBubble(Vector3 directionOfImpact)
+        {
+            Sequence impactMotionSequecne = DOTween.Sequence();
+            impactMotionSequecne.Append(transform.DOMove(transform.position + (directionOfImpact * 0.05f) , 0.1f));
+            impactMotionSequecne.Append(transform.DOMove(transform.position, 0.1f));
         }
     }
 }
