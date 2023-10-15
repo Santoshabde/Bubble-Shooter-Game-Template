@@ -20,10 +20,13 @@ namespace SNGames.BubbleShooter
         //Need to be filled by user
         [BoxGroup("Required Data")]
         [SerializeField] protected BubbleType bubbleColor;
+        [BoxGroup("Required Data")]
+        [SerializeField] protected GameObject bubbleMesh;
 
         public List<NeighbourData> NeighbourBubbles => neighbourBubbles;
         public BubbleType BubbleColor => bubbleColor;
         public Vector3 PositionID => positionID;
+        public GameObject BubbleMesh => bubbleMesh;
 
         public void SetPositionID(Vector3 poitionID)
         {
@@ -61,7 +64,7 @@ namespace SNGames.BubbleShooter
                 {
                     transform.DOMove(finalPoint, 0.5f);
 
-                    yield return new WaitForSeconds(0.85f);
+                    yield return new WaitForSeconds(0.53f);
 
                     OnLaunchBallSettleAtFinalPosition(finalPoint);
                 }

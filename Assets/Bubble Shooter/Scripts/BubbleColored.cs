@@ -4,12 +4,23 @@ using UnityEngine;
 using DG.Tweening;
 using SNGames.BubbleShooter;
 using SNGames.CommonModule;
+using NaughtyAttributes;
 
 namespace SNGames.BubbleShooter
 {
     public class BubbleColored : Bubble
     {
+        [BoxGroup("VFX Data")]
+        [SerializeField] protected ParticleSystem ringEffect;
+        [BoxGroup("VFX Data")]
+        [SerializeField] protected ParticleSystem splashEffect;
+
         protected override void OnLaunchBallSettleAtFinalPosition(Vector3 finalPoint)
+        {
+            StartCoroutine(OnLaunchBallSettleAtFinalPosition_IEnum(finalPoint));
+        }
+
+        private IEnumerator OnLaunchBallSettleAtFinalPosition_IEnum(Vector3 finalPoint)
         {
             //Set position ID of this launch bubble
             SetPositionID(finalPoint);
@@ -25,12 +36,15 @@ namespace SNGames.BubbleShooter
 
             //Next main step - identify same color bubbles in chain, if >=3 remove them from board
             List<Bubble> chainSameColorBubbles = BubbleShooter_HelperFunctions.GetAllReachableNodesOfAColor(this);
+            List<Bubble> cachedBubblesToDeactivate = new List<Bubble>();
             if (chainSameColorBubbles.Count >= 3)
             {
                 foreach (var sameColoredBubble in chainSameColorBubbles)
                 {
+                    cachedBubblesToDeactivate.Add(sameColoredBubble);
+                    ((BubbleColored)sameColoredBubble).ActivateDeactivatedVFX();
                     LevelData.bubblesLevelDataDictionary.Remove(sameColoredBubble.PositionID);
-                    sameColoredBubble.gameObject.SetActive(false);
+                    yield return new WaitForSeconds(0.1f);
                 }
 
                 //Recalculating neighbour Data
@@ -39,6 +53,16 @@ namespace SNGames.BubbleShooter
 
             //Once bubble clears the similar colors, we need to seperate isolated bubbles from the level
             SNEventsController<InGameEvents>.TriggerEvent(InGameEvents.OnBubbleCollisionClearDataComplete);
+
+            yield return new WaitForSeconds(0.2f);
+            cachedBubblesToDeactivate.ForEach(t => t.gameObject.SetActive(false));
+        }
+
+        public void ActivateDeactivatedVFX()
+        {
+            bubbleMesh.SetActive(false);
+            ringEffect.gameObject.SetActive(true);
+            splashEffect.gameObject.SetActive(true);
         }
     }
 }
