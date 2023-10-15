@@ -20,6 +20,9 @@ namespace SNGames.BubbleShooter
             SetPositionID(pointToMoveTo);
             transform.DOMove(pointToMoveTo, 0.2f);
 
+            //Resetting layer
+            gameObject.layer = LayerMask.NameToLayer("Default");
+
             //Updating Level Data, as new bubble got added
             LevelData.bubblesLevelDataDictionary.Add(pointToMoveTo, this);
 

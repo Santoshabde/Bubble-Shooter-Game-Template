@@ -11,7 +11,6 @@ namespace SNGames.BubbleShooter
     {
         public static float bubbleGap = 0.5f;
 
-
         [SerializeField] private InGameBubblesData inGameBubblesData;
         [SerializeField] private float startX;
         [SerializeField] private float startY;
