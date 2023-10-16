@@ -204,5 +204,35 @@ namespace SNGames.BubbleShooter
 
             return visitedBubbles;
         }
+
+        public static List<Bubble> GetExploredBubblesOfCertainLevel(Bubble startingBubble, int level)
+        {
+            List<Bubble> visitedBubbles = new List<Bubble>();
+            Queue<Bubble> queue = new Queue<Bubble>();
+
+            queue.Enqueue(startingBubble);
+            visitedBubbles.Add(startingBubble);
+
+            int levelExplored = 0;
+
+            while (queue.Count != 0)
+            {
+                levelExplored += 1;
+                Bubble poppedBubble = queue.Dequeue();
+
+                foreach (var item in poppedBubble.NeighbourBubbles)
+                {
+                    if ((!visitedBubbles.Contains(item.bubble)))
+                    {
+                        if (levelExplored <= level)
+                            queue.Enqueue(item.bubble);
+
+                        visitedBubbles.Add(item.bubble);
+                    }
+                }
+            }
+
+            return visitedBubbles;
+        }
     }
 }

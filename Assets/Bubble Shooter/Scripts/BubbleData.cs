@@ -8,7 +8,8 @@ namespace SNGames.BubbleShooter
         Blue,
         Pink,
         White,
-        NonDestructable
+        NonDestructable,
+        PowerUp_Bomb
     }
 
     public enum NeighbourDirection

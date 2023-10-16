@@ -37,8 +37,9 @@ namespace SNGames.BubbleShooter
         public void PlaceCurrentShootBubble()
         {
             //Choose a random color
-            Bubble randomColorBubblePrefab = inGameBubbleData.GetRandomBubbleColorPrefab();
-            
+            //Bubble randomColorBubblePrefab = inGameBubbleData.GetRandomBubbleColorPrefab();
+            Bubble randomColorBubblePrefab = inGameBubbleData.GetBubbleOfAColor(BubbleType.PowerUp_Bomb);
+
             //Spawn current bubble shoot!! 
             currentlyPlacedBubble = Instantiate(randomColorBubblePrefab, currentBubbleLaunchPoint.position, Quaternion.identity);
             currentlyPlacedBubble.transform.parent = transform;
