@@ -31,18 +31,20 @@ namespace SNGames.BubbleShooter
 
         void Update()
         {
-            RayCastToBubblesOnBoardAndCheckForLaunchInput();
+            if (Input.GetMouseButton(0)
+                || Input.GetMouseButtonUp(0))
+                RayCastToBubblesOnBoardAndCheckForLaunchInput();
         }
 
         public void PlaceCurrentShootBubble()
         {
             //Choose a random color
-            //Bubble randomColorBubblePrefab = inGameBubbleData.GetRandomBubbleColorPrefab();
-            Bubble randomColorBubblePrefab = inGameBubbleData.GetBubbleOfAColor(BubbleType.PowerUp_Bomb);
+            Bubble randomColorBubblePrefab = inGameBubbleData.GetRandomBubbleColorPrefab();
+            //Bubble randomColorBubblePrefab = inGameBubbleData.GetBubbleOfAColor(BubbleType.PowerUp_Bomb);
 
             //Spawn current bubble shoot!! 
             currentlyPlacedBubble = Instantiate(randomColorBubblePrefab, currentBubbleLaunchPoint.position, Quaternion.identity);
-            currentlyPlacedBubble.transform.parent = transform;
+            currentlyPlacedBubble.transform.parent = currentBubbleLaunchPoint.transform;
             currentlyPlacedBubble.isLaunchBubble = true;
             currentlyPlacedBubble.gameObject.layer = LayerMask.NameToLayer("LaunchBubble");
         }
@@ -52,7 +54,7 @@ namespace SNGames.BubbleShooter
             Bubble randomColorBubblePrefab = inGameBubbleData.GetRandomBubbleColorPrefab();
 
             nextBubble = Instantiate(randomColorBubblePrefab, nextBubblePoint.position, Quaternion.identity);
-            nextBubble.transform.parent = transform;
+            nextBubble.transform.parent = nextBubblePoint.transform;
             nextBubble.isLaunchBubble = true;
             nextBubble.gameObject.layer = LayerMask.NameToLayer("LaunchBubble");
         }
@@ -64,10 +66,13 @@ namespace SNGames.BubbleShooter
             IEnumerator PlaceNextBubbleToCurrent()
             {
                 yield return new WaitForSeconds(0.1f);
-                nextBubble.transform.DOMove(currentBubbleLaunchPoint.position, 0.4f);
+                nextBubble.transform.DOMove(currentBubbleLaunchPoint.position, 0.2f);
+
+                yield return new WaitForSeconds(0.2f);
                 currentlyPlacedBubble = nextBubble;
                 PlaceNextShootBubble();
                 initialPathRenderer.enabled = true;
+                RayCastToBubblesOnBoardAndCheckForLaunchInput();
             }
         }
 
@@ -86,7 +91,7 @@ namespace SNGames.BubbleShooter
                 {
                     Vector3 finalPositionIfCurrentBubbleShot = BubbleShooter_HelperFunctions.GetNearestNeighbourBubblePoint(hit.collider.GetComponent<Bubble>(), hit.point);
 
-                    if (Input.GetMouseButtonDown(0))
+                    if (Input.GetMouseButtonUp(0))
                     {
                         OnShootingTheCurrentBubble(finalPositionIfCurrentBubbleShot);
                     }
@@ -113,6 +118,7 @@ namespace SNGames.BubbleShooter
 
                 //Moving the current bubble to final positions
                 currentlyPlacedBubble.MoveLaunchBubbleToFinalPositionOnBoard(currentlyPlacedBallPosition);
+                currentlyPlacedBubble = null;
             }
         }
     }

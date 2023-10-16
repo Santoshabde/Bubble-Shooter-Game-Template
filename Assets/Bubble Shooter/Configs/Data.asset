@@ -20,4 +20,5 @@ MonoBehaviour:
   - {fileID: 3423964376077334255, guid: 7fa2ad233c1292e40b6081aec341a247, type: 3}
   - {fileID: 4947833674392567734, guid: 55bc00cc4b85bce47923dc86e0ed1b66, type: 3}
   - {fileID: 4475994614213924023, guid: d5148cfdf63e8c249bff9752f921cb85, type: 3}
+  - {fileID: 1866134423520931765, guid: 1c10cc9167221144f9c0c239c44325c8, type: 3}
   scorePerBubble: 10
