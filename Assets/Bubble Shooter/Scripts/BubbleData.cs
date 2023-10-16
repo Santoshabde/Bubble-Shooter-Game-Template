@@ -31,6 +31,6 @@ namespace SNGames.BubbleShooter
     public enum InGameEvents
     {
         OnBubbleCollisionClearDataComplete,
-        MoveNextBubbleToCurrentBubble
+        MoveNextBubbleToCurrentBubble,
     }
 }

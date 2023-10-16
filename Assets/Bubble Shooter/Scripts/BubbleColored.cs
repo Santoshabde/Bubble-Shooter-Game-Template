@@ -50,6 +50,9 @@ namespace SNGames.BubbleShooter
                     cachedBubblesToDeactivate.Add(sameColoredBubble);
                     ((BubbleColored)sameColoredBubble).ActivateDeactivatedVFX();
                     LevelData.bubblesLevelDataDictionary.Remove(sameColoredBubble.PositionID);
+
+                    ScoreController.Instance.UpdateGameScore(10, sameColoredBubble.transform.position, false);
+
                     yield return new WaitForSeconds(0.1f);
                 }
 
