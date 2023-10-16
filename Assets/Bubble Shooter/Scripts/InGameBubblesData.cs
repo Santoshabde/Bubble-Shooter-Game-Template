@@ -8,6 +8,7 @@ namespace SNGames.BubbleShooter
     public class InGameBubblesData : ScriptableObject
     {
         [SerializeField] private List<Bubble> bubblePrefabsInGame;
+        [SerializeField] private int scorePerBubble;
 
         private Dictionary<BubbleType, Bubble> bubblePrefabsData = null;
 

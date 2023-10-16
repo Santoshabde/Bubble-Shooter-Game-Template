@@ -62,9 +62,9 @@ namespace SNGames.BubbleShooter
 
                 IEnumerator MoveBallToFinalPosition(Vector3 finalPoint)
                 {
-                    transform.DOMove(finalPoint, 0.5f);
+                    transform.DOMove(finalPoint, 0.2f);
 
-                    yield return new WaitForSeconds(0.53f);
+                    yield return new WaitForSeconds(0.2f);
 
                     OnLaunchBallSettleAtFinalPosition(finalPoint);
                 }

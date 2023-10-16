@@ -34,6 +34,12 @@ namespace SNGames.BubbleShooter
             //Recalculating neighbour Data again for all board bubbles - because a new bubble got added to the board
             BubbleShooter_HelperFunctions.RecalculateAllBubblesNeighboursData(LevelData.bubblesLevelDataDictionary, LevelGenerator.bubbleGap);
 
+            //Giving a impact animation for all neighbouring bubbles
+            foreach (var neighbourData in neighbourBubbles)
+            {
+                ((BubbleColored)neighbourData.bubble).PlayImpactMotionAnimationForBubble((neighbourData.bubble.transform.position - transform.position).normalized);
+            }
+
             //Next main step - identify same color bubbles in chain, if >=3 remove them from board
             List<Bubble> chainSameColorBubbles = BubbleShooter_HelperFunctions.GetAllReachableNodesOfAColor(this);
             List<Bubble> cachedBubblesToDeactivate = new List<Bubble>();
@@ -49,13 +55,6 @@ namespace SNGames.BubbleShooter
 
                 //Recalculating neighbour Data
                 BubbleShooter_HelperFunctions.RecalculateAllBubblesNeighboursData(LevelData.bubblesLevelDataDictionary, LevelGenerator.bubbleGap);
-            }
-            else
-            {
-                foreach (var neighbourData in neighbourBubbles)
-                {
-                    ((BubbleColored)neighbourData.bubble).PlayImpactMotionAnimationForBubble((neighbourData.bubble.transform.position - transform.position).normalized);
-                }
             }
 
             //Once bubble clears the similar colors, we need to seperate isolated bubbles from the level

@@ -41,6 +41,7 @@ namespace SNGames.BubbleShooter
             
             //Spawn current bubble shoot!! 
             currentlyPlacedBubble = Instantiate(randomColorBubblePrefab, currentBubbleLaunchPoint.position, Quaternion.identity);
+            currentlyPlacedBubble.transform.parent = transform;
             currentlyPlacedBubble.isLaunchBubble = true;
             currentlyPlacedBubble.gameObject.layer = LayerMask.NameToLayer("LaunchBubble");
         }
@@ -50,6 +51,7 @@ namespace SNGames.BubbleShooter
             Bubble randomColorBubblePrefab = inGameBubbleData.GetRandomBubbleColorPrefab();
 
             nextBubble = Instantiate(randomColorBubblePrefab, nextBubblePoint.position, Quaternion.identity);
+            nextBubble.transform.parent = transform;
             nextBubble.isLaunchBubble = true;
             nextBubble.gameObject.layer = LayerMask.NameToLayer("LaunchBubble");
         }
@@ -98,6 +100,9 @@ namespace SNGames.BubbleShooter
         {
             if (currentlyPlacedBubble != null)
             {
+                //Unparenting
+                currentlyPlacedBubble.transform.parent = null;
+
                 //Updating bubble left
                 bubbleShotsLeftCount -= 1;
                 bubbleShotsLeftCountText.text = bubbleShotsLeftCount.ToString();
