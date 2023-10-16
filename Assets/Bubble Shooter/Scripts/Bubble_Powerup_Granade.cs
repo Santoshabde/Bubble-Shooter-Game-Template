@@ -7,6 +7,7 @@ namespace SNGames.BubbleShooter
 {
     public class Bubble_Powerup_Granade : Bubble
     {
+        [SerializeField] private int granadeDestructionLevel = 2;
         [SerializeField] private ParticleSystem explosionParticleEffect;
 
         protected override void OnLaunchBallSettleAtFinalPosition(Vector3 finalPoint)
@@ -35,11 +36,11 @@ namespace SNGames.BubbleShooter
             explosionParticleEffect.gameObject.SetActive(true);
 
             List<Bubble> cachedBubblesToDeactivate = new List<Bubble>();
-            foreach (var neighbourData in neighbourBubbles)
+            foreach (var bubble in BubbleShooter_HelperFunctions.GetExploredBubblesOfCertainLevel(this, granadeDestructionLevel))
             {
-                cachedBubblesToDeactivate.Add(neighbourData.bubble);
-                LevelData.bubblesLevelDataDictionary.Remove(neighbourData.bubble.PositionID);
-                ((BubbleColored)neighbourData.bubble).ActivateDeactivatedVFX();
+                cachedBubblesToDeactivate.Add(bubble);
+                LevelData.bubblesLevelDataDictionary.Remove(bubble.PositionID);
+                ((BubbleColored)bubble).ActivateDeactivatedVFX();
                 yield return new WaitForSeconds(0.1f);
             } 
 
@@ -48,7 +49,7 @@ namespace SNGames.BubbleShooter
             //Recalculating neighbour Data again for all board bubbles - because a new bubble got added to the board
             BubbleShooter_HelperFunctions.RecalculateAllBubblesNeighboursData(LevelData.bubblesLevelDataDictionary, LevelGenerator.bubbleGap);
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
 
             cachedBubblesToDeactivate.ForEach(t => t.gameObject.SetActive(false));
             SNEventsController<InGameEvents>.TriggerEvent(InGameEvents.MoveNextBubbleToCurrentBubble);

@@ -205,7 +205,7 @@ namespace SNGames.BubbleShooter
             return visitedBubbles;
         }
 
-        public static List<Bubble> GetExploredBubblesOfCertainLevel(Bubble startingBubble, int level)
+        public static List<Bubble> GetExploredBubblesOfCertainLevel(Bubble startingBubble, int level, bool includeSelf = false)
         {
             List<Bubble> visitedBubbles = new List<Bubble>();
             Queue<Bubble> queue = new Queue<Bubble>();
@@ -213,24 +213,31 @@ namespace SNGames.BubbleShooter
             queue.Enqueue(startingBubble);
             visitedBubbles.Add(startingBubble);
 
-            int levelExplored = 0;
+            int currentLevel = 0; // Initialize the current level
 
-            while (queue.Count != 0)
+            while (queue.Count != 0 && currentLevel < level) // Stop when the desired level is reached
             {
-                levelExplored += 1;
-                Bubble poppedBubble = queue.Dequeue();
+                int levelSize = queue.Count; // Track the size of the current level
 
-                foreach (var item in poppedBubble.NeighbourBubbles)
+                for (int i = 0; i < levelSize; i++)
                 {
-                    if ((!visitedBubbles.Contains(item.bubble)))
-                    {
-                        if (levelExplored <= level)
-                            queue.Enqueue(item.bubble);
+                    Bubble poppedBubble = queue.Dequeue();
 
-                        visitedBubbles.Add(item.bubble);
+                    foreach (var item in poppedBubble.NeighbourBubbles)
+                    {
+                        if (!visitedBubbles.Contains(item.bubble))
+                        {
+                            queue.Enqueue(item.bubble);
+                            visitedBubbles.Add(item.bubble);
+                        }
                     }
                 }
+
+                currentLevel++; // Move to the next level
             }
+
+            if (!includeSelf && visitedBubbles.Contains(startingBubble))
+                visitedBubbles.Remove(startingBubble);
 
             return visitedBubbles;
         }
