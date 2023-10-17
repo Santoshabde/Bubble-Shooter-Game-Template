@@ -10,10 +10,13 @@ namespace SNGames.BubbleShooter
 {
     public class BubbleShooterController : MonoBehaviour
     {
+        [SerializeField] private LevelGenerator levelGenerator;
         [SerializeField] private TextMeshPro bubbleShotsLeftCountText;
         [SerializeField] private int bubbleShotsLeftCount;
         [SerializeField] private InGameBubblesData inGameBubbleData;
         [SerializeField] private LineRenderer initialPathRenderer;
+        [SerializeField] private float distanceToMaintain;
+        [SerializeField] private Transform distanceCalculationTransform;
         [SerializeField] private Transform nonPowerupsPlatform;
         [SerializeField] private Transform currentBubbleLaunchPoint;
         [SerializeField] private Transform nextBubblePoint;
@@ -29,6 +32,7 @@ namespace SNGames.BubbleShooter
         private void Start()
         {
             SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.MoveNextBubbleToCurrentBubble, MoveNextShootBubbleToCurrentShootBubble);
+            SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.MoveNextBubbleToCurrentBubble, () => AdjustShootPositionBasedOnLastBubbleIntheGrid(distanceCalculationTransform));
 
             PowerupController.OnPowerButtonClicked += OnPowerButtonClicked;
 
@@ -64,7 +68,6 @@ namespace SNGames.BubbleShooter
             {
                 powerUpActivated = false;
                 RayCastToBubblesOnBoardAndCheckForLaunchInput();
-                initialPathRenderer.enabled = true;
                 currentlyPlacedBubble = catchedCurrentlyPlacedBubble;
                 nonPowerupsPlatform.gameObject.SetActive(true);
                 powerupsPlatform.gameObject.SetActive(false);
@@ -75,14 +78,11 @@ namespace SNGames.BubbleShooter
 
                 IEnumerator PlaceNextBubbleToCurrent()
                 {
-                    yield return new WaitForSeconds(0.1f);
                     nextBubble.transform.DOMove(currentBubbleLaunchPoint.position, 0.2f);
 
                     yield return new WaitForSeconds(0.2f);
                     currentlyPlacedBubble = nextBubble;
                     PlaceNextShootBubble();
-                    initialPathRenderer.enabled = true;
-                    RayCastToBubblesOnBoardAndCheckForLaunchInput();
                 }
             }
         }
@@ -156,6 +156,27 @@ namespace SNGames.BubbleShooter
                 currentlyPlacedBubble.transform.parent = currentPowerUpLaunchPoint;
                 currentlyPlacedBubble.isLaunchBubble = true;
                 currentlyPlacedBubble.gameObject.layer = LayerMask.NameToLayer("LaunchBubble");
+            }
+        }
+
+        private void AdjustShootPositionBasedOnLastBubbleIntheGrid(Transform refPoint)
+        {
+            StartCoroutine(AdjustShootPositionBasedOnLastBubbleIntheGrid_IEnum());
+
+            IEnumerator AdjustShootPositionBasedOnLastBubbleIntheGrid_IEnum()
+            {
+                yield return new WaitForSeconds(0.22f);
+
+                float distanceBetween = Vector3.Distance(distanceCalculationTransform.position, levelGenerator.GetNearestRowBubbleInTheGrid(refPoint).PositionID);
+                Debug.Log(distanceBetween);
+
+                float distanceToMove = distanceBetween - distanceToMaintain;
+                transform.DOMove(transform.position + new Vector3(0, distanceToMove, 0), 0.2f);
+
+                yield return new WaitForSeconds(0.2f);
+
+                initialPathRenderer.enabled = true;
+                RayCastToBubblesOnBoardAndCheckForLaunchInput();
             }
         }
     }

@@ -93,5 +93,23 @@ namespace SNGames.BubbleShooter
 
             BubbleShooter_HelperFunctions.RecalculateAllBubblesNeighboursData(LevelData.bubblesLevelDataDictionary, LevelGenerator.bubbleGap);
         }
+
+        public Bubble GetNearestRowBubbleInTheGrid(Transform refPoint)
+        {
+            Bubble minDistanceBubble = null;
+
+            float minDistance = 100;
+            foreach (var item in LevelData.bubblesLevelDataDictionary)
+            {
+                float distance = Vector3.Distance(item.Key, refPoint.position);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    minDistanceBubble = item.Value;
+                }
+            }
+
+            return minDistanceBubble;
+        }
     }
 }

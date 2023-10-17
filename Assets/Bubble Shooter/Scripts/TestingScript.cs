@@ -10,7 +10,7 @@ public class TestingScript : MonoBehaviour
 {
     [SerializedDictionary]
     public SerializedDictionary<Vector3, Bubble> bubblesLevelData = new SerializedDictionary<Vector3, Bubble>();
-
+    [SerializeField] private LevelGenerator levelGenerator;
     //Testing BFS
     [Foldout("BFS Testing")]
     [SerializeField] private Bubble bubbleToTestBFS;
@@ -20,6 +20,11 @@ public class TestingScript : MonoBehaviour
     [SerializeField] private List<Bubble> allVisitedNodes;
     [Foldout("BFS Testing")]
     [SerializeField] private List<Bubble> leftOutNodes;
+    [Foldout("Nearest Testing")]
+    [SerializeField] private Bubble nearestBubble;
+    [Foldout("Nearest Testing")]
+    [SerializeField] private Transform toCompareTransform;
+
 
     private void Update()
     {
@@ -43,5 +48,11 @@ public class TestingScript : MonoBehaviour
 
         leftOutNodes = new List<Bubble>();
         leftOutNodes = allNodes.Except(allVisitedNodes).ToList();
+    }
+
+    [Button]
+    public void GetNearestRowBubble()
+    {
+        nearestBubble = levelGenerator.GetNearestRowBubbleInTheGrid(toCompareTransform);
     }
 }
