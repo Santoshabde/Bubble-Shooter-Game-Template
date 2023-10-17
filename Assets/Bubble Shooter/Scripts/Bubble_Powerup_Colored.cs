@@ -9,6 +9,7 @@ namespace SNGames.BubbleShooter
     public class Bubble_Powerup_Colored : Bubble
     {
         [Header("Multi Colored Powerup Data")]
+        [SerializeField] private ParticleSystem initialGlow;
         [SerializeField] private GameObject parentMultiColorObject;
         [SerializeField] private List<IdAndGameObject> bubbleIdAndColor;
 
@@ -24,8 +25,6 @@ namespace SNGames.BubbleShooter
 
             //Set the layer back to default - like rest of the bubbles on board
             gameObject.layer = LayerMask.NameToLayer("Default");
-
-            yield return new WaitForSeconds(0.3f);
 
             //Change color to attached bubble which you aimed to
             if (bubbleWeAreShootingTo.BubbleColor == BubbleType.NonDestructable)
@@ -47,6 +46,7 @@ namespace SNGames.BubbleShooter
                 (neighbourData.bubble).PlayImpactMotionAnimationForBubble((neighbourData.bubble.transform.position - transform.position).normalized);
             }
 
+            yield return new WaitForSeconds(0.3f);
             //Next main step - identify same color bubbles in chain, if >=3 remove them from board
             List<Bubble> chainSameColorBubbles = BubbleShooter_HelperFunctions.GetAllReachableNodesOfAColor(this);
             List<Bubble> cachedBubblesToDeactivate = new List<Bubble>();
@@ -80,6 +80,11 @@ namespace SNGames.BubbleShooter
         {
             parentMultiColorObject.SetActive(false);
             BubbleMesh.SetActive(false);
+        }
+
+        protected override void InitOnExecutingLaunch()
+        {
+            initialGlow.gameObject.SetActive(false);
         }
 
         private void UpdateToRespectiveColorMesh(BubbleType colorToUpdateTo)

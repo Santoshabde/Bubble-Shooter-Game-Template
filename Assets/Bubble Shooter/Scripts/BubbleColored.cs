@@ -47,8 +47,7 @@ namespace SNGames.BubbleShooter
                 foreach (var sameColoredBubble in chainSameColorBubbles)
                 {
                     cachedBubblesToDeactivate.Add(sameColoredBubble);
-                    if (sameColoredBubble.GetType() == typeof(BubbleColored))
-                        ((BubbleColored)sameColoredBubble).ActivateDeactivatedVFX();
+                    sameColoredBubble.ActivateDeactivatedVFX();
                     LevelData.bubblesLevelDataDictionary.Remove(sameColoredBubble.PositionID);
 
                     ScoreController.Instance.UpdateGameScore(10, sameColoredBubble.transform.position, false);

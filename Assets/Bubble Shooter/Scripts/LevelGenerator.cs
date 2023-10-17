@@ -88,8 +88,7 @@ namespace SNGames.BubbleShooter
 
             foreach (var item in leftOutNodes)
             {
-                item.gameObject.AddComponent<Rigidbody2D>();
-                LevelData.bubblesLevelDataDictionary.Remove(item.PositionID);
+                item.FreeBubbleFromTheGrid();
             }
 
             BubbleShooter_HelperFunctions.RecalculateAllBubblesNeighboursData(LevelData.bubblesLevelDataDictionary, LevelGenerator.bubbleGap);

@@ -8,6 +8,7 @@ namespace SNGames.BubbleShooter
     public class Bubble_Powerup_Granade : Bubble
     {
         [Header("Granade Powerup Data")]
+        [SerializeField] private ParticleSystem initialGlow;
         [SerializeField] private int granadeDestructionLevel = 2;
         [SerializeField] private ParticleSystem explosionParticleEffect;
 
@@ -65,6 +66,11 @@ namespace SNGames.BubbleShooter
         public override void ActivateDeactivatedVFX()
         {
             BubbleMesh.SetActive(false);
+        }
+
+        protected override void InitOnExecutingLaunch()
+        {
+            initialGlow.gameObject.SetActive(false);
         }
     }
 }

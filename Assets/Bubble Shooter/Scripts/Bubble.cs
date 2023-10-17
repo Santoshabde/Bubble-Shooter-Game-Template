@@ -27,16 +27,19 @@ namespace SNGames.BubbleShooter
         public Vector3 PositionID => positionID;
         public GameObject BubbleMesh => bubbleMesh;
 
+        //Set a unique poisition id. PositionId is the heart of this game. All calculations are based on this.
         public void SetPositionID(Vector3 poitionID)
         {
             this.positionID = poitionID;
         }
 
+        //set Neighbours of this bubble
         public void SetNeighbourBubblesData(List<NeighbourData> neighbourBubbles)
         {
             this.neighbourBubbles = neighbourBubbles;
         }
 
+        //Get all neighbour points. This function returns all possible neighbour points, even if it occupied by a bubble
         public List<Vector3> GetAllPositionNeighbourPoints()
         {
             List<Vector3> possibleNeighbourPoints = new List<Vector3>();
@@ -51,11 +54,13 @@ namespace SNGames.BubbleShooter
             return possibleNeighbourPoints;
         }
 
+        //Moves the bubble to final position of raycast hit and then performs neccesarry actions based on the bubble type
         public void MoveLaunchBubbleToFinalPositionOnBoard(Vector3 finalPoint, Bubble bubbleWeAreShootingTo)
         {
             if(isLaunchBubble)
             {
                 isLaunchBubble = false;
+                InitOnExecutingLaunch();
 
                 StartCoroutine(MoveBallToFinalPosition(finalPoint));
 
@@ -70,15 +75,31 @@ namespace SNGames.BubbleShooter
             }
         }
 
+        //Impact motion of bubble
         public void PlayImpactMotionAnimationForBubble(Vector3 directionOfImpact)
         {
             Sequence impactMotionSequecne = DOTween.Sequence();
             impactMotionSequecne.Append(transform.DOMove(transform.position + (directionOfImpact * 0.05f), 0.1f));
+         
             impactMotionSequecne.Append(transform.DOMove(transform.position, 0.1f));
         }
 
+        public void FreeBubbleFromTheGrid()
+        {
+            gameObject.AddComponent<Rigidbody2D>();
+            LevelData.bubblesLevelDataDictionary.Remove(PositionID);
+            Destroy(this.gameObject, 3f);
+        }
+
+        //Overide this and write the fcuntionality based on the bubble type
         protected abstract void OnLaunchBallSettleAtFinalPosition(Vector3 finalPoint, Bubble bubbleWeAreShootingTo);
 
+        //Vfx played on deactivating this bubble
         public abstract void ActivateDeactivatedVFX();
+
+        protected virtual void InitOnExecutingLaunch() 
+        {
+
+        }
     }
 }
