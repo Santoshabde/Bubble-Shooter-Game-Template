@@ -44,9 +44,21 @@ namespace SNGames.BubbleShooter
 
         void Update()
         {
+#if UNITY_EDITOR
             if (Input.GetMouseButton(0)
                 || Input.GetMouseButtonUp(0))
+            {
                 RayCastToBubblesOnBoardAndCheckForLaunchInput();
+            }
+#else
+            if ((Input.touchCount > 0)
+ && (Input.GetTouch(0).phase == TouchPhase.Began 
+ || Input.GetTouch(0).phase == TouchPhase.Moved 
+ || Input.GetTouch(0).phase == TouchPhase.Ended))
+            {
+                RayCastToBubblesOnBoardAndCheckForLaunchInput_mobile();
+            }
+#endif
         }
 
         public void PlaceCurrentShootBubble()
@@ -122,6 +134,39 @@ namespace SNGames.BubbleShooter
                 initialPathRenderer.SetPosition(1, (Vector3)hit.point + new Vector3(0, 0, 2));
             }
         }
+
+        private void RayCastToBubblesOnBoardAndCheckForLaunchInput_mobile()
+        {
+            if (Input.touchCount > 0)
+            {
+                // Get the touch position
+                Vector3 touchScreenPos = Input.touches[0].position;
+                Vector3 touchWorldPos = Camera.main.ScreenToWorldPoint(touchScreenPos);
+                touchWorldPos.z = 0f;
+
+                // Calculate the raycast direction
+                Vector3 rayCastDirection = (touchWorldPos - currentBubbleLaunchPoint.position).normalized;
+
+                RaycastHit2D hit;
+                hit = Physics2D.Raycast(currentBubbleLaunchPoint.position, rayCastDirection, Mathf.Infinity, ~ignoreLayerMask);
+                if (hit.collider != null)
+                {
+                    if (hit.collider.GetComponent<Bubble>() != null)
+                    {
+                        Vector3 finalPositionIfCurrentBubbleShot = BubbleShooter_HelperFunctions.GetNearestNeighbourBubblePoint(hit.collider.GetComponent<Bubble>(), hit.point);
+
+                        if (Input.GetTouch(0).phase == TouchPhase.Ended)
+                        {
+                            OnShootingTheCurrentBubble(finalPositionIfCurrentBubbleShot, hit.collider.GetComponent<Bubble>());
+                        }
+                    }
+
+                    initialPathRenderer.SetPosition(0, currentBubbleLaunchPoint.position + new Vector3(0, 0, 2));
+                    initialPathRenderer.SetPosition(1, (Vector3)hit.point + new Vector3(0, 0, 2));
+                }
+            }
+        }
+
 
         private void OnShootingTheCurrentBubble(Vector3 currentlyPlacedBallPosition, Bubble bubbleWeAreShootingTo)
         {

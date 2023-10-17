@@ -43,6 +43,8 @@ namespace SNGames.BubbleShooter
                 cachedBubblesToDeactivate.Add(bubble);
                 LevelData.bubblesLevelDataDictionary.Remove(bubble.PositionID);
                 bubble.ActivateDeactivatedVFX();
+
+                ScoreController.Instance.UpdateGameScore(10, bubble.transform.position, false);
                 yield return new WaitForSeconds(0.1f);
             }
 

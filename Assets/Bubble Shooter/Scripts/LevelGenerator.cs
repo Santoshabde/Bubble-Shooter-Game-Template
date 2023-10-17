@@ -89,6 +89,7 @@ namespace SNGames.BubbleShooter
             foreach (var item in leftOutNodes)
             {
                 item.FreeBubbleFromTheGrid();
+                ScoreController.Instance.UpdateGameScore(10, item.PositionID, false);
             }
 
             BubbleShooter_HelperFunctions.RecalculateAllBubblesNeighboursData(LevelData.bubblesLevelDataDictionary, LevelGenerator.bubbleGap);
