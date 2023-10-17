@@ -228,7 +228,9 @@ namespace SNGames.BubbleShooter
                         if (!visitedBubbles.Contains(item.bubble))
                         {
                             queue.Enqueue(item.bubble);
-                            visitedBubbles.Add(item.bubble);
+
+                            if (item.bubble.BubbleColor != BubbleType.NonDestructable)
+                                visitedBubbles.Add(item.bubble);
                         }
                     }
                 }

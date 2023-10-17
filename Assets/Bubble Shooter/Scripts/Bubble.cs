@@ -18,9 +18,8 @@ namespace SNGames.BubbleShooter
         [SerializeField, ReadOnly] public bool isLaunchBubble = false;
 
         //Need to be filled by user
-        [BoxGroup("Required Data")]
+        [Header("Base Bubble Data")]
         [SerializeField] protected BubbleType bubbleColor;
-        [BoxGroup("Required Data")]
         [SerializeField] protected GameObject bubbleMesh;
 
         public List<NeighbourData> NeighbourBubbles => neighbourBubbles;
@@ -52,7 +51,7 @@ namespace SNGames.BubbleShooter
             return possibleNeighbourPoints;
         }
 
-        public void MoveLaunchBubbleToFinalPositionOnBoard(Vector3 finalPoint)
+        public void MoveLaunchBubbleToFinalPositionOnBoard(Vector3 finalPoint, Bubble bubbleWeAreShootingTo)
         {
             if(isLaunchBubble)
             {
@@ -66,11 +65,20 @@ namespace SNGames.BubbleShooter
 
                     yield return new WaitForSeconds(0.2f);
 
-                    OnLaunchBallSettleAtFinalPosition(finalPoint);
+                    OnLaunchBallSettleAtFinalPosition(finalPoint, bubbleWeAreShootingTo);
                 }
             }
         }
 
-        protected abstract void OnLaunchBallSettleAtFinalPosition(Vector3 finalPoint);
+        public void PlayImpactMotionAnimationForBubble(Vector3 directionOfImpact)
+        {
+            Sequence impactMotionSequecne = DOTween.Sequence();
+            impactMotionSequecne.Append(transform.DOMove(transform.position + (directionOfImpact * 0.05f), 0.1f));
+            impactMotionSequecne.Append(transform.DOMove(transform.position, 0.1f));
+        }
+
+        protected abstract void OnLaunchBallSettleAtFinalPosition(Vector3 finalPoint, Bubble bubbleWeAreShootingTo);
+
+        public abstract void ActivateDeactivatedVFX();
     }
 }

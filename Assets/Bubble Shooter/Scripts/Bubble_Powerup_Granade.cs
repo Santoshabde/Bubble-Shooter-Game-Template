@@ -7,10 +7,11 @@ namespace SNGames.BubbleShooter
 {
     public class Bubble_Powerup_Granade : Bubble
     {
+        [Header("Granade Powerup Data")]
         [SerializeField] private int granadeDestructionLevel = 2;
         [SerializeField] private ParticleSystem explosionParticleEffect;
 
-        protected override void OnLaunchBallSettleAtFinalPosition(Vector3 finalPoint)
+        protected override void OnLaunchBallSettleAtFinalPosition(Vector3 finalPoint, Bubble bubbleWeAreShootingTo)
         {
             StartCoroutine(OnLaunchBallSettleAtFinalPosition_IEnum(finalPoint));
         }
@@ -29,7 +30,7 @@ namespace SNGames.BubbleShooter
             //Giving a impact animation for all neighbouring bubbles
             foreach (var neighbourData in neighbourBubbles)
             {
-                ((BubbleColored)neighbourData.bubble).PlayImpactMotionAnimationForBubble((neighbourData.bubble.transform.position - transform.position).normalized);
+                (neighbourData.bubble).PlayImpactMotionAnimationForBubble((neighbourData.bubble.transform.position - transform.position).normalized);
             }
 
             bubbleMesh.SetActive(false);
@@ -40,20 +41,30 @@ namespace SNGames.BubbleShooter
             {
                 cachedBubblesToDeactivate.Add(bubble);
                 LevelData.bubblesLevelDataDictionary.Remove(bubble.PositionID);
-                ((BubbleColored)bubble).ActivateDeactivatedVFX();
+                bubble.ActivateDeactivatedVFX();
                 yield return new WaitForSeconds(0.1f);
-            } 
+            }
 
             LevelData.bubblesLevelDataDictionary.Remove(PositionID);
 
             //Recalculating neighbour Data again for all board bubbles - because a new bubble got added to the board
             BubbleShooter_HelperFunctions.RecalculateAllBubblesNeighboursData(LevelData.bubblesLevelDataDictionary, LevelGenerator.bubbleGap);
 
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(0.5f);
+
+            //Once bubble clears the similar colors, we need to seperate isolated bubbles from the level
+            SNEventsController<InGameEvents>.TriggerEvent(InGameEvents.OnBubbleCollisionClearDataComplete);
+
+            yield return new WaitForSeconds(1.5f);
 
             cachedBubblesToDeactivate.ForEach(t => t.gameObject.SetActive(false));
             SNEventsController<InGameEvents>.TriggerEvent(InGameEvents.MoveNextBubbleToCurrentBubble);
             gameObject.SetActive(false);
+        }
+
+        public override void ActivateDeactivatedVFX()
+        {
+            BubbleMesh.SetActive(false);
         }
     }
 }

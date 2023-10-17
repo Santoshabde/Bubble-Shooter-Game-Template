@@ -10,7 +10,7 @@ public class BubbleScore : MonoBehaviour
 
     private void Start()
     {
-        Destroy(this.gameObject, 0.61f);
+        Destroy(this.gameObject, 0.7f);
     }
 
     public void SpawnScoreMesh(int score)

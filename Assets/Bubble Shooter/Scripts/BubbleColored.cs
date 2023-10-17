@@ -10,12 +10,11 @@ namespace SNGames.BubbleShooter
 {
     public class BubbleColored : Bubble
     {
-        [BoxGroup("VFX Data")]
+        [Header("Colored Bubble Data")]
         [SerializeField] protected ParticleSystem ringEffect;
-        [BoxGroup("VFX Data")]
         [SerializeField] protected ParticleSystem splashEffect;
 
-        protected override void OnLaunchBallSettleAtFinalPosition(Vector3 finalPoint)
+        protected override void OnLaunchBallSettleAtFinalPosition(Vector3 finalPoint, Bubble bubbleWeAreShootingTo)
         {
             StartCoroutine(OnLaunchBallSettleAtFinalPosition_IEnum(finalPoint));
         }
@@ -37,7 +36,7 @@ namespace SNGames.BubbleShooter
             //Giving a impact animation for all neighbouring bubbles
             foreach (var neighbourData in neighbourBubbles)
             {
-                ((BubbleColored)neighbourData.bubble).PlayImpactMotionAnimationForBubble((neighbourData.bubble.transform.position - transform.position).normalized);
+                (neighbourData.bubble).PlayImpactMotionAnimationForBubble((neighbourData.bubble.transform.position - transform.position).normalized);
             }
 
             //Next main step - identify same color bubbles in chain, if >=3 remove them from board
@@ -48,7 +47,8 @@ namespace SNGames.BubbleShooter
                 foreach (var sameColoredBubble in chainSameColorBubbles)
                 {
                     cachedBubblesToDeactivate.Add(sameColoredBubble);
-                    ((BubbleColored)sameColoredBubble).ActivateDeactivatedVFX();
+                    if (sameColoredBubble.GetType() == typeof(BubbleColored))
+                        ((BubbleColored)sameColoredBubble).ActivateDeactivatedVFX();
                     LevelData.bubblesLevelDataDictionary.Remove(sameColoredBubble.PositionID);
 
                     ScoreController.Instance.UpdateGameScore(10, sameColoredBubble.transform.position, false);
@@ -69,18 +69,11 @@ namespace SNGames.BubbleShooter
             SNEventsController<InGameEvents>.TriggerEvent(InGameEvents.MoveNextBubbleToCurrentBubble);
         }
 
-        public void ActivateDeactivatedVFX()
+        public override void ActivateDeactivatedVFX()
         {
             bubbleMesh.SetActive(false);
             ringEffect.gameObject.SetActive(true);
             splashEffect.gameObject.SetActive(true);
-        }
-
-        public void PlayImpactMotionAnimationForBubble(Vector3 directionOfImpact)
-        {
-            Sequence impactMotionSequecne = DOTween.Sequence();
-            impactMotionSequecne.Append(transform.DOMove(transform.position + (directionOfImpact * 0.05f) , 0.1f));
-            impactMotionSequecne.Append(transform.DOMove(transform.position, 0.1f));
         }
     }
 }

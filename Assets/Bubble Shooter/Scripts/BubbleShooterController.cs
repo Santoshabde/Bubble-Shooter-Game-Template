@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using SNGames.CommonModule;
 using TMPro;
+using System;
 
 namespace SNGames.BubbleShooter
 {
@@ -13,16 +14,24 @@ namespace SNGames.BubbleShooter
         [SerializeField] private int bubbleShotsLeftCount;
         [SerializeField] private InGameBubblesData inGameBubbleData;
         [SerializeField] private LineRenderer initialPathRenderer;
+        [SerializeField] private Transform nonPowerupsPlatform;
         [SerializeField] private Transform currentBubbleLaunchPoint;
         [SerializeField] private Transform nextBubblePoint;
+        [SerializeField] private Transform powerupsPlatform;
+        [SerializeField] private Transform currentPowerUpLaunchPoint;
         [SerializeField] private LayerMask ignoreLayerMask;
 
         private Bubble currentlyPlacedBubble = null;
+        private Bubble catchedCurrentlyPlacedBubble = null;
         private Bubble nextBubble;
+        private bool powerUpActivated = false;
 
         private void Start()
         {
             SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.MoveNextBubbleToCurrentBubble, MoveNextShootBubbleToCurrentShootBubble);
+
+            PowerupController.OnPowerButtonClicked += OnPowerButtonClicked;
+
             bubbleShotsLeftCountText.text = bubbleShotsLeftCount.ToString();
 
             PlaceCurrentShootBubble();
@@ -40,13 +49,42 @@ namespace SNGames.BubbleShooter
         {
             //Choose a random color
             Bubble randomColorBubblePrefab = inGameBubbleData.GetRandomBubbleColorPrefab();
-            //Bubble randomColorBubblePrefab = inGameBubbleData.GetBubbleOfAColor(BubbleType.PowerUp_Bomb);
+            //Bubble randomColorBubblePrefab = inGameBubbleData.GetBubbleOfAColor(BubbleType.PowerUp_Colored);
 
             //Spawn current bubble shoot!! 
             currentlyPlacedBubble = Instantiate(randomColorBubblePrefab, currentBubbleLaunchPoint.position, Quaternion.identity);
             currentlyPlacedBubble.transform.parent = currentBubbleLaunchPoint.transform;
             currentlyPlacedBubble.isLaunchBubble = true;
             currentlyPlacedBubble.gameObject.layer = LayerMask.NameToLayer("LaunchBubble");
+        }
+
+        public void MoveNextShootBubbleToCurrentShootBubble()
+        {
+            if (powerUpActivated)
+            {
+                powerUpActivated = false;
+                RayCastToBubblesOnBoardAndCheckForLaunchInput();
+                initialPathRenderer.enabled = true;
+                currentlyPlacedBubble = catchedCurrentlyPlacedBubble;
+                nonPowerupsPlatform.gameObject.SetActive(true);
+                powerupsPlatform.gameObject.SetActive(false);
+            }
+            else
+            {
+                StartCoroutine(PlaceNextBubbleToCurrent());
+
+                IEnumerator PlaceNextBubbleToCurrent()
+                {
+                    yield return new WaitForSeconds(0.1f);
+                    nextBubble.transform.DOMove(currentBubbleLaunchPoint.position, 0.2f);
+
+                    yield return new WaitForSeconds(0.2f);
+                    currentlyPlacedBubble = nextBubble;
+                    PlaceNextShootBubble();
+                    initialPathRenderer.enabled = true;
+                    RayCastToBubblesOnBoardAndCheckForLaunchInput();
+                }
+            }
         }
 
         public void PlaceNextShootBubble()
@@ -57,23 +95,6 @@ namespace SNGames.BubbleShooter
             nextBubble.transform.parent = nextBubblePoint.transform;
             nextBubble.isLaunchBubble = true;
             nextBubble.gameObject.layer = LayerMask.NameToLayer("LaunchBubble");
-        }
-
-        public void MoveNextShootBubbleToCurrentShootBubble()
-        {
-            StartCoroutine(PlaceNextBubbleToCurrent());
-
-            IEnumerator PlaceNextBubbleToCurrent()
-            {
-                yield return new WaitForSeconds(0.1f);
-                nextBubble.transform.DOMove(currentBubbleLaunchPoint.position, 0.2f);
-
-                yield return new WaitForSeconds(0.2f);
-                currentlyPlacedBubble = nextBubble;
-                PlaceNextShootBubble();
-                initialPathRenderer.enabled = true;
-                RayCastToBubblesOnBoardAndCheckForLaunchInput();
-            }
         }
 
         private void RayCastToBubblesOnBoardAndCheckForLaunchInput()
@@ -93,7 +114,7 @@ namespace SNGames.BubbleShooter
 
                     if (Input.GetMouseButtonUp(0))
                     {
-                        OnShootingTheCurrentBubble(finalPositionIfCurrentBubbleShot);
+                        OnShootingTheCurrentBubble(finalPositionIfCurrentBubbleShot, hit.collider.GetComponent<Bubble>());
                     }
                 }
 
@@ -102,7 +123,7 @@ namespace SNGames.BubbleShooter
             }
         }
 
-        private void OnShootingTheCurrentBubble(Vector3 currentlyPlacedBallPosition)
+        private void OnShootingTheCurrentBubble(Vector3 currentlyPlacedBallPosition, Bubble bubbleWeAreShootingTo)
         {
             if (currentlyPlacedBubble != null)
             {
@@ -117,8 +138,24 @@ namespace SNGames.BubbleShooter
                 initialPathRenderer.enabled = false;
 
                 //Moving the current bubble to final positions
-                currentlyPlacedBubble.MoveLaunchBubbleToFinalPositionOnBoard(currentlyPlacedBallPosition);
+                currentlyPlacedBubble.MoveLaunchBubbleToFinalPositionOnBoard(currentlyPlacedBallPosition, bubbleWeAreShootingTo);
                 currentlyPlacedBubble = null;
+            }
+        }
+
+        private void OnPowerButtonClicked(BubbleType powerType)
+        {
+            if (!powerUpActivated)
+            {
+                powerUpActivated = true;
+                nonPowerupsPlatform.gameObject.SetActive(false);
+                powerupsPlatform.gameObject.SetActive(true);
+
+                catchedCurrentlyPlacedBubble = currentlyPlacedBubble;
+                currentlyPlacedBubble = Instantiate(inGameBubbleData.GetBubbleOfAColor(powerType), currentPowerUpLaunchPoint.position, Quaternion.identity);
+                currentlyPlacedBubble.transform.parent = currentPowerUpLaunchPoint;
+                currentlyPlacedBubble.isLaunchBubble = true;
+                currentlyPlacedBubble.gameObject.layer = LayerMask.NameToLayer("LaunchBubble");
             }
         }
     }
