@@ -163,14 +163,14 @@ namespace SNGames.BubbleShooter
 
             IEnumerator AdjustShootPositionBasedOnLastBubbleIntheGrid_IEnum()
             {
-                yield return new WaitForSeconds(0.22f);
+                yield return new WaitForSeconds(0.2f);
 
                 float distanceBetween = Vector3.Distance(distanceCalculationTransform.position, levelGenerator.GetNearestRowBubbleInTheGrid(refPoint).PositionID);
 
                 float distanceToMove = distanceBetween - distanceToMaintain;
-                transform.DOMove(transform.position + new Vector3(0, distanceToMove, 0), 0.2f);
+                transform.DOMove(transform.position + new Vector3(0, distanceToMove, 0), 0.45f);
 
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(0.45f);
 
                 initialPathRenderer.enabled = true;
                 RayCastToBubblesOnBoardAndCheckForLaunchInput();
