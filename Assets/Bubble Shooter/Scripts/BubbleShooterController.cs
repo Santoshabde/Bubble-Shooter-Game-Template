@@ -13,6 +13,7 @@ namespace SNGames.BubbleShooter
         [SerializeField] private LevelGenerator levelGenerator;
         [SerializeField] private TextMeshPro bubbleShotsLeftCountText;
         [SerializeField] private int bubbleShotsLeftCount;
+        [SerializeField] private float minYTouchMousePoint;
         [SerializeField] private InGameBubblesData inGameBubbleData;
         [SerializeField] private LineRenderer initialPathRenderer;
         [SerializeField] private float distanceToMaintain;
@@ -100,6 +101,11 @@ namespace SNGames.BubbleShooter
 
         private void RayCastToBubblesOnBoardAndCheckForLaunchInput()
         {
+            if(GetWorldMouseTouchPoint().y < minYTouchMousePoint)
+            {
+                return;
+            }
+
             Vector3 rayCastDirection = GetRayCastDirectionToShoot();
 
             RaycastHit2D[] hit = new RaycastHit2D[1];
@@ -226,6 +232,27 @@ namespace SNGames.BubbleShooter
             return Input.GetMouseButtonUp(0);
 #else
             return (Input.touchCount > 0) && Input.GetTouch(0).phase == TouchPhase.Ended;
+#endif
+        }
+
+        private Vector3 GetWorldMouseTouchPoint()
+        {
+#if UNITY_EDITOR
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mouseWorldPos.z = 0f;
+
+            return mouseWorldPos;
+#else
+            if (Input.touchCount > 0)
+            {
+                Vector3 touchScreenPos = Input.touches[0].position;
+                Vector3 touchWorldPos = Camera.main.ScreenToWorldPoint(touchScreenPos);
+                touchWorldPos.z = 0f;
+
+                return touchWorldPos;
+            }
+
+            return new Vector3(0, 2, 0);
 #endif
         }
     }
