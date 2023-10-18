@@ -21,6 +21,8 @@ namespace SNGames.BubbleShooter
 
         private void Start()
         {
+            Application.targetFrameRate = 120;
+
             SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnBubbleCollisionClearDataComplete, ClearTheIsolatedBubblesInLevel);
 
             //Generates Level - All bubbles - And Fill up the level data

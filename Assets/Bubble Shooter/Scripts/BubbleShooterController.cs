@@ -116,22 +116,22 @@ namespace SNGames.BubbleShooter
 
             Vector3 rayCastDirection = (mouseWorldPos - currentBubbleLaunchPoint.position).normalized;
 
-            RaycastHit2D hit;
-            hit = Physics2D.Raycast(currentBubbleLaunchPoint.position, rayCastDirection, Mathf.Infinity,~ignoreLayerMask);
-            if (hit.collider != null)
+            RaycastHit2D[] hit = new RaycastHit2D[1];
+            Physics2D.RaycastNonAlloc(currentBubbleLaunchPoint.position, rayCastDirection, hit, 100f, ~ignoreLayerMask);
+            if (hit[0].collider != null)
             {
-                if (hit.collider.GetComponent<Bubble>() != null)
+                if (hit[0].collider.GetComponent<Bubble>() != null)
                 {
-                    Vector3 finalPositionIfCurrentBubbleShot = BubbleShooter_HelperFunctions.GetNearestNeighbourBubblePoint(hit.collider.GetComponent<Bubble>(), hit.point);
+                    Vector3 finalPositionIfCurrentBubbleShot = BubbleShooter_HelperFunctions.GetNearestNeighbourBubblePoint(hit[0].collider.GetComponent<Bubble>(), hit[0].point);
 
                     if (Input.GetMouseButtonUp(0))
                     {
-                        OnShootingTheCurrentBubble(finalPositionIfCurrentBubbleShot, hit.collider.GetComponent<Bubble>());
+                        OnShootingTheCurrentBubble(finalPositionIfCurrentBubbleShot, hit[0].collider.GetComponent<Bubble>());
                     }
                 }
 
                 initialPathRenderer.SetPosition(0, currentBubbleLaunchPoint.position + new Vector3(0, 0, 2));
-                initialPathRenderer.SetPosition(1, (Vector3)hit.point + new Vector3(0, 0, 2));
+                initialPathRenderer.SetPosition(1, (Vector3)hit[0].point + new Vector3(0, 0, 2));
             }
         }
 
@@ -147,22 +147,22 @@ namespace SNGames.BubbleShooter
                 // Calculate the raycast direction
                 Vector3 rayCastDirection = (touchWorldPos - currentBubbleLaunchPoint.position).normalized;
 
-                RaycastHit2D hit;
-                hit = Physics2D.Raycast(currentBubbleLaunchPoint.position, rayCastDirection, Mathf.Infinity, ~ignoreLayerMask);
-                if (hit.collider != null)
+                RaycastHit2D[] hit = new RaycastHit2D[1];
+                Physics2D.RaycastNonAlloc(currentBubbleLaunchPoint.position, rayCastDirection, hit, 100f, ~ignoreLayerMask);
+                if (hit[0].collider != null)
                 {
-                    if (hit.collider.GetComponent<Bubble>() != null)
+                    if (hit[0].collider.GetComponent<Bubble>() != null)
                     {
-                        Vector3 finalPositionIfCurrentBubbleShot = BubbleShooter_HelperFunctions.GetNearestNeighbourBubblePoint(hit.collider.GetComponent<Bubble>(), hit.point);
+                        Vector3 finalPositionIfCurrentBubbleShot = BubbleShooter_HelperFunctions.GetNearestNeighbourBubblePoint(hit[0].collider.GetComponent<Bubble>(), hit[0].point);
 
                         if (Input.GetTouch(0).phase == TouchPhase.Ended)
                         {
-                            OnShootingTheCurrentBubble(finalPositionIfCurrentBubbleShot, hit.collider.GetComponent<Bubble>());
+                            OnShootingTheCurrentBubble(finalPositionIfCurrentBubbleShot, hit[0].collider.GetComponent<Bubble>());
                         }
                     }
 
                     initialPathRenderer.SetPosition(0, currentBubbleLaunchPoint.position + new Vector3(0, 0, 2));
-                    initialPathRenderer.SetPosition(1, (Vector3)hit.point + new Vector3(0, 0, 2));
+                    initialPathRenderer.SetPosition(1, (Vector3)hit[0].point + new Vector3(0, 0, 2));
                 }
             }
         }
@@ -213,7 +213,6 @@ namespace SNGames.BubbleShooter
                 yield return new WaitForSeconds(0.22f);
 
                 float distanceBetween = Vector3.Distance(distanceCalculationTransform.position, levelGenerator.GetNearestRowBubbleInTheGrid(refPoint).PositionID);
-                Debug.Log(distanceBetween);
 
                 float distanceToMove = distanceBetween - distanceToMaintain;
                 transform.DOMove(transform.position + new Vector3(0, distanceToMove, 0), 0.2f);
@@ -223,6 +222,33 @@ namespace SNGames.BubbleShooter
                 initialPathRenderer.enabled = true;
                 RayCastToBubblesOnBoardAndCheckForLaunchInput();
             }
+        }
+
+        private bool ShouldCastARayAndCheckForInput()
+        {
+#if UNITY_EDITOR
+            if (Input.GetMouseButton(0)
+                || Input.GetMouseButtonUp(0))
+                return true;
+#else
+            if ((Input.touchCount > 0)
+ && (Input.GetTouch(0).phase == TouchPhase.Began
+ || Input.GetTouch(0).phase == TouchPhase.Moved
+ || Input.GetTouch(0).phase == TouchPhase.Ended))
+                return true;
+#endif
+
+            return false;
+        }
+
+        private void GetInputUp()
+        {
+
+        }
+
+        private void GetInputHeld()
+        {
+
         }
     }
 }
