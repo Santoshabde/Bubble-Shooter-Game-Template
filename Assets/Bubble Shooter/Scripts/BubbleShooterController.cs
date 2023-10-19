@@ -32,13 +32,18 @@ namespace SNGames.BubbleShooter
 
         private void Start()
         {
+            //Registering to 2 events
+            //Move your next Bubble to current bubble on triggering this event
             SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.MoveNextBubbleToCurrentBubble, MoveNextShootBubbleToCurrentShootBubble);
+            //You move the level(along with camera) up and down based on the last bubble distance to your shoot point. - NOTE: Never move bubbles, bubbles positions should always be fixed
             SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.MoveNextBubbleToCurrentBubble, () => AdjustShootPositionBasedOnLastBubbleIntheGrid(distanceCalculationTransform));
 
+            //Spawn respective power on clicking respective powerup
             PowerupController.OnPowerButtonClicked += OnPowerButtonClicked;
 
             bubbleShotsLeftCountText.text = bubbleShotsLeftCount.ToString();
 
+            //Place current and next bubble at the start of the level
             PlaceCurrentShootBubble();
             PlaceNextShootBubble();
         }
@@ -47,6 +52,7 @@ namespace SNGames.BubbleShooter
         {
             if (ShouldCastARayAndCheckForInput())
             {
+                //2 cases again here - ray cast directly to bubble (or) ray cast to wall
                 RayCastToBubblesOnBoardAndCheckForLaunchInput();
             }
         }
@@ -102,10 +108,13 @@ namespace SNGames.BubbleShooter
         List<Vector3> allWallHitPoints = new List<Vector3>();
         private void RayCastToBubblesOnBoardAndCheckForLaunchInput()
         {
-            //if(GetWorldMouseTouchPoint().y < minYTouchMousePoint)
-           // {
-            //    return;
-           // }
+            //If your 
+            if(GetMouseTouchWorldPoint().y - currentBubbleLaunchPoint.position.y < 0.7f)
+            {
+                return;
+            }
+
+            if (currentlyPlacedBubble == null) return;
 
             Vector3 rayCastDirection = GetRayCastDirectionToShoot();
 
@@ -113,7 +122,10 @@ namespace SNGames.BubbleShooter
             Physics2D.RaycastNonAlloc(currentBubbleLaunchPoint.position, rayCastDirection, hit, 100f, ~ignoreLayerMask);
             if (hit[0].collider != null)
             {
-                if (hit[0].collider.GetComponent<Bubble>() != null)
+                //On Raycast hitting bubble
+                Bubble firstHitBubble = hit[0].collider.GetComponent<Bubble>();
+
+                if (firstHitBubble != null)
                 {
                     initialPathRenderer.positionCount = 2;
                     initialPathRenderer.SetPosition(0, currentBubbleLaunchPoint.position + new Vector3(0, 0, 2));
@@ -121,44 +133,75 @@ namespace SNGames.BubbleShooter
 
                     if (GetInputUp())
                     {
-                        Vector3 finalPositionIfCurrentBubbleShot = BubbleShooter_HelperFunctions.GetNearestNeighbourBubblePoint(hit[0].collider.GetComponent<Bubble>(), hit[0].point);
-                        OnShootingTheCurrentBubble(finalPositionIfCurrentBubbleShot, hit[0].collider.GetComponent<Bubble>());
+                        Vector3 finalPositionIfCurrentBubbleShot = BubbleShooter_HelperFunctions.GetNearestNeighbourBubblePoint(firstHitBubble, hit[0].point);
+                        OnShootingTheCurrentBubble(finalPositionIfCurrentBubbleShot, firstHitBubble);
                     }
                 }
 
                 //First ray hit wall
                 if (hit[0].collider.transform.tag == "Wall")
                 {
+                    finalHitBubble = null;
                     allWallHitPoints = new List<Vector3>();
                     allWallHitPoints.Add(currentBubbleLaunchPoint.position);
                     allWallHitPoints.Add(hit[0].point);
 
-                    //Testing
-                    RaycastHit2D[] hit1 = new RaycastHit2D[1];   
                     Vector3 reflectedRayDirection0 = Vector3.Reflect(rayCastDirection, hit[0].normal);
-                   // Debug.DrawRay(hit[0].point, hit[0].normal);
-                    //Debug.DrawRay(hit[0].point, reflectedRayDirection0);
-                    Physics2D.RaycastNonAlloc(hit[0].point + ((Vector2)(reflectedRayDirection0) * 0.2f), reflectedRayDirection0, hit1, 100f, ~ignoreLayerMask);
+                    CastWallRay(hit[0].point, reflectedRayDirection0);
 
-                    Debug.Log(hit1[0].collider.name);
-                    if(hit1[0].collider.transform.tag == "Wall")
-                    {
-                        allWallHitPoints.Add(hit1[0].point);
-                        Vector3 reflectedRayDirection1 = Vector3.Reflect(reflectedRayDirection0, hit1[0].normal);
-
-                        RaycastHit2D[] hit2 = new RaycastHit2D[1];
-                        Physics2D.RaycastNonAlloc(hit1[0].point + ((Vector2)(reflectedRayDirection1) * 0.2f), reflectedRayDirection1, hit2, 100f, ~ignoreLayerMask);
-                        if (hit2[0].collider.transform.tag == "Wall")
-                        {
-                            allWallHitPoints.Add(hit2[0].point);
-                        }
-                    }
-
-                    initialPathRenderer.positionCount = allWallHitPoints.Count;
+                    initialPathRenderer.positionCount = allWallHitPoints.Count + 1;
                     for (int i = 0; i < allWallHitPoints.Count; i++)
                     {
                         initialPathRenderer.SetPosition(i, allWallHitPoints[i] + new Vector3(0, 0, 2));
                     }
+                    initialPathRenderer.SetPosition(allWallHitPoints.Count, (Vector3)finalBubbleHit.point + new Vector3(0, 0, 2));
+
+                    if (GetInputUp())
+                    {
+                        Sequence moveSeq = DOTween.Sequence();
+                        foreach (var item in allWallHitPoints)
+                        {
+                            moveSeq.Append(currentlyPlacedBubble.transform.DOMove(item, 0.07f).SetEase(Ease.InOutCubic));
+                        }
+
+                        Vector3 finalPositionIfCurrentBubbleShot = BubbleShooter_HelperFunctions.GetNearestNeighbourBubblePoint(finalHitBubble, finalBubbleHit.point);
+
+                        moveSeq.OnComplete(() =>
+                        {
+                            OnShootingTheCurrentBubble(finalPositionIfCurrentBubbleShot, finalHitBubble);
+                        });
+                    }
+                }
+            }
+        }
+
+        private Bubble finalHitBubble = null;
+        private RaycastHit2D finalBubbleHit;
+        private void CastWallRay(Vector3 origin, Vector3 direction)
+        {
+            if (finalHitBubble != null)
+            {
+                return; // Stop when a Bubble is hit.
+            }
+
+            RaycastHit2D[] hits = Physics2D.RaycastAll(origin + ((direction * 0.2f)), direction, 100f, ~ignoreLayerMask);
+            if (hits != null && hits.Length > 0 && hits[0].collider != null)
+            {
+                if (hits[0].collider.GetComponent<Bubble>() != null)
+                {
+                    finalHitBubble = hits[0].collider.GetComponent<Bubble>();
+                    finalBubbleHit = hits[0];
+                    return;
+                }
+                else if (hits[0].collider.transform.tag == "Wall")
+                {
+                    allWallHitPoints.Add(hits[0].point);
+                    Vector3 reflectionDirection = Vector3.Reflect(direction, hits[0].normal);
+                    CastWallRay(hits[0].point, reflectionDirection);
+                }
+                else
+                {
+                    return;
                 }
             }
         }
@@ -241,8 +284,7 @@ namespace SNGames.BubbleShooter
         private Vector3 GetRayCastDirectionToShoot()
         {
 #if UNITY_EDITOR
-            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mouseWorldPos.z = 0f;
+            Vector3 mouseWorldPos = GetMouseTouchWorldPoint();
 
             Vector3 rayCastDirection = (mouseWorldPos - currentBubbleLaunchPoint.position).normalized;
 
@@ -252,9 +294,7 @@ namespace SNGames.BubbleShooter
             Vector3 rayCastDirection = new Vector3(0, 1, 0);
             if (Input.touchCount > 0)
             {
-                Vector3 touchScreenPos = Input.touches[0].position;
-                Vector3 touchWorldPos = Camera.main.ScreenToWorldPoint(touchScreenPos);
-                touchWorldPos.z = 0f;
+                Vector3 touchWorldPos = GetMouseTouchWorldPoint();
 
                 // Calculate the raycast direction
                 rayCastDirection = (touchWorldPos - currentBubbleLaunchPoint.position).normalized;
@@ -273,21 +313,20 @@ namespace SNGames.BubbleShooter
 #endif
         }
 
-        private Vector3 GetWorldMouseTouchPoint()
+        private Vector3 GetMouseTouchWorldPoint()
         {
 #if UNITY_EDITOR
             Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mouseWorldPos.z = 0f;
+           // mouseWorldPos.y = 2f;
 
             return mouseWorldPos;
 #else
             if (Input.touchCount > 0)
             {
                 Vector3 touchScreenPos = Input.touches[0].position;
-                Vector3 touchWorldPos = Camera.main.ScreenToWorldPoint(touchScreenPos);
-                touchWorldPos.z = 0f;
-
-                return touchWorldPos;
+                Vector3 worldPos = Camera.main.ScreenToWorldPoint(touchScreenPos);
+                return touchScreenPos;
             }
 
             return new Vector3(0, 2, 0);
@@ -295,13 +334,5 @@ namespace SNGames.BubbleShooter
         }
 
         #endregion
-
-        private void OnDrawGizmos()
-        {
-            foreach (var item in allWallHitPoints)
-            {
-                Gizmos.DrawSphere(item, 0.1f);
-            }
-        }
     }
 }

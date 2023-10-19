@@ -17,10 +17,10 @@ Library: D:\Unity Engine Projects\Bubble Shooter Game Template_GIT\Temp\BurstOut
 --assembly-defines=Unity.2D.Animation.Runtime;
 --assembly-defines=Unity.2D.Tilemap.Extras;
 --assembly-defines=Unity.VisualScripting.Flow;
---assembly-defines=NaughtyAttributes.Test;
 --assembly-defines=Unity.InternalAPIEngineBridge.001;
 --assembly-defines=Unity.2D.Common.Runtime;
 --assembly-defines=Unity.Timeline;
+--assembly-defines=NaughtyAttributes.Test;
 --assembly-defines=AYellowpaper.SerializedCollections;
 --assembly-defines=CFXRRuntime;
 --assembly-defines=Unity.Collections;
