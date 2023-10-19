@@ -55,7 +55,7 @@ namespace SNGames.BubbleShooter
         }
 
         //Moves the bubble to final position of raycast hit and then performs neccesarry actions based on the bubble type
-        public void MoveLaunchBubbleToFinalPositionOnBoard(Vector3 finalPoint, Bubble bubbleWeAreShootingTo)
+        public void MoveLaunchBubbleToFinalPositionOnBoard(Vector3 finalPoint, Bubble bubbleWeAreShootingTo = null)
         {
             if(isLaunchBubble)
             {
@@ -70,7 +70,8 @@ namespace SNGames.BubbleShooter
 
                     yield return new WaitForSeconds(0.2f);
 
-                    OnLaunchBallSettleAtFinalPosition(finalPoint, bubbleWeAreShootingTo);
+                    if (bubbleWeAreShootingTo != null)
+                        OnLaunchBallSettleAtFinalPosition(finalPoint, bubbleWeAreShootingTo);
                 }
             }
         }
