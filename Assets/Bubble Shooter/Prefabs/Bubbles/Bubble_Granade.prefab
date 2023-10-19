@@ -4831,6 +4831,7 @@ MonoBehaviour:
   isLaunchBubble: 0
   bubbleColor: 7
   bubbleMesh: {fileID: 7310047662128952008}
+  audioIDToPlayOnFinalPosSettling: explosion1
   initialGlow: {fileID: 9165510693695426221}
   granadeDestructionLevel: 2
   explosionParticleEffect: {fileID: 1847363566381674227}

@@ -283,7 +283,7 @@ namespace SNGames.BubbleShooter
             if ((Input.touchCount > 0)
  && (Input.GetTouch(0).phase == TouchPhase.Began
  || Input.GetTouch(0).phase == TouchPhase.Moved
- || Input.GetTouch(0).phase == TouchPhase.Ended))
+ || Input.GetTouch(0).phase == TouchPhase.Ended) && IsMousePointFingerInCorrectYPositionToCastARay())
                 return true;
 #endif
 
@@ -316,9 +316,23 @@ namespace SNGames.BubbleShooter
         private bool GetInputUp()
         {
 #if UNITY_EDITOR
-            return Input.GetMouseButtonUp(0);
+            bool mouseInput = Input.GetMouseButtonUp(0);
+            if (mouseInput)
+            {
+                if (AudioManager.Instance != null)
+                    AudioManager.Instance.PlayAudioClipWithAutoDestroy("shoot");
+            }
+
+            return mouseInput;
 #else
-            return (Input.touchCount > 0) && Input.GetTouch(0).phase == TouchPhase.Ended;
+
+            bool touchInput = (Input.touchCount > 0) && Input.GetTouch(0).phase == TouchPhase.Ended;
+            if (touchInput)
+            {
+                if (AudioManager.Instance != null)
+                    AudioManager.Instance.PlayAudioClipWithAutoDestroy("shoot");
+            }
+            return touchInput;
 #endif
         }
 
@@ -327,7 +341,6 @@ namespace SNGames.BubbleShooter
 #if UNITY_EDITOR
             Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mouseWorldPos.z = 0f;
-           // mouseWorldPos.y = 2f;
 
             return mouseWorldPos;
 #else
@@ -335,7 +348,9 @@ namespace SNGames.BubbleShooter
             {
                 Vector3 touchScreenPos = Input.touches[0].position;
                 Vector3 worldPos = Camera.main.ScreenToWorldPoint(touchScreenPos);
-                return touchScreenPos;
+                worldPos.z = 0;
+
+                return worldPos;
             }
 
             return new Vector3(0, 2, 0);

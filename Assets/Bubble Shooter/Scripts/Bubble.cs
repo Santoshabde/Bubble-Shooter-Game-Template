@@ -21,6 +21,7 @@ namespace SNGames.BubbleShooter
         [Header("Base Bubble Data")]
         [SerializeField] protected BubbleType bubbleColor;
         [SerializeField] protected GameObject bubbleMesh;
+        [SerializeField] protected string audioIDToPlayOnFinalPosSettling;
 
         public List<NeighbourData> NeighbourBubbles => neighbourBubbles;
         public BubbleType BubbleColor => bubbleColor;
@@ -71,7 +72,12 @@ namespace SNGames.BubbleShooter
                     yield return new WaitForSeconds(0.2f);
 
                     if (bubbleWeAreShootingTo != null)
+                    {
+                        if (AudioManager.Instance != null)
+                            AudioManager.Instance.PlayAudioClipWithAutoDestroy(audioIDToPlayOnFinalPosSettling);
+
                         OnLaunchBallSettleAtFinalPosition(finalPoint, bubbleWeAreShootingTo);
+                    }
                 }
             }
         }

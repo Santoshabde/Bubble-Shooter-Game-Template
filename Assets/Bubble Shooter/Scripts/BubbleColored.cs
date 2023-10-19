@@ -70,6 +70,9 @@ namespace SNGames.BubbleShooter
 
         public override void ActivateDeactivatedVFX()
         {
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlayAudioClipWithAutoDestroy("pop");
+
             bubbleMesh.SetActive(false);
             ringEffect.gameObject.SetActive(true);
             splashEffect.gameObject.SetActive(true);

@@ -5154,6 +5154,7 @@ MonoBehaviour:
   isLaunchBubble: 0
   bubbleColor: 8
   bubbleMesh: {fileID: 4462093637321288832}
+  audioIDToPlayOnFinalPosSettling: multiColorClip
   initialGlow: {fileID: 6201791846364160089}
   parentMultiColorObject: {fileID: 6635738869940206030}
   bubbleIdAndColor:
