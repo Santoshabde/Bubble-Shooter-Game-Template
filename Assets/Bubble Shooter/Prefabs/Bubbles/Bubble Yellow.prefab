@@ -19649,7 +19649,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.26
+  m_Radius: 0.28
 --- !u!114 &3423964376077334255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19667,5 +19667,6 @@ MonoBehaviour:
   isLaunchBubble: 0
   bubbleColor: 1
   bubbleMesh: {fileID: 4689053145586662113}
+  audioIDToPlayOnFinalPosSettling: 
   ringEffect: {fileID: 5888512547183862960}
   splashEffect: {fileID: 8717541899805735728}
