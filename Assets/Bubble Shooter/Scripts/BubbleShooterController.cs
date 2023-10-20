@@ -29,6 +29,7 @@ namespace SNGames.BubbleShooter
         private Bubble catchedCurrentlyPlacedBubble = null;
         private Bubble nextBubble;
         private bool powerUpActivated = false;
+        private bool currentPlaceBubbleInMovingProcess = false;
 
         private void Start()
         {
@@ -61,7 +62,6 @@ namespace SNGames.BubbleShooter
         {
             //Choose a random color
             Bubble randomColorBubblePrefab = inGameBubbleData.GetRandomBubbleColorPrefab();
-            //Bubble randomColorBubblePrefab = inGameBubbleData.GetBubbleOfAColor(BubbleType.PowerUp_Colored);
 
             //Spawn current bubble shoot!! 
             currentlyPlacedBubble = Instantiate(randomColorBubblePrefab, currentBubbleLaunchPoint.position, Quaternion.identity);
@@ -91,6 +91,8 @@ namespace SNGames.BubbleShooter
                     yield return new WaitForSeconds(0.2f);
                     currentlyPlacedBubble = nextBubble;
                     PlaceNextShootBubble();
+
+                    currentPlaceBubbleInMovingProcess = false;
                 }
             }
         }
@@ -237,7 +239,7 @@ namespace SNGames.BubbleShooter
 
         private void OnPowerButtonClicked(BubbleType powerType)
         {
-            if (!powerUpActivated)
+            if (!powerUpActivated && !currentPlaceBubbleInMovingProcess)
             {
                 powerUpActivated = true;
                 nonPowerupsPlatform.gameObject.SetActive(false);
@@ -319,6 +321,8 @@ namespace SNGames.BubbleShooter
             bool mouseInput = Input.GetMouseButtonUp(0);
             if (mouseInput)
             {
+                currentPlaceBubbleInMovingProcess = true;
+
                 if (AudioManager.Instance != null)
                     AudioManager.Instance.PlayAudioClipWithAutoDestroy("shoot");
             }
