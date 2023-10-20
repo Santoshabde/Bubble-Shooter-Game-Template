@@ -74,7 +74,7 @@ namespace SNGames.BubbleShooter
 
                     if (bubbleWeAreShootingTo != null)
                     {
-                        if (AudioManager.Instance != null)
+                        if (AudioManager.Instance != null && !string.IsNullOrEmpty(audioIDToPlayOnFinalPosSettling))
                             AudioManager.Instance.PlayAudioClipWithAutoDestroy(audioIDToPlayOnFinalPosSettling);
 
                         OnLaunchBallSettleAtFinalPosition(finalPoint, bubbleWeAreShootingTo);
