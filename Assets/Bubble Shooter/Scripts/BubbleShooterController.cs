@@ -30,10 +30,15 @@ namespace SNGames.BubbleShooter
         private Bubble nextBubble;
         private bool powerUpActivated = false;
         private bool currentPlaceBubbleInMovingProcess = false;
+        private RaycastHit2D[] hit = new RaycastHit2D[1];
+
+        //Variable related to, wall reflections for bubble, when you aim for the wall
+        private List<Vector3> allWallHitPoints = new List<Vector3>();
+        private Bubble finalHitBubble = null;
+        private RaycastHit2D finalBubbleHit;
 
         private void Start()
         {
-            //Registering to 2 events
             //Move your next Bubble to current bubble on triggering this event
             SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.MoveNextBubbleToCurrentBubble, MoveNextShootBubbleToCurrentShootBubble);
             //You move the level(along with camera) up and down based on the last bubble distance to your shoot point. - NOTE: Never move bubbles, bubbles positions should always be fixed
@@ -58,6 +63,7 @@ namespace SNGames.BubbleShooter
             }
         }
 
+        //Placing the 'currentlyPlacedBubble' to shoot in its position
         public void PlaceCurrentShootBubble()
         {
             //Choose a random color
@@ -70,10 +76,12 @@ namespace SNGames.BubbleShooter
             currentlyPlacedBubble.gameObject.layer = LayerMask.NameToLayer("LaunchBubble");
         }
 
+        //Moving the next shoot bubble to 'currentlyPlacedBubble'
         public void MoveNextShootBubbleToCurrentShootBubble()
         {
             if (powerUpActivated)
             {
+                currentPlaceBubbleInMovingProcess = false;
                 powerUpActivated = false;
                 RayCastToBubblesOnBoardAndCheckForLaunchInput();
                 currentlyPlacedBubble = catchedCurrentlyPlacedBubble;
@@ -97,6 +105,7 @@ namespace SNGames.BubbleShooter
             }
         }
 
+        //Spawning the next shoot bubble
         public void PlaceNextShootBubble()
         {
             Bubble randomColorBubblePrefab = inGameBubbleData.GetRandomBubbleColorPrefab();
@@ -107,8 +116,6 @@ namespace SNGames.BubbleShooter
             nextBubble.gameObject.layer = LayerMask.NameToLayer("LaunchBubble");
         }
 
-        List<Vector3> allWallHitPoints = new List<Vector3>();
-        RaycastHit2D[] hit = new RaycastHit2D[1];
         private void RayCastToBubblesOnBoardAndCheckForLaunchInput()
         {
             //If nothing is placed on the launch point - currenltyPlacedBubble == null - Return
@@ -183,11 +190,10 @@ namespace SNGames.BubbleShooter
 
         bool IsMousePointFingerInCorrectYPositionToCastARay()
         {
-            return GetMouseTouchWorldPoint().y - currentBubbleLaunchPoint.position.y > 0.7f;
+            return GetMouseTouchWorldPoint().y - currentBubbleLaunchPoint.position.y > 0.1f;
         }
 
-        private Bubble finalHitBubble = null;
-        private RaycastHit2D finalBubbleHit;
+        //A recursive function, which recurively casts rays to the 2 walls, until it strickes a bubble
         private void CastWallRay(Vector3 origin, Vector3 direction)
         {
             if (finalHitBubble != null)
