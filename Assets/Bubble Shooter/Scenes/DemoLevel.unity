@@ -3473,7 +3473,7 @@ GameObject:
   - component: {fileID: 1982375701}
   - component: {fileID: 1982375702}
   m_Layer: 0
-  m_Name: 'fps '
+  m_Name: Fps Counter Display
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
