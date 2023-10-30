@@ -52,6 +52,8 @@ namespace SNGames.BubbleShooter
             //Place current and next bubble at the start of the level
             PlaceCurrentShootBubble();
             PlaceNextShootBubble();
+
+            AdjustShootPositionBasedOnLastBubbleIntheGrid(distanceCalculationTransform, true);
         }
 
         void Update()
@@ -259,7 +261,7 @@ namespace SNGames.BubbleShooter
             }
         }
 
-        private void AdjustShootPositionBasedOnLastBubbleIntheGrid(Transform refPoint)
+        private void AdjustShootPositionBasedOnLastBubbleIntheGrid(Transform refPoint, bool debug = false)
         {
             StartCoroutine(AdjustShootPositionBasedOnLastBubbleIntheGrid_IEnum());
 
@@ -267,7 +269,10 @@ namespace SNGames.BubbleShooter
             {
                 yield return new WaitForSeconds(0.2f);
 
-                float distanceBetween = Vector3.Distance(distanceCalculationTransform.position, levelGenerator.GetNearestRowBubbleInTheGrid(refPoint).PositionID);
+                float distanceBetween = Mathf.Abs(levelGenerator.GetNearestRowBubbleInTheGrid(refPoint).PositionID.y - distanceCalculationTransform.position.y);
+
+                if (debug)
+                    Debug.Log("Initial Distance:" + distanceBetween);
 
                 float distanceToMove = distanceBetween - distanceToMaintain;
                 transform.DOMove(transform.position + new Vector3(0, distanceToMove, 0), 0.45f);

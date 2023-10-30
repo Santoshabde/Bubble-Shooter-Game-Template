@@ -4829,7 +4829,7 @@ MonoBehaviour:
   positionID: {x: 0, y: 0, z: 0}
   neighbourBubbles: []
   isLaunchBubble: 0
-  bubbleColor: 7
+  bubbleColor: 8
   bubbleMesh: {fileID: 7310047662128952008}
   audioIDToPlayOnFinalPosSettling: explosion1
   initialGlow: {fileID: 9165510693695426221}

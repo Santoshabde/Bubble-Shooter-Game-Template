@@ -19665,7 +19665,7 @@ MonoBehaviour:
   positionID: {x: 0, y: 0, z: 0}
   neighbourBubbles: []
   isLaunchBubble: 0
-  bubbleColor: 6
+  bubbleColor: 7
   bubbleMesh: {fileID: 1896101564148341041}
   audioIDToPlayOnFinalPosSettling: 
   ringEffect: {fileID: 1659530603631012415}

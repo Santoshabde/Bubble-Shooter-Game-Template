@@ -8,6 +8,7 @@ namespace SNGames.BubbleShooter
         Blue,
         Pink,
         White,
+        Purple,
         NonDestructable,
         PowerUp_Bomb,
         PowerUp_Colored

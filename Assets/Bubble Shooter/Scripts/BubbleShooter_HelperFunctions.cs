@@ -16,7 +16,7 @@ namespace SNGames.BubbleShooter
 
             int random = Random.Range(0, 5);
             if (random == 0)
-                randomColor = BubbleType.Green;
+                randomColor = BubbleType.Blue;
 
             if (random == 1)
                 randomColor = BubbleType.Pink;
@@ -25,7 +25,7 @@ namespace SNGames.BubbleShooter
                 randomColor = BubbleType.Red;
 
             if (random == 3)
-                randomColor = BubbleType.White;
+                randomColor = BubbleType.Purple;
 
             if (random == 4)
                 randomColor = BubbleType.Yellow;

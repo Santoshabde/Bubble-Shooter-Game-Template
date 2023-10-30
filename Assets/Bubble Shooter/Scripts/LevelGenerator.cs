@@ -21,18 +21,12 @@ namespace SNGames.BubbleShooter
 
         private void Start()
         {
-            Application.targetFrameRate = 120;
-
-            SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnBubbleCollisionClearDataComplete, ClearTheIsolatedBubblesInLevel);
-
-            //Generates Level - All bubbles - And Fill up the level data
-            GenerateLevel(startX, startY, initialNumberOfRows, initialNumberOfColumns);
-
-            //Calculates all neighbours 
-            BubbleShooter_HelperFunctions.RecalculateAllBubblesNeighboursData(LevelData.bubblesLevelDataDictionary, bubbleGap);
+            SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnBubbleCollisionClearDataComplete, ClearTheIsolatedBubblesInLevel);   
         }
 
-        private void GenerateLevel(float startX, float startY, int rows, int columns)
+        #region Level Generation Types
+
+        public void GenerateRandomLevel(float startX, float startY, int rows, int columns)
         {
             LevelData.bubblesLevelDataDictionary = new Dictionary<Vector3, Bubble>();
             for (int i = 0; i < rows; i++)
@@ -69,7 +63,17 @@ namespace SNGames.BubbleShooter
                 LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
                 nodeBubbleToCalculateBFS = instantiatedBubble;
             }
+
+            //Calculates all neighbours 
+            BubbleShooter_HelperFunctions.RecalculateAllBubblesNeighboursData(LevelData.bubblesLevelDataDictionary, bubbleGap);
         }
+
+        public void GenerateLevelFromLevelJson(string levelJson)
+        {
+
+        }
+
+        #endregion
 
         private void ClearTheIsolatedBubblesInLevel()
         {

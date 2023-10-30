@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21e6fcc4348c82a4caf4e90d39f45b7b, type: 3}
+  m_Name: LevelData
+  m_EditorClassIdentifier: 
+  levelGenData:
+  - levelNumber: 1
+    generateRandomLevel: 1
+    startSpawnPosition: {x: -2.25, y: 0}
+    numberOfRows: 9
+    numberOfColumns: 10
+    levelJson: 
+    targetBubbles:
+    - targetNumber: 3
+      targetBubble: 1
+    - targetNumber: 4
+      targetBubble: 0
+    - targetNumber: 1
+      targetBubble: 2
+    targetRacoonsToSave: 2
+    totalGameTimeInSeconds: 120
