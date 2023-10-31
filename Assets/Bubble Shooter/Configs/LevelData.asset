@@ -27,4 +27,4 @@ MonoBehaviour:
     - targetNumber: 45
       targetBubble: 2
     targetRacoonsToSave: 0
-    totalGameTimeInSeconds: 25
+    totalGameTimeInSeconds: 45
