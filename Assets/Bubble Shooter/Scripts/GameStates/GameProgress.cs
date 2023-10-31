@@ -41,8 +41,9 @@ public class GameProgress : State
             yield return new WaitForSeconds(1f);
             timePassed = (int)DateTime.Now.Subtract(startTime).TotalSeconds;
 
-            if (levelGenData.totalGameTimeInSeconds - timePassed >= 0)
-                scoreController.UpdateTimer(TimerUtility.ConvertSecondsToTimer(levelGenData.totalGameTimeInSeconds - timePassed));
+            int timeRemaining = levelGenData.totalGameTimeInSeconds - timePassed;
+            if (timeRemaining >= 0)
+                scoreController.UpdateTimer(TimerUtility.ConvertSecondsToTimer(timeRemaining), timeRemaining < 10);
         }
     }
 }

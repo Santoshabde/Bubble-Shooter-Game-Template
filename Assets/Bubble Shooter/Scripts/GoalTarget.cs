@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class GoalTarget : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class GoalTarget : MonoBehaviour
     [SerializeField] private TextMeshProUGUI targetValue;
 
     public int currentTargetValue;
+
+    private Sequence scaleSeq;
+    private bool scaleSeqPlaying = false;
 
     public void SetTarget(int target, Sprite sprite)
     {
@@ -26,5 +30,14 @@ public class GoalTarget : MonoBehaviour
 
         currentTargetValue = value;
         targetValue.text = value.ToString();
+
+        if (!scaleSeqPlaying)
+        {
+            scaleSeqPlaying = true;
+            scaleSeq = DOTween.Sequence();
+            scaleSeq.Append(targetValue.transform.DOScale(1.4f, 0.25f));
+            scaleSeq.Append(targetValue.transform.DOScale(1f, 0.25f));
+            scaleSeq.OnComplete(() => scaleSeqPlaying = false);
+        }
     }
 }

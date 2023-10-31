@@ -13,9 +13,18 @@ public class ScoreController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI racoonsToRescue;
     [SerializeField] private GoalsSetUp goalsetup;
 
-    public void UpdateTimer(string timer)
+    public void UpdateTimer(string timer, bool shouldAnimate = false)
     {
         gameTime.text = timer;
+
+        if (shouldAnimate)
+        {
+            gameTime.color = Color.red;
+
+            Sequence scaleSeq = DOTween.Sequence();
+            scaleSeq.Append(gameTime.transform.DOScale(1.2f, 0.30f));
+            scaleSeq.Append(gameTime.transform.DOScale(1f, 0.30f));
+        }
     }
 
     public void UpdateRacoonsToRescue(int racoonsToRescue)

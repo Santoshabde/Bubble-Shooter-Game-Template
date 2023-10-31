@@ -3669,6 +3669,7 @@ MonoBehaviour:
   inGameBubbleData: {fileID: 11400000, guid: 948900266e405a546a27cc17f1bb545c, type: 2}
   parentTransform: {fileID: 1067727000}
   goalTarget: {fileID: 1703082863}
+  scoreIndicator: {fileID: 6129252460041421496, guid: 2be6e4aa8e5c22241a7e968f02709fb7, type: 3}
 --- !u!1 &1796862088
 GameObject:
   m_ObjectHideFlags: 0

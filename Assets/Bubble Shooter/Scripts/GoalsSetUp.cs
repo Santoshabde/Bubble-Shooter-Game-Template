@@ -8,6 +8,7 @@ public class GoalsSetUp : MonoBehaviour
     [SerializeField] private InGameBubblesData inGameBubbleData;
     [SerializeField] private Transform parentTransform;
     [SerializeField] private GoalTarget goalTarget;
+    [SerializeField] private BubbleScore scoreIndicator;
 
     private Dictionary<BubbleType, GoalTarget> currentTargetData;
 
@@ -33,8 +34,21 @@ public class GoalsSetUp : MonoBehaviour
             //Update Dictionary
             if(currentTargetData.ContainsKey(bubble.BubbleColor))
             {
+                if (currentTargetData[bubble.BubbleColor].currentTargetValue - 1 >= 0)
+                    SpawnScoreText(bubble.PositionID);
+
                 currentTargetData[bubble.BubbleColor].UpdateTarget(currentTargetData[bubble.BubbleColor].currentTargetValue - 1);
             }
+        }
+    }
+
+    //Only visual purpose
+    public void SpawnScoreText(Vector3 positionToSpawn)
+    {
+        if (scoreIndicator != null)
+        {
+            BubbleScore score = Instantiate(scoreIndicator, positionToSpawn, Quaternion.identity);
+            score.SpawnScoreMesh(1);
         }
     }
 }

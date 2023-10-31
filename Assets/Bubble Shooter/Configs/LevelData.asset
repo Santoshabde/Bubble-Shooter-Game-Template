@@ -20,11 +20,11 @@ MonoBehaviour:
     numberOfColumns: 10
     levelJson: 
     targetBubbles:
-    - targetNumber: 3
+    - targetNumber: 45
       targetBubble: 1
-    - targetNumber: 4
+    - targetNumber: 45
       targetBubble: 4
-    - targetNumber: 1
+    - targetNumber: 45
       targetBubble: 2
     targetRacoonsToSave: 0
-    totalGameTimeInSeconds: 10
+    totalGameTimeInSeconds: 25
