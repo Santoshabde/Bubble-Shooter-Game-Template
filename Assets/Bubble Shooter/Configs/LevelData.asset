@@ -23,8 +23,8 @@ MonoBehaviour:
     - targetNumber: 3
       targetBubble: 1
     - targetNumber: 4
-      targetBubble: 0
+      targetBubble: 4
     - targetNumber: 1
       targetBubble: 2
-    targetRacoonsToSave: 2
-    totalGameTimeInSeconds: 120
+    targetRacoonsToSave: 0
+    totalGameTimeInSeconds: 10

@@ -31,9 +31,9 @@ public class GameStart : State
             gameStateManager.LevelGenerator?.GenerateLevelFromLevelJson(currentLevelGenData.levelJson);
 
         //Update HUD
-        gameStateManager.HudController.UpdateTimer(TimerUtility.ConvertSecondsToTimer(currentLevelGenData.totalGameTimeInSeconds));
-        gameStateManager.HudController.UpdateRacoonsToRescue(currentLevelGenData.targetRacoonsToSave);
-        gameStateManager.HudController.InitialGoalSetUp(currentLevelGenData.targetBubbles);
+        gameStateManager.ScoreController.UpdateTimer(TimerUtility.ConvertSecondsToTimer(currentLevelGenData.totalGameTimeInSeconds));
+        gameStateManager.ScoreController.UpdateRacoonsToRescue(currentLevelGenData.targetRacoonsToSave);
+        gameStateManager.ScoreController.InitialGoalSetUp(currentLevelGenData.targetBubbles);
 
         gameStateManager.SwitchState(new GameProgress(gameStateManager));
     }

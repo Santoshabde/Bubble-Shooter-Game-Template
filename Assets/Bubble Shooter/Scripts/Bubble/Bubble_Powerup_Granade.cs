@@ -38,15 +38,18 @@ namespace SNGames.BubbleShooter
             explosionParticleEffect.gameObject.SetActive(true);
 
             List<Bubble> cachedBubblesToDeactivate = new List<Bubble>();
-            foreach (var bubble in BubbleShooter_HelperFunctions.GetExploredBubblesOfCertainLevel(this, granadeDestructionLevel))
+            List<Bubble> exploredBubblesOfCertainLevel = BubbleShooter_HelperFunctions.GetExploredBubblesOfCertainLevel(this, granadeDestructionLevel);
+            foreach (var bubble in exploredBubblesOfCertainLevel)
             {
                 cachedBubblesToDeactivate.Add(bubble);
                 LevelData.bubblesLevelDataDictionary.Remove(bubble.PositionID);
                 bubble.ActivateDeactivatedVFX();
 
-                ScoreController.Instance.UpdateGameScore(10, bubble.transform.position, false);
                 yield return new WaitForSeconds(0.1f);
             }
+
+            //Update Target Score data
+            GameManager.Instance.UpdateGameTargetsScore(exploredBubblesOfCertainLevel);
 
             LevelData.bubblesLevelDataDictionary.Remove(PositionID);
 

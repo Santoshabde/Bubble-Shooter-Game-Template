@@ -5,39 +5,31 @@ using NaughtyAttributes;
 using SNGames.CommonModule;
 using TMPro;
 using DG.Tweening;
+using SNGames.BubbleShooter;
 
-public class ScoreController : SerializeSingleton<ScoreController>
+public class ScoreController : MonoBehaviour
 {
-    [SerializeField] private BubbleScore scoreIndicator;
-    [SerializeField] private Transform scoreContainer;
-    [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private TextMeshPro finalScoreMovePosition;
+    [SerializeField] private TextMeshProUGUI gameTime;
+    [SerializeField] private TextMeshProUGUI racoonsToRescue;
+    [SerializeField] private GoalsSetUp goalsetup;
 
-    [SerializeField, ReadOnly]
-    private int totalGameScore = 0;
-
-    private void Start()
+    public void UpdateTimer(string timer)
     {
-        totalGameScore = 0;
+        gameTime.text = timer;
     }
 
-    public void UpdateGameScore(int updateScore, Vector3 bubblePosition, bool shouldSpawnText)
+    public void UpdateRacoonsToRescue(int racoonsToRescue)
     {
-        if(!shouldSpawnText)
-        {
-            BubbleScore score = Instantiate(scoreIndicator, bubblePosition, Quaternion.identity);
-            score.SpawnScoreMesh(updateScore, finalScoreMovePosition);
-        }
+        this.racoonsToRescue.text = racoonsToRescue.ToString();
+    }
 
-        totalGameScore += updateScore;
-        if (scoreText != null)
-        {
-            scoreText.text = totalGameScore.ToString();
+    public void InitialGoalSetUp(List<TargetLevelBubble> targetBubbles)
+    {
+        goalsetup.InitialGoalSetUp(targetBubbles);
+    }
 
-            Sequence containerSeq = DOTween.Sequence();
-            containerSeq.AppendInterval(0.9f);
-            containerSeq.Append(scoreContainer.transform.DOScale(Vector3.one * 1.14f, 0.13f));
-            containerSeq.Append(scoreContainer.transform.DOScale(Vector3.one, 0.13f));
-        }
+    public void UpdateGameTargetsScore(List<Bubble> bubblesToCalculateScoreFor)
+    {
+        goalsetup.UpdateTargetData(bubblesToCalculateScoreFor);
     }
 }

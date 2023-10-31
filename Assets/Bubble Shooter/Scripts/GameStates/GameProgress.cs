@@ -33,14 +33,16 @@ public class GameProgress : State
     {
         DateTime startTime = DateTime.Now;
         LevelGenData levelGenData = gameStateManager.currentLevelGenData;
-        HUDController hudController = gameStateManager.HudController;
+        ScoreController scoreController = gameStateManager.ScoreController;
 
         int timePassed = (int)DateTime.Now.Subtract(startTime).TotalSeconds;
         while (levelGenData.totalGameTimeInSeconds - timePassed >= 0)
         {
             yield return new WaitForSeconds(1f);
             timePassed = (int)DateTime.Now.Subtract(startTime).TotalSeconds;
-            hudController.UpdateTimer(TimerUtility.ConvertSecondsToTimer(levelGenData.totalGameTimeInSeconds - timePassed));
+
+            if (levelGenData.totalGameTimeInSeconds - timePassed >= 0)
+                scoreController.UpdateTimer(TimerUtility.ConvertSecondsToTimer(levelGenData.totalGameTimeInSeconds - timePassed));
         }
     }
 }

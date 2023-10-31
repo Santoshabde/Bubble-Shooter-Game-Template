@@ -49,11 +49,11 @@ namespace SNGames.BubbleShooter
                     cachedBubblesToDeactivate.Add(sameColoredBubble);
                     sameColoredBubble.ActivateDeactivatedVFX();
                     LevelData.bubblesLevelDataDictionary.Remove(sameColoredBubble.PositionID);
-
-                    ScoreController.Instance.UpdateGameScore(10, sameColoredBubble.transform.position, false);
-
                     yield return new WaitForSeconds(0.1f);
                 }
+
+                //Update Target Data
+                GameManager.Instance.UpdateGameTargetsScore(chainSameColorBubbles);
 
                 //Recalculating neighbour Data
                 BubbleShooter_HelperFunctions.RecalculateAllBubblesNeighboursData(LevelData.bubblesLevelDataDictionary, LevelGenerator.bubbleGap);
