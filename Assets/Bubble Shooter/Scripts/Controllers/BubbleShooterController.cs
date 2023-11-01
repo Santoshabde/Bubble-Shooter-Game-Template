@@ -53,7 +53,7 @@ namespace SNGames.BubbleShooter
             PlaceCurrentShootBubble();
             PlaceNextShootBubble();
 
-            AdjustShootPositionBasedOnLastBubbleIntheGrid(distanceCalculationTransform, true);
+            //AdjustShootPositionBasedOnLastBubbleIntheGrid(distanceCalculationTransform, true);
         }
 
         void Update()
