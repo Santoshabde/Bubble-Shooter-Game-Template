@@ -12,10 +12,12 @@ namespace SNGames.BubbleShooter
 
         [SerializeField] private LevelGenerator levelGenerator;
         [SerializeField] private ScoreController scoreController;
+        [SerializeField] private InGameUIManager inGameUIManager;
 
         public InGameLevelData InGameLevelData => levelGenerationData;
         public ScoreController ScoreController => scoreController;
         public LevelGenerator LevelGenerator => levelGenerator;
+        public InGameUIManager InGameUIManager => inGameUIManager;
 
         public int currentLevel;
         public LevelGenData currentLevelGenData;

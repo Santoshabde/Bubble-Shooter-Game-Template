@@ -20,6 +20,7 @@ public class GoalsSetUp : MonoBehaviour
             GoalTarget spawnedTarget = Instantiate(goalTarget);
             spawnedTarget.transform.SetParent(parentTransform);
             spawnedTarget.transform.gameObject.SetActive(true);
+            spawnedTarget.transform.localScale = Vector3.one;
 
             spawnedTarget.SetTarget(item.targetNumber, inGameBubbleData.BubbleIdAndSprite[item.targetBubble]);
 

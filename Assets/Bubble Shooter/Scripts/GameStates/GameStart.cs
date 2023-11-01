@@ -18,12 +18,37 @@ public class GameStart : State
     {
         Application.targetFrameRate = 120;
 
+        gameStateManager.StartCoroutine(GameStart_IEnum());
+       
+    }
+
+    public override void Exit()
+    {
+       
+    }
+
+    public override void Tick(float deltaTime)
+    {
+        
+    }
+
+    private IEnumerator GameStart_IEnum()
+    {
+        yield return null;
+
         //Fetch the level, Update current level
 
         //Fetch that particular levelGendata
         gameStateManager.currentLevelGenData = gameStateManager.InGameLevelData.Data[gameStateManager.currentLevel];
 
         currentLevelGenData = gameStateManager.currentLevelGenData;
+
+        LevelData.currentLevelGenData = currentLevelGenData;
+
+        gameStateManager.InGameUIManager.OpenDialog<LevelTargetSSummaryDialog>();
+
+        yield return new WaitForSeconds(2f);
+
         //Generate level - either random or level josn
         if (currentLevelGenData.generateRandomLevel)
             gameStateManager.LevelGenerator?.GenerateRandomLevel(currentLevelGenData.startSpawnPosition.x, currentLevelGenData.startSpawnPosition.y, currentLevelGenData.numberOfRows, currentLevelGenData.numberOfColumns);
@@ -36,15 +61,6 @@ public class GameStart : State
         gameStateManager.ScoreController.InitialGoalSetUp(currentLevelGenData.targetBubbles);
 
         gameStateManager.SwitchState(new GameProgress(gameStateManager));
-    }
 
-    public override void Exit()
-    {
-       
-    }
-
-    public override void Tick(float deltaTime)
-    {
-        
     }
 }
