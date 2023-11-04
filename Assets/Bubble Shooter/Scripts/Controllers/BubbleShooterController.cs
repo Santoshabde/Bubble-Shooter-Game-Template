@@ -58,10 +58,13 @@ namespace SNGames.BubbleShooter
 
         void Update()
         {
-            if (ShouldCastARayAndCheckForInput())
+            if (GameManager.Instance.currentGameStateIsInProgress)
             {
-                //2 cases again here - ray cast directly to bubble (or) ray cast to wall
-                RayCastToBubblesOnBoardAndCheckForLaunchInput();
+                if (ShouldCastARayAndCheckForInput())
+                {
+                    //2 cases again here - ray cast directly to bubble (or) ray cast to wall
+                    RayCastToBubblesOnBoardAndCheckForLaunchInput();
+                }
             }
         }
 

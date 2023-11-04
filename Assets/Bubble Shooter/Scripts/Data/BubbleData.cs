@@ -1,5 +1,6 @@
 namespace SNGames.BubbleShooter
 {
+    [System.Serializable]
     public enum BubbleType
     {
         Green,

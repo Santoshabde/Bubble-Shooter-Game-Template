@@ -10,7 +10,7 @@ namespace SNGames.CommonModule
 
         private State currentState;
 
-        public void SwitchState(State newState)
+        public virtual void SwitchState(State newState)
         {
             currentCharacterState = newState.ToString();
 

@@ -8,6 +8,7 @@ using DG.Tweening;
 public class GoalTarget : MonoBehaviour
 {
     [SerializeField] private Image image;
+    [SerializeField] private Image onCompleteIcon;
     [SerializeField] private TextMeshProUGUI targetValue;
 
     public int currentTargetValue;
@@ -26,7 +27,11 @@ public class GoalTarget : MonoBehaviour
     public void UpdateTarget(int value)
     {
         if (value == 0 || value < 0)
+        {
+            onCompleteIcon?.gameObject.SetActive(true);
+            targetValue.gameObject.SetActive(false);
             value = 0;
+        }
 
         currentTargetValue = value;
         targetValue.text = value.ToString();

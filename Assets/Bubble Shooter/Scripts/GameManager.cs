@@ -21,6 +21,7 @@ namespace SNGames.BubbleShooter
 
         public int currentLevel;
         public LevelGenData currentLevelGenData;
+        public bool currentGameStateIsInProgress = false;
 
         public static GameManager Instance;
         private void Awake()
@@ -37,6 +38,16 @@ namespace SNGames.BubbleShooter
         public void UpdateGameTargetsScore(List<Bubble> bubblesToCalculateScoreFor)
         {
             scoreController.UpdateGameTargetsScore(bubblesToCalculateScoreFor);
+        }
+
+        public override void SwitchState(State newState)
+        {
+            base.SwitchState(newState);
+
+            if (Type.Equals(typeof(GameProgress), newState.GetType()))
+                currentGameStateIsInProgress = true;
+            else
+                currentGameStateIsInProgress = false;
         }
     }
 }

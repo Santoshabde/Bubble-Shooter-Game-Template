@@ -14,17 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelGenData:
   - levelNumber: 1
-    generateRandomLevel: 1
+    generateRandomLevel: 0
     startSpawnPosition: {x: -2.25, y: 0}
     numberOfRows: 9
     numberOfColumns: 10
-    levelJson: 
+    levelJson: '{"bubbles":[{"bubbleType":6,"bubbleSpawnedPosition":{"x":-1.25,"y":0.0,"z":0.0}},{"bubbleType":1,"bubbleSpawnedPosition":{"x":-0.75,"y":0.0,"z":0.0}},{"bubbleType":1,"bubbleSpawnedPosition":{"x":-0.25,"y":0.0,"z":0.0}},{"bubbleType":1,"bubbleSpawnedPosition":{"x":0.25,"y":0.0,"z":0.0}},{"bubbleType":1,"bubbleSpawnedPosition":{"x":0.75,"y":0.0,"z":0.0}},{"bubbleType":6,"bubbleSpawnedPosition":{"x":1.25,"y":0.0,"z":0.0}},{"bubbleType":6,"bubbleSpawnedPosition":{"x":-1.0,"y":0.5,"z":0.0}},{"bubbleType":1,"bubbleSpawnedPosition":{"x":-0.5,"y":0.5,"z":0.0}},{"bubbleType":1,"bubbleSpawnedPosition":{"x":0.0,"y":0.5,"z":0.0}},{"bubbleType":1,"bubbleSpawnedPosition":{"x":0.5,"y":0.5,"z":0.0}},{"bubbleType":6,"bubbleSpawnedPosition":{"x":1.0,"y":0.5,"z":0.0}},{"bubbleType":6,"bubbleSpawnedPosition":{"x":-0.75,"y":1.0,"z":0.0}},{"bubbleType":1,"bubbleSpawnedPosition":{"x":-0.25,"y":1.0,"z":0.0}},{"bubbleType":1,"bubbleSpawnedPosition":{"x":0.25,"y":1.0,"z":0.0}},{"bubbleType":6,"bubbleSpawnedPosition":{"x":0.75,"y":1.0,"z":0.0}},{"bubbleType":6,"bubbleSpawnedPosition":{"x":-0.5,"y":1.5,"z":0.0}},{"bubbleType":6,"bubbleSpawnedPosition":{"x":0.0,"y":1.5,"z":0.0}},{"bubbleType":6,"bubbleSpawnedPosition":{"x":0.5,"y":1.5,"z":0.0}},{"bubbleType":7,"bubbleSpawnedPosition":{"x":-2.25,"y":2.0,"z":0.0}},{"bubbleType":7,"bubbleSpawnedPosition":{"x":-1.75,"y":2.0,"z":0.0}},{"bubbleType":7,"bubbleSpawnedPosition":{"x":-1.25,"y":2.0,"z":0.0}},{"bubbleType":7,"bubbleSpawnedPosition":{"x":-0.75,"y":2.0,"z":0.0}},{"bubbleType":7,"bubbleSpawnedPosition":{"x":-0.25,"y":2.0,"z":0.0}},{"bubbleType":7,"bubbleSpawnedPosition":{"x":0.25,"y":2.0,"z":0.0}},{"bubbleType":7,"bubbleSpawnedPosition":{"x":0.75,"y":2.0,"z":0.0}},{"bubbleType":7,"bubbleSpawnedPosition":{"x":1.25,"y":2.0,"z":0.0}},{"bubbleType":7,"bubbleSpawnedPosition":{"x":1.75,"y":2.0,"z":0.0}},{"bubbleType":7,"bubbleSpawnedPosition":{"x":2.25,"y":2.0,"z":0.0}}]}'
     targetBubbles:
-    - targetNumber: 45
+    - targetNumber: 4
       targetBubble: 1
-    - targetNumber: 45
+    - targetNumber: 5
       targetBubble: 4
-    - targetNumber: 45
+    - targetNumber: 7
       targetBubble: 2
     targetRacoonsToSave: 0
     totalGameTimeInSeconds: 45

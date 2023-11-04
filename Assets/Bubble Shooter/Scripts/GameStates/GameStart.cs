@@ -51,7 +51,7 @@ public class GameStart : State
 
         //Generate level - either random or level josn
         if (currentLevelGenData.generateRandomLevel)
-            gameStateManager.LevelGenerator?.GenerateRandomLevel(currentLevelGenData.startSpawnPosition.x, currentLevelGenData.startSpawnPosition.y, currentLevelGenData.numberOfRows, currentLevelGenData.numberOfColumns);
+            gameStateManager.LevelGenerator?.GenerateRandomLevel(currentLevelGenData.startSpawnPosition.x, currentLevelGenData.startSpawnPosition.y, currentLevelGenData.numberOfRows, currentLevelGenData.numberOfColumns, true);
         else
             gameStateManager.LevelGenerator?.GenerateLevelFromLevelJson(currentLevelGenData.levelJson);
 

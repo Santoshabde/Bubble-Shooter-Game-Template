@@ -4,6 +4,7 @@ using UnityEngine;
 using AYellowpaper.SerializedCollections;
 using SNGames.CommonModule;
 using System.Linq;
+using DG.Tweening;
 
 namespace SNGames.BubbleShooter
 {
@@ -16,6 +17,7 @@ namespace SNGames.BubbleShooter
         [SerializeField] private float startY;
         [SerializeField] private int initialNumberOfRows;
         [SerializeField] private int initialNumberOfColumns;
+        [SerializeField] private Transform initialPointToSpawn;
 
         private Bubble nodeBubbleToCalculateBFS;
 
@@ -26,7 +28,7 @@ namespace SNGames.BubbleShooter
 
         #region Level Generation Types
 
-        public void GenerateRandomLevel(float startX, float startY, int rows, int columns)
+        public void GenerateRandomLevel(float startX, float startY, int rows, int columns, bool shouldAnimateWhileSpawning = false)
         {
             LevelData.bubblesLevelDataDictionary = new Dictionary<Vector3, Bubble>();
             for (int i = 0; i < rows; i++)
@@ -41,12 +43,15 @@ namespace SNGames.BubbleShooter
                         xOffset = bubbleGap / 2;
 
                     Vector3 positionBubbleShouldSpawn = new Vector3(startX + (j * bubbleGap) + xOffset, startY + (i * bubbleGap), 0);
-                    Bubble instantiatedBubble = Instantiate(bubbleChoosen, positionBubbleShouldSpawn, Quaternion.identity);
+                    Bubble instantiatedBubble = Instantiate(bubbleChoosen, shouldAnimateWhileSpawning? initialPointToSpawn.position : positionBubbleShouldSpawn, Quaternion.identity);
                     instantiatedBubble.SetPositionID(positionBubbleShouldSpawn);
                     instantiatedBubble.transform.SetParent(transform);
                     LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
                 }
             }
+
+            if (shouldAnimateWhileSpawning)
+                AnimateBubblesToTheirPositions();
 
             //Spawn a indestructable bubble row as final row
             Bubble indestructableBubblePrefab = inGameBubblesData.GetBubbleOfAColor(BubbleType.NonDestructable);
@@ -61,6 +66,8 @@ namespace SNGames.BubbleShooter
                 instantiatedBubble.SetPositionID(positionBubbleShouldSpawn);
                 instantiatedBubble.transform.SetParent(transform);
                 LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
+
+                //NOTE!!!!! Choosing nodeBubbleToCalculateBFS is important to set up - its used for multiple path finding algos to find out isolated bubbles in the game
                 nodeBubbleToCalculateBFS = instantiatedBubble;
             }
 
@@ -70,7 +77,36 @@ namespace SNGames.BubbleShooter
 
         public void GenerateLevelFromLevelJson(string levelJson)
         {
+            LevelData.bubblesLevelDataDictionary = new Dictionary<Vector3, Bubble>();
 
+            BubbleLevelJson bubbleLevelDataToSpawn = JsonUtility.FromJson<BubbleLevelJson>(levelJson);
+            List<BubblePositionID> bubbles = bubbleLevelDataToSpawn.bubbles;
+
+            foreach (var bubbleInfo in bubbles)
+            {
+                Bubble bubbleChoosen = inGameBubblesData.GetBubbleOfAColor(bubbleInfo.bubbleType);
+                Vector3 positionBubbleShouldSpawn = bubbleInfo.bubbleSpawnedPosition;
+
+                Bubble instantiatedBubble = Instantiate(bubbleChoosen, positionBubbleShouldSpawn, Quaternion.identity);
+                instantiatedBubble.SetPositionID(positionBubbleShouldSpawn);
+                instantiatedBubble.transform.SetParent(transform);
+                LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
+
+                //NOTE!!!!! Choosing nodeBubbleToCalculateBFS is important to set up - its used for multiple path finding algos to find out isolated bubbles in the game
+                if (instantiatedBubble.BubbleColor == BubbleType.NonDestructable)
+                    nodeBubbleToCalculateBFS = instantiatedBubble;
+            }
+
+            //Calculates all neighbours 
+            BubbleShooter_HelperFunctions.RecalculateAllBubblesNeighboursData(LevelData.bubblesLevelDataDictionary, bubbleGap);
+        }
+
+        private void AnimateBubblesToTheirPositions()
+        {
+            foreach (var bubbleData in LevelData.bubblesLevelDataDictionary)
+            {
+                bubbleData.Value.transform.DOMove(bubbleData.Key, 0.8f);
+            }
         }
 
         #endregion
