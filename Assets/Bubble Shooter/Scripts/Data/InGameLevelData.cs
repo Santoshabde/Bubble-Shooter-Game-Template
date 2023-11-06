@@ -42,6 +42,7 @@ namespace SNGames.BubbleShooter
         public int numberOfColumns;
         public string levelJson;
         public List<TargetLevelBubble> targetBubbles;
+        public List<BubbleType> bubblesToShootOrder;
         public int targetRacoonsToSave;
         public int totalGameTimeInSeconds;
     }

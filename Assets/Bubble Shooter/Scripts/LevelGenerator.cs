@@ -20,10 +20,18 @@ namespace SNGames.BubbleShooter
         [SerializeField] private Transform initialPointToSpawn;
 
         private Bubble nodeBubbleToCalculateBFS;
+        private List<Bubble> allBubblesSpawnedInTheLevel = new List<Bubble>();
 
         private void Start()
         {
-            SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnBubbleCollisionClearDataComplete, ClearTheIsolatedBubblesInLevel);   
+            SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnBubbleCollisionClearDataComplete, ClearTheIsolatedBubblesInLevel);
+            SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnLevelSuccess, ClearCurrentLevel);
+        }
+
+        private void OnDestroy()
+        {
+            SNEventsController<InGameEvents>.DeregisterEvent(InGameEvents.OnBubbleCollisionClearDataComplete, ClearTheIsolatedBubblesInLevel);
+            SNEventsController<InGameEvents>.DeregisterEvent(InGameEvents.OnLevelSuccess, ClearCurrentLevel);
         }
 
         #region Level Generation Types
@@ -46,7 +54,9 @@ namespace SNGames.BubbleShooter
                         Bubble instantiatedBubble = Instantiate(bubbleChoosen, shouldAnimateWhileSpawning ? initialPointToSpawn.position : positionBubbleShouldSpawn, Quaternion.identity);
                         instantiatedBubble.SetPositionID(positionBubbleShouldSpawn);
                         instantiatedBubble.transform.SetParent(transform);
+
                         LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
+                        allBubblesSpawnedInTheLevel.Add(bubbleChoosen);
                     }
                 }
                 else
@@ -60,7 +70,9 @@ namespace SNGames.BubbleShooter
                         Bubble instantiatedBubble = Instantiate(bubbleChoosen, shouldAnimateWhileSpawning ? initialPointToSpawn.position : positionBubbleShouldSpawn, Quaternion.identity);
                         instantiatedBubble.SetPositionID(positionBubbleShouldSpawn);
                         instantiatedBubble.transform.SetParent(transform);
+
                         LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
+                        allBubblesSpawnedInTheLevel.Add(bubbleChoosen);
                     }
                 }
             }
@@ -80,7 +92,9 @@ namespace SNGames.BubbleShooter
                 Bubble instantiatedBubble = Instantiate(indestructableBubblePrefab, positionBubbleShouldSpawn, Quaternion.identity);
                 instantiatedBubble.SetPositionID(positionBubbleShouldSpawn);
                 instantiatedBubble.transform.SetParent(transform);
+
                 LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
+                allBubblesSpawnedInTheLevel.Add(indestructableBubblePrefab);
 
                 //NOTE!!!!! Choosing nodeBubbleToCalculateBFS is important to set up - its used for multiple path finding algos to find out isolated bubbles in the game
                 nodeBubbleToCalculateBFS = instantiatedBubble;
@@ -105,7 +119,9 @@ namespace SNGames.BubbleShooter
                 Bubble instantiatedBubble = Instantiate(bubbleChoosen, positionBubbleShouldSpawn, Quaternion.identity);
                 instantiatedBubble.SetPositionID(positionBubbleShouldSpawn);
                 instantiatedBubble.transform.SetParent(transform);
+
                 LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
+                allBubblesSpawnedInTheLevel.Add(bubbleChoosen);
 
                 //NOTE!!!!! Choosing nodeBubbleToCalculateBFS is important to set up - its used for multiple path finding algos to find out isolated bubbles in the game
                 if (instantiatedBubble.BubbleColor == BubbleType.NonDestructable)
@@ -151,6 +167,19 @@ namespace SNGames.BubbleShooter
             GameManager.Instance.UpdateGameTargetsScore(leftOutNodes);
 
             BubbleShooter_HelperFunctions.RecalculateAllBubblesNeighboursData(LevelData.bubblesLevelDataDictionary, LevelGenerator.bubbleGap);
+        }
+
+        private void ClearCurrentLevel()
+        {
+            foreach (var item in allBubblesSpawnedInTheLevel)
+            {
+                Destroy(item.gameObject);
+            }
+
+            allBubblesSpawnedInTheLevel.Clear();
+            allBubblesSpawnedInTheLevel = new List<Bubble>();
+
+            LevelData.ResetLevelData();
         }
 
         public Bubble GetNearestRowBubbleInTheGrid(Transform refPoint)

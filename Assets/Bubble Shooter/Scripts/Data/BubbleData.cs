@@ -36,5 +36,7 @@ namespace SNGames.BubbleShooter
     {
         OnBubbleCollisionClearDataComplete,
         MoveNextBubbleToCurrentBubble,
+        OnLevelSuccess,
+        OnLevelFail,
     }
 }

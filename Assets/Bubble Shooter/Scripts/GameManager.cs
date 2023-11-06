@@ -9,6 +9,7 @@ namespace SNGames.BubbleShooter
     public class GameManager : StateMachine
     {
         [SerializeField] private InGameLevelData levelGenerationData;
+        [SerializeField] private VFXData vfxData;
 
         [SerializeField] private LevelGenerator levelGenerator;
         [SerializeField] private ScoreController scoreController;
@@ -18,8 +19,8 @@ namespace SNGames.BubbleShooter
         public ScoreController ScoreController => scoreController;
         public LevelGenerator LevelGenerator => levelGenerator;
         public InGameUIManager InGameUIManager => inGameUIManager;
+        public VFXData VFXData => vfxData;
 
-        public int currentLevel;
         public LevelGenData currentLevelGenData;
         public bool currentGameStateIsInProgress = false;
 
@@ -37,7 +38,7 @@ namespace SNGames.BubbleShooter
 
         public void UpdateGameTargetsScore(List<Bubble> bubblesToCalculateScoreFor)
         {
-            scoreController.UpdateGameTargetsScore(bubblesToCalculateScoreFor);
+            scoreController.UpdateGameTargetsScore(bubblesToCalculateScoreFor, () => SwitchState(new GameSuccess(this)));
         }
 
         public override void SwitchState(State newState)

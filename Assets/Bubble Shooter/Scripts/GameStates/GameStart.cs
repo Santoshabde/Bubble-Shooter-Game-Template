@@ -19,7 +19,8 @@ public class GameStart : State
         Application.targetFrameRate = 120;
 
         gameStateManager.StartCoroutine(GameStart_IEnum());
-       
+
+        LevelData.currentLevel = 1;
     }
 
     public override void Exit()
@@ -39,7 +40,7 @@ public class GameStart : State
         //Fetch the level, Update current level
 
         //Fetch that particular levelGendata
-        gameStateManager.currentLevelGenData = gameStateManager.InGameLevelData.Data[gameStateManager.currentLevel];
+        gameStateManager.currentLevelGenData = gameStateManager.InGameLevelData.Data[LevelData.currentLevel];
 
         currentLevelGenData = gameStateManager.currentLevelGenData;
 
@@ -61,6 +62,5 @@ public class GameStart : State
         gameStateManager.ScoreController.InitialGoalSetUp(currentLevelGenData.targetBubbles);
 
         gameStateManager.SwitchState(new GameProgress(gameStateManager));
-
     }
 }

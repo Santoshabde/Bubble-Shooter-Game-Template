@@ -9,6 +9,7 @@ public class GoalTarget : MonoBehaviour
 {
     [SerializeField] private Image image;
     [SerializeField] private Image onCompleteIcon;
+    [SerializeField] private Image onIncompleteIcon;
     [SerializeField] private TextMeshProUGUI targetValue;
 
     public int currentTargetValue;
@@ -16,12 +17,26 @@ public class GoalTarget : MonoBehaviour
     private Sequence scaleSeq;
     private bool scaleSeqPlaying = false;
 
-    public void SetTarget(int target, Sprite sprite)
+    public void SetTarget(int target, Sprite sprite, bool shouldEnableCompleteByDefault = false, bool shouldEnableInCompleteByDefault = false)
     {
-        targetValue.text = target.ToString();
+        if (targetValue != null)
+            targetValue.text = target.ToString();
+
         image.sprite = sprite;
 
         currentTargetValue = target;
+
+        if (shouldEnableCompleteByDefault && onCompleteIcon != null)
+        {
+            onCompleteIcon?.gameObject.SetActive(true);
+            onIncompleteIcon?.gameObject.SetActive(false);
+        }
+
+        if (shouldEnableInCompleteByDefault && onIncompleteIcon != null)
+        {
+            onIncompleteIcon?.gameObject.SetActive(true);
+            onCompleteIcon?.gameObject.SetActive(false);
+        }
     }
 
     public void UpdateTarget(int value)

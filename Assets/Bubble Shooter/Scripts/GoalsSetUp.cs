@@ -1,4 +1,5 @@
 using SNGames.BubbleShooter;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,8 @@ public class GoalsSetUp : MonoBehaviour
     public void InitialGoalSetUp(List<TargetLevelBubble> targetBubbles)
     {
         currentTargetData = new Dictionary<BubbleType, GoalTarget>();
+        LevelData.currentLevelCurrentTargetStatus = new Dictionary<BubbleType, int>();
+
         foreach (var item in targetBubbles)
         {
             GoalTarget spawnedTarget = Instantiate(goalTarget);
@@ -25,22 +28,45 @@ public class GoalsSetUp : MonoBehaviour
             spawnedTarget.SetTarget(item.targetNumber, inGameBubbleData.BubbleIdAndSprite[item.targetBubble]);
 
             currentTargetData.Add(item.targetBubble, spawnedTarget);
+            LevelData.currentLevelCurrentTargetStatus.Add(item.targetBubble, item.targetNumber);
         }
     }
 
-    public void UpdateTargetData(List<Bubble> bubblesToCalculateScoreFor)
+    public void UpdateTargetData(List<Bubble> bubblesToCalculateScoreFor, Action OnAllTargetGoalsReached = null)
     {
         foreach (var bubble in bubblesToCalculateScoreFor)
         {
             //Update Dictionary
             if(currentTargetData.ContainsKey(bubble.BubbleColor))
             {
-                if (currentTargetData[bubble.BubbleColor].currentTargetValue - 1 >= 0)
+                int currentTargetValue = currentTargetData[bubble.BubbleColor].currentTargetValue;
+                int valueAfterUpdating = currentTargetValue - 1;
+
+                if (valueAfterUpdating >= 0)
                     SpawnScoreText(bubble.PositionID);
 
-                currentTargetData[bubble.BubbleColor].UpdateTarget(currentTargetData[bubble.BubbleColor].currentTargetValue - 1);
+                if (valueAfterUpdating <= 0)
+                {
+                    valueAfterUpdating = 0;
+                }
+
+                currentTargetData[bubble.BubbleColor].UpdateTarget(valueAfterUpdating);
+                LevelData.currentLevelCurrentTargetStatus[bubble.BubbleColor] = valueAfterUpdating;
             }
         }
+
+        //All Targets Reached?
+        int count = 0;
+        foreach (var item in currentTargetData)
+        {
+            if(item.Value.currentTargetValue == 0)
+            {
+                count += 1;
+            }
+        }
+
+        if (count == currentTargetData.Count)
+            OnAllTargetGoalsReached?.Invoke();
     }
 
     //Only visual purpose

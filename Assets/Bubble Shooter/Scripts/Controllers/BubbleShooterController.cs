@@ -37,6 +37,8 @@ namespace SNGames.BubbleShooter
         private Bubble finalHitBubble = null;
         private RaycastHit2D finalBubbleHit;
 
+        private Queue bubbleQueue = new Queue();
+
         private void Start()
         {
             //Move your next Bubble to current bubble on triggering this event

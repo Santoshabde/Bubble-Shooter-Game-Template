@@ -11,12 +11,19 @@ namespace SNGames.BubbleShooter
     {
         public static Dictionary<Vector3, Bubble> bubblesLevelDataDictionary = new Dictionary<Vector3, Bubble>();
 
+        public static int currentLevel;
+
         public static LevelGenData currentLevelGenData = null;
+
+        public static Dictionary<BubbleType, int> currentLevelCurrentTargetStatus = new Dictionary<BubbleType, int>();
 
         public static void ResetLevelData()
         {
             bubblesLevelDataDictionary.Clear();
             bubblesLevelDataDictionary = new Dictionary<Vector3, Bubble>();
+
+            currentLevelCurrentTargetStatus.Clear();
+            currentLevelCurrentTargetStatus = new Dictionary<BubbleType, int>();
         }
     }
 }

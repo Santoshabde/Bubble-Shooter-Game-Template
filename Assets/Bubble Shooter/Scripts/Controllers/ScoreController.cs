@@ -6,6 +6,7 @@ using SNGames.CommonModule;
 using TMPro;
 using DG.Tweening;
 using SNGames.BubbleShooter;
+using System;
 
 public class ScoreController : MonoBehaviour
 {
@@ -37,8 +38,8 @@ public class ScoreController : MonoBehaviour
         goalsetup.InitialGoalSetUp(targetBubbles);
     }
 
-    public void UpdateGameTargetsScore(List<Bubble> bubblesToCalculateScoreFor)
+    public void UpdateGameTargetsScore(List<Bubble> bubblesToCalculateScoreFor, Action OnAllTargetsReached = null)
     {
-        goalsetup.UpdateTargetData(bubblesToCalculateScoreFor);
+        goalsetup.UpdateTargetData(bubblesToCalculateScoreFor, OnAllTargetsReached);
     }
 }

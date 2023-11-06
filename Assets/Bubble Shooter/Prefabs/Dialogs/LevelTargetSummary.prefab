@@ -871,9 +871,9 @@ RectTransform:
   - {fileID: 6927758645771631289}
   m_Father: {fileID: 7613098345804184652}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 406.5, y: -50}
   m_SizeDelta: {x: 160, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3676312785037550387
@@ -927,5 +927,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 3694423661907118307}
+  onCompleteIcon: {fileID: 0}
   targetValue: {fileID: 2727474923157768141}
   currentTargetValue: 0

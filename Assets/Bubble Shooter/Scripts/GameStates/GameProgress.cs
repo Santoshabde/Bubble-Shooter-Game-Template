@@ -8,6 +8,8 @@ using System;
 public class GameProgress : State
 {
     private GameManager gameStateManager;
+    private Coroutine timerCoroutine;
+
     public GameProgress(GameManager gameManager)
     {
         gameStateManager = gameManager;
@@ -16,12 +18,23 @@ public class GameProgress : State
     public override void Enter()
     {
         //Start game timer
-        gameStateManager.StartCoroutine(StartGameTimer());
+        if(timerCoroutine != null)
+        {
+            gameStateManager.StopCoroutine(timerCoroutine);
+            timerCoroutine = null;
+        }
+
+        timerCoroutine = gameStateManager.StartCoroutine(StartGameTimer());
     }
 
     public override void Exit()
     {
-        
+        if (timerCoroutine != null)
+        {
+            gameStateManager.StopCoroutine(timerCoroutine);
+            timerCoroutine = null;
+            gameStateManager.ScoreController.UpdateTimer("--");
+        }
     }
 
     public override void Tick(float deltaTime)
@@ -45,5 +58,7 @@ public class GameProgress : State
             if (timeRemaining >= 0)
                 scoreController.UpdateTimer(TimerUtility.ConvertSecondsToTimer(timeRemaining), timeRemaining < 10);
         }
+
+        gameStateManager.SwitchState(new GameFailed(gameStateManager, GameFailedType.GameTimeOut));
     }
 }
