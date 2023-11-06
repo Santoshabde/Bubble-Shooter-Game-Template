@@ -41,16 +41,27 @@ public class LevelEditorBuilder : MonoBehaviour
         listOfBubbleSlots = new List<BubbleSlot>();
         for (int i = 0; i < rows; i++)
         {
-            for (int j = 0; j < columns; j++)
+            float xOffset = 0;
+            if (i % 2 == 1)
             {
-                float xOffset = 0;
-                if (i % 2 == 1)
-                    xOffset = bubbleGap / 2;
-
-                Vector3 positionBubbleShouldSpawn = new Vector3(startX + (j * bubbleGap) + xOffset, startY + (i * bubbleGap), 0);
-                BubbleSlot tempBubbleSlot = Instantiate(bubbleSlot, positionBubbleShouldSpawn, Quaternion.identity);
-                tempBubbleSlot.transform.SetParent(transform);
-                listOfBubbleSlots.Add(tempBubbleSlot);
+                xOffset = bubbleGap / 2;
+                for (int j = 0; j <= columns; j++)
+                {
+                    Vector3 positionBubbleShouldSpawn = new Vector3(startX + (j * bubbleGap) - xOffset, startY + (i * bubbleGap), 0);
+                    BubbleSlot tempBubbleSlot = Instantiate(bubbleSlot, positionBubbleShouldSpawn, Quaternion.identity);
+                    tempBubbleSlot.transform.SetParent(transform);
+                    listOfBubbleSlots.Add(tempBubbleSlot);
+                }
+            }
+            else
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    Vector3 positionBubbleShouldSpawn = new Vector3(startX + (j * bubbleGap) - xOffset, startY + (i * bubbleGap), 0);
+                    BubbleSlot tempBubbleSlot = Instantiate(bubbleSlot, positionBubbleShouldSpawn, Quaternion.identity);
+                    tempBubbleSlot.transform.SetParent(transform);
+                    listOfBubbleSlots.Add(tempBubbleSlot);
+                }
             }
         }
     }
@@ -91,6 +102,13 @@ public class LevelEditorBuilder : MonoBehaviour
                         hit.collider.GetComponent<BubbleSlot>().isOccupiedWithBubble = true;
                         Bubble spawned = Instantiate(currenlyActiveBubble, hit.collider.GetComponent<BubbleSlot>().transform.position, Quaternion.identity);
                         hit.collider.GetComponent<BubbleSlot>().occupiedBubble = spawned;
+
+
+                        if (spawned.BubbleColor == BubbleType.NonDestructable)
+                        {
+                            Color c = currenlyActiveBubble.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color;
+                            currenlyActiveBubble.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(c.r, c.g, c.b, 1);
+                        }
                     }
                 }
 
@@ -109,8 +127,19 @@ public class LevelEditorBuilder : MonoBehaviour
 
     public void OnButtonClick(int bubblrTypess)
     {
+        if(currenlyActiveBubble != null)
+        {
+            Destroy(currenlyActiveBubble.gameObject);
+            currenlyActiveBubble = null;
+        }
+
         BubbleType bubbleTypeClicked = (BubbleType)bubblrTypess;
         currenlyActiveBubble = Instantiate(inGameBubblesData.GetBubbleOfAColor(bubbleTypeClicked));
         currenlyActiveBubble.GetComponent<Collider2D>().enabled = false;
+
+        if(bubbleTypeClicked == BubbleType.NonDestructable)
+        {
+            currenlyActiveBubble.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().color = new Color(1,1,1,1);
+        }
     }
 }

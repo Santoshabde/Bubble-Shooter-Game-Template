@@ -33,20 +33,35 @@ namespace SNGames.BubbleShooter
             LevelData.bubblesLevelDataDictionary = new Dictionary<Vector3, Bubble>();
             for (int i = 0; i < rows; i++)
             {
-                for (int j = 0; j < columns; j++)
+                float xOffset = 0;
+                if (i % 2 == 1)
                 {
-                    //Choosing Random Color bubble
-                    Bubble bubbleChoosen = inGameBubblesData.GetRandomBubbleColorPrefab();
+                    xOffset = bubbleGap / 2;
+                    for (int j = 0; j <= columns; j++)
+                    {
+                        //Choosing Random Color bubble
+                        Bubble bubbleChoosen = inGameBubblesData.GetRandomBubbleColorPrefab();
 
-                    float xOffset = 0;
-                    if (i % 2 == 1)
-                        xOffset = bubbleGap / 2;
+                        Vector3 positionBubbleShouldSpawn = new Vector3(startX + (j * bubbleGap) - xOffset, startY + (i * bubbleGap), 0);
+                        Bubble instantiatedBubble = Instantiate(bubbleChoosen, shouldAnimateWhileSpawning ? initialPointToSpawn.position : positionBubbleShouldSpawn, Quaternion.identity);
+                        instantiatedBubble.SetPositionID(positionBubbleShouldSpawn);
+                        instantiatedBubble.transform.SetParent(transform);
+                        LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
+                    }
+                }
+                else
+                {
+                    for (int j = 0; j < columns; j++)
+                    {
+                        //Choosing Random Color bubble
+                        Bubble bubbleChoosen = inGameBubblesData.GetRandomBubbleColorPrefab();
 
-                    Vector3 positionBubbleShouldSpawn = new Vector3(startX + (j * bubbleGap) + xOffset, startY + (i * bubbleGap), 0);
-                    Bubble instantiatedBubble = Instantiate(bubbleChoosen, shouldAnimateWhileSpawning? initialPointToSpawn.position : positionBubbleShouldSpawn, Quaternion.identity);
-                    instantiatedBubble.SetPositionID(positionBubbleShouldSpawn);
-                    instantiatedBubble.transform.SetParent(transform);
-                    LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
+                        Vector3 positionBubbleShouldSpawn = new Vector3(startX + (j * bubbleGap) + xOffset, startY + (i * bubbleGap), 0);
+                        Bubble instantiatedBubble = Instantiate(bubbleChoosen, shouldAnimateWhileSpawning ? initialPointToSpawn.position : positionBubbleShouldSpawn, Quaternion.identity);
+                        instantiatedBubble.SetPositionID(positionBubbleShouldSpawn);
+                        instantiatedBubble.transform.SetParent(transform);
+                        LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
+                    }
                 }
             }
 
