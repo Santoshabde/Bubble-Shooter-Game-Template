@@ -72,13 +72,16 @@ namespace SNGames.BubbleShooter
         {
             if (GameManager.Instance.currentGameStateIsInProgress)
             {
+                initialPathRenderer.enabled = ShouldEnableLineRenderer();
                 if (ShouldCastARayAndCheckForInput())
                 {
                     //2 cases again here - ray cast directly to bubble (or) ray cast to wall
-                    RayCastToBubblesOnBoardAndCheckForLaunchInput();
+                    RayCastToBubblesOnBoardAndCheckForLaunchInput();  
                 }
             }
         }
+
+        private bool ShouldEnableLineRenderer() => !currentPlaceBubbleInMovingProcess && AdjustShootPositionBasedOnLastBubbleIntheGrid_Coroutine == null;
 
         //Placing the 'currentlyPlacedBubble' to shoot in its position
         public void PlaceCurrentShootBubble()
@@ -280,9 +283,11 @@ namespace SNGames.BubbleShooter
             }
         }
 
+        private Coroutine AdjustShootPositionBasedOnLastBubbleIntheGrid_Coroutine;
         private void AdjustShootPositionBasedOnLastBubbleIntheGrid(Transform refPoint, bool debug = false)
         {
-            StartCoroutine(AdjustShootPositionBasedOnLastBubbleIntheGrid_IEnum());
+            if (AdjustShootPositionBasedOnLastBubbleIntheGrid_Coroutine == null)
+                AdjustShootPositionBasedOnLastBubbleIntheGrid_Coroutine = StartCoroutine(AdjustShootPositionBasedOnLastBubbleIntheGrid_IEnum());
 
             IEnumerator AdjustShootPositionBasedOnLastBubbleIntheGrid_IEnum()
             {
@@ -298,8 +303,8 @@ namespace SNGames.BubbleShooter
 
                 yield return new WaitForSeconds(0.45f);
 
-                initialPathRenderer.enabled = true;
                 RayCastToBubblesOnBoardAndCheckForLaunchInput();
+                AdjustShootPositionBasedOnLastBubbleIntheGrid_Coroutine = null;
             }
         }
 
@@ -318,6 +323,9 @@ namespace SNGames.BubbleShooter
             allBubblesShot = new List<Bubble>();
 
             transform.position = Vector3.zero;
+            powerupsPlatform.gameObject.SetActive(false);
+            nonPowerupsPlatform.gameObject.SetActive(false);
+            initialPathRenderer.transform.gameObject.SetActive(false);
         }
 
         private void StartNewLevel()
@@ -325,6 +333,10 @@ namespace SNGames.BubbleShooter
             //Place current and next bubble at the start of the level
             PlaceCurrentShootBubble();
             PlaceNextShootBubble();
+
+            powerupsPlatform.gameObject.SetActive(true);
+            nonPowerupsPlatform.gameObject.SetActive(true);
+            initialPathRenderer.transform.gameObject.SetActive(true);
         }
 
         #region Input Type Based Helper Functions

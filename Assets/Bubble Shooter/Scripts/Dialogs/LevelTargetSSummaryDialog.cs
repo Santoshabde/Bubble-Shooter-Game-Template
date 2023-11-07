@@ -14,6 +14,7 @@ namespace SNGames.BubbleShooter
         [SerializeField] private Transform parentTransform;
         [SerializeField] private GoalTarget goalTarget;
         [SerializeField] private Transform targetPannelToAnimate;
+        [SerializeField] private TextMeshProUGUI currentLevelInfo;
 
         private LevelGenData currentLevelGenData = null;
         private List<GoalTarget> spawnedGoalTargets = new List<GoalTarget>();
@@ -21,6 +22,8 @@ namespace SNGames.BubbleShooter
         public override void OnOpenDialog()
         {
             base.OnOpenDialog();
+
+            currentLevelInfo.text = "Level: " + LocalSaveSystem.playerInGameStats.currentLevel;
 
             targetPannelToAnimate.localScale = Vector3.zero;
 

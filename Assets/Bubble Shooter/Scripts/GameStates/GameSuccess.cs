@@ -41,9 +41,7 @@ public class GameSuccess : State
         yield return new WaitForSeconds(2f);
 
         //Dialog
-        gameStateManager.InGameUIManager.OpenDialog<LevelSuccessDialog>();
-
-        //Trigger Event
         SNEventsController<InGameEvents>.TriggerEvent(InGameEvents.OnLevelSuccess);
+        gameStateManager.InGameUIManager.OpenDialog<LevelSuccessDialog>();
     }
 }
