@@ -20,6 +20,8 @@ public class GameFailed : State
     public override void Enter()
     {
         gameStateManager.InGameUIManager.OpenDialog<LevelFailedDialog>();
+
+        SNEventsController<InGameEvents>.TriggerEvent(InGameEvents.OnLevelFail);
     }
 
     public override void Exit()

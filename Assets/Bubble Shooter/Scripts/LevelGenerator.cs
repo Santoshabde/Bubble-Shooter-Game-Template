@@ -25,13 +25,17 @@ namespace SNGames.BubbleShooter
         private void Start()
         {
             SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnBubbleCollisionClearDataComplete, ClearTheIsolatedBubblesInLevel);
+
             SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnLevelSuccess, ClearCurrentLevel);
+            SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnLevelFail, ClearCurrentLevel);
         }
 
         private void OnDestroy()
         {
             SNEventsController<InGameEvents>.DeregisterEvent(InGameEvents.OnBubbleCollisionClearDataComplete, ClearTheIsolatedBubblesInLevel);
+
             SNEventsController<InGameEvents>.DeregisterEvent(InGameEvents.OnLevelSuccess, ClearCurrentLevel);
+            SNEventsController<InGameEvents>.DeregisterEvent(InGameEvents.OnLevelFail, ClearCurrentLevel);
         }
 
         #region Level Generation Types
@@ -56,7 +60,7 @@ namespace SNGames.BubbleShooter
                         instantiatedBubble.transform.SetParent(transform);
 
                         LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
-                        allBubblesSpawnedInTheLevel.Add(bubbleChoosen);
+                        allBubblesSpawnedInTheLevel.Add(instantiatedBubble);
                     }
                 }
                 else
@@ -72,7 +76,7 @@ namespace SNGames.BubbleShooter
                         instantiatedBubble.transform.SetParent(transform);
 
                         LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
-                        allBubblesSpawnedInTheLevel.Add(bubbleChoosen);
+                        allBubblesSpawnedInTheLevel.Add(instantiatedBubble);
                     }
                 }
             }
@@ -94,7 +98,7 @@ namespace SNGames.BubbleShooter
                 instantiatedBubble.transform.SetParent(transform);
 
                 LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
-                allBubblesSpawnedInTheLevel.Add(indestructableBubblePrefab);
+                allBubblesSpawnedInTheLevel.Add(instantiatedBubble);
 
                 //NOTE!!!!! Choosing nodeBubbleToCalculateBFS is important to set up - its used for multiple path finding algos to find out isolated bubbles in the game
                 nodeBubbleToCalculateBFS = instantiatedBubble;
@@ -121,7 +125,7 @@ namespace SNGames.BubbleShooter
                 instantiatedBubble.transform.SetParent(transform);
 
                 LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
-                allBubblesSpawnedInTheLevel.Add(bubbleChoosen);
+                allBubblesSpawnedInTheLevel.Add(instantiatedBubble);
 
                 //NOTE!!!!! Choosing nodeBubbleToCalculateBFS is important to set up - its used for multiple path finding algos to find out isolated bubbles in the game
                 if (instantiatedBubble.BubbleColor == BubbleType.NonDestructable)
@@ -173,7 +177,8 @@ namespace SNGames.BubbleShooter
         {
             foreach (var item in allBubblesSpawnedInTheLevel)
             {
-                Destroy(item.gameObject);
+                if (item != null)
+                    Destroy(item.gameObject);
             }
 
             allBubblesSpawnedInTheLevel.Clear();

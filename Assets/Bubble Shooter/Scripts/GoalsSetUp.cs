@@ -78,4 +78,15 @@ public class GoalsSetUp : MonoBehaviour
             score.SpawnScoreMesh(1);
         }
     }
+
+    public void ResetOnLevelCompleted()
+    {
+        Debug.Log("Came here");
+        foreach (var item in currentTargetData)
+        {
+            Destroy(item.Value.gameObject);
+        }
+
+        currentTargetData = null;
+    }
 }

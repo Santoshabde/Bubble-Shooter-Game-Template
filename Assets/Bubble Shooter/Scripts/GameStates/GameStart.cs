@@ -18,9 +18,9 @@ public class GameStart : State
     {
         Application.targetFrameRate = 120;
 
-        gameStateManager.StartCoroutine(GameStart_IEnum());
+        gameStateManager.InGameUIManager.CloseAllDialogs();
 
-        LevelData.currentLevel = 1;
+        gameStateManager.StartCoroutine(GameStart_IEnum());
     }
 
     public override void Exit()
@@ -36,6 +36,8 @@ public class GameStart : State
     private IEnumerator GameStart_IEnum()
     {
         yield return null;
+
+        SNEventsController<InGameEvents>.TriggerEvent(InGameEvents.OnNewLevelStart);
 
         //Fetch the level, Update current level
 
@@ -55,6 +57,7 @@ public class GameStart : State
             gameStateManager.LevelGenerator?.GenerateRandomLevel(currentLevelGenData.startSpawnPosition.x, currentLevelGenData.startSpawnPosition.y, currentLevelGenData.numberOfRows, currentLevelGenData.numberOfColumns, true);
         else
             gameStateManager.LevelGenerator?.GenerateLevelFromLevelJson(currentLevelGenData.levelJson);
+
 
         //Update HUD
         gameStateManager.ScoreController.UpdateTimer(TimerUtility.ConvertSecondsToTimer(currentLevelGenData.totalGameTimeInSeconds));

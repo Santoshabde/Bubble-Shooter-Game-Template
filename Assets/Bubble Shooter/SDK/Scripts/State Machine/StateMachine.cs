@@ -8,7 +8,7 @@ namespace SNGames.CommonModule
     {
         [SerializeField] private string currentCharacterState;
 
-        private State currentState;
+        protected State currentState;
 
         public virtual void SwitchState(State newState)
         {

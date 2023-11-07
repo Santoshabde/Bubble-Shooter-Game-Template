@@ -38,6 +38,7 @@ namespace SNGames.BubbleShooter
         private RaycastHit2D finalBubbleHit;
 
         private Queue bubbleQueue = new Queue();
+        public List<Bubble> allBubblesShot = new List<Bubble>();
 
         private void Start()
         {
@@ -46,16 +47,25 @@ namespace SNGames.BubbleShooter
             //You move the level(along with camera) up and down based on the last bubble distance to your shoot point. - NOTE: Never move bubbles, bubbles positions should always be fixed
             SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.MoveNextBubbleToCurrentBubble, () => AdjustShootPositionBasedOnLastBubbleIntheGrid(distanceCalculationTransform));
 
+            SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnLevelSuccess, ClearCurrentLevel);
+            SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnLevelFail, ClearCurrentLevel);
+            SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnNewLevelStart, StartNewLevel);
+
             //Spawn respective power on clicking respective powerup
             PowerupController.OnPowerButtonClicked += OnPowerButtonClicked;
 
-            bubbleShotsLeftCountText.text = bubbleShotsLeftCount.ToString();
-
-            //Place current and next bubble at the start of the level
-            PlaceCurrentShootBubble();
-            PlaceNextShootBubble();
+            //bubbleShotsLeftCountText.text = bubbleShotsLeftCount.ToString();
 
             //AdjustShootPositionBasedOnLastBubbleIntheGrid(distanceCalculationTransform, true);
+        }
+
+        private void OnDestroy()
+        {
+            SNEventsController<InGameEvents>.DeregisterEvent(InGameEvents.MoveNextBubbleToCurrentBubble, MoveNextShootBubbleToCurrentShootBubble);
+            SNEventsController<InGameEvents>.DeregisterEvent(InGameEvents.MoveNextBubbleToCurrentBubble, () => AdjustShootPositionBasedOnLastBubbleIntheGrid(distanceCalculationTransform));
+            SNEventsController<InGameEvents>.DeregisterEvent(InGameEvents.OnLevelSuccess, ClearCurrentLevel);
+            SNEventsController<InGameEvents>.DeregisterEvent(InGameEvents.OnLevelFail, ClearCurrentLevel);
+            SNEventsController<InGameEvents>.DeregisterEvent(InGameEvents.OnNewLevelStart, StartNewLevel);
         }
 
         void Update()
@@ -81,6 +91,8 @@ namespace SNGames.BubbleShooter
             currentlyPlacedBubble.transform.parent = currentBubbleLaunchPoint.transform;
             currentlyPlacedBubble.isLaunchBubble = true;
             currentlyPlacedBubble.gameObject.layer = LayerMask.NameToLayer("LaunchBubble");
+
+            allBubblesShot.Add(currentlyPlacedBubble);
         }
 
         //Moving the next shoot bubble to 'currentlyPlacedBubble'
@@ -121,6 +133,8 @@ namespace SNGames.BubbleShooter
             nextBubble.transform.parent = nextBubblePoint.transform;
             nextBubble.isLaunchBubble = true;
             nextBubble.gameObject.layer = LayerMask.NameToLayer("LaunchBubble");
+
+            allBubblesShot.Add(nextBubble);
         }
 
         private void RayCastToBubblesOnBoardAndCheckForLaunchInput()
@@ -287,6 +301,30 @@ namespace SNGames.BubbleShooter
                 initialPathRenderer.enabled = true;
                 RayCastToBubblesOnBoardAndCheckForLaunchInput();
             }
+        }
+
+        private void ClearCurrentLevel()
+        {
+            foreach (var item in allBubblesShot)
+            {
+                if(item != null)
+                {
+                    Destroy(item.gameObject);
+                }
+            }
+
+            allBubblesShot.Clear();
+            allBubblesShot = null;
+            allBubblesShot = new List<Bubble>();
+
+            transform.position = Vector3.zero;
+        }
+
+        private void StartNewLevel()
+        {
+            //Place current and next bubble at the start of the level
+            PlaceCurrentShootBubble();
+            PlaceNextShootBubble();
         }
 
         #region Input Type Based Helper Functions

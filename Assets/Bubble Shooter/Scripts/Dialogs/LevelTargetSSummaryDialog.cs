@@ -30,7 +30,10 @@ namespace SNGames.BubbleShooter
         {
             base.OnCloseDialog();
 
-            spawnedGoalTargets.ForEach(t => Destroy(t.gameObject));
+            spawnedGoalTargets.ForEach(t =>
+            {
+                if (t != null) Destroy(t.gameObject);
+            });
         }
 
         public void InitialGoalSetUp(List<TargetLevelBubble> targetBubbles)

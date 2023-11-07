@@ -38,7 +38,11 @@ namespace SNGames.BubbleShooter
 
         public void UpdateGameTargetsScore(List<Bubble> bubblesToCalculateScoreFor)
         {
-            scoreController.UpdateGameTargetsScore(bubblesToCalculateScoreFor, () => SwitchState(new GameSuccess(this)));
+            scoreController.UpdateGameTargetsScore(bubblesToCalculateScoreFor, () =>
+            {
+                if (!Type.Equals(currentState.GetType(), typeof(GameSuccess)))
+                    SwitchState(new GameSuccess(this));
+            });
         }
 
         public override void SwitchState(State newState)

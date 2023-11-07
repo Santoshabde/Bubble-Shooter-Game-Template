@@ -38,5 +38,6 @@ namespace SNGames.BubbleShooter
         MoveNextBubbleToCurrentBubble,
         OnLevelSuccess,
         OnLevelFail,
+        OnNewLevelStart
     }
 }

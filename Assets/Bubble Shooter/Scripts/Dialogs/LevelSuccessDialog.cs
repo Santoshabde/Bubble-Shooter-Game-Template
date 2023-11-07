@@ -2,7 +2,7 @@ using SNGames.CommonModule;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 namespace SNGames.BubbleShooter
 {
@@ -41,6 +41,13 @@ namespace SNGames.BubbleShooter
                 spawnedTarget.SetTarget(item.targetNumber, inGameBubbleData.BubbleIdAndSprite[item.targetBubble], true);
                 spawnedGoalTargets.Add(spawnedTarget);
             }
+        }
+
+        public void OnNextLevelButtonClick()
+        {
+            LevelData.currentLevel = 2;
+
+            GameManager.Instance.SwitchState(new GameStart(GameManager.Instance));
         }
     }
 }

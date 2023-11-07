@@ -14,6 +14,12 @@ public class ScoreController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI racoonsToRescue;
     [SerializeField] private GoalsSetUp goalsetup;
 
+    private void Awake()
+    {
+        SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnLevelSuccess, OnLevelSuccess);
+        SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnLevelFail, OnLevelFail);
+    }
+
     public void UpdateTimer(string timer, bool shouldAnimate = false)
     {
         gameTime.text = timer;
@@ -41,5 +47,15 @@ public class ScoreController : MonoBehaviour
     public void UpdateGameTargetsScore(List<Bubble> bubblesToCalculateScoreFor, Action OnAllTargetsReached = null)
     {
         goalsetup.UpdateTargetData(bubblesToCalculateScoreFor, OnAllTargetsReached);
+    }
+
+    private void OnLevelFail()
+    {
+        goalsetup.ResetOnLevelCompleted();
+    }
+
+    private void OnLevelSuccess()
+    {
+        goalsetup.ResetOnLevelCompleted();
     }
 }
