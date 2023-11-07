@@ -40,9 +40,10 @@ public class GameStart : State
         SNEventsController<InGameEvents>.TriggerEvent(InGameEvents.OnNewLevelStart);
 
         //Fetch the level, Update current level
+        int currentLevel = LocalSaveSystem.playerInGameStats.currentLevel;
 
         //Fetch that particular levelGendata
-        gameStateManager.currentLevelGenData = gameStateManager.InGameLevelData.Data[LevelData.currentLevel];
+        gameStateManager.currentLevelGenData = gameStateManager.InGameLevelData.Data[currentLevel];
 
         currentLevelGenData = gameStateManager.currentLevelGenData;
 

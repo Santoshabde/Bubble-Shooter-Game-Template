@@ -45,7 +45,12 @@ namespace SNGames.BubbleShooter
 
         public void OnNextLevelButtonClick()
         {
-            LevelData.currentLevel = 2;
+            //Fetching currenlt Player in Game Stat
+            PlayerInGameStats currentPlayerInGameStats = LocalSaveSystem.playerInGameStats;
+            currentPlayerInGameStats.currentLevel += 1;
+
+            //Updating Local Save Data
+            LocalSaveSystem.playerInGameStats = currentPlayerInGameStats;
 
             GameManager.Instance.SwitchState(new GameStart(GameManager.Instance));
         }
