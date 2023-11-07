@@ -25,6 +25,8 @@ namespace SNGames.BubbleShooter
 
             //Set the layer back to default - like rest of the bubbles on board
             gameObject.layer = LayerMask.NameToLayer("Default");
+            if (lineRenderer != null)
+                lineRenderer.gameObject.SetActive(false);
 
             //Change color to attached bubble which you aimed to
             if (bubbleWeAreShootingTo.BubbleColor == BubbleType.NonDestructable)

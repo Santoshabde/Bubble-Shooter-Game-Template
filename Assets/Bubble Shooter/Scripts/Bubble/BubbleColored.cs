@@ -26,6 +26,8 @@ namespace SNGames.BubbleShooter
 
             //Set the layer back to default - like rest of the bubbles on board
             gameObject.layer = LayerMask.NameToLayer("Default");
+            if (lineRenderer != null)
+                lineRenderer.gameObject.SetActive(false);
 
             //Updating Level Data, as new bubble got added
             LevelData.bubblesLevelDataDictionary.Add(finalPoint, this);

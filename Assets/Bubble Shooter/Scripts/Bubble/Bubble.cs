@@ -23,6 +23,7 @@ namespace SNGames.BubbleShooter
         [SerializeField] protected BubbleType bubbleColor;
         [SerializeField] protected GameObject bubbleMesh;
         [SerializeField] protected string audioIDToPlayOnFinalPosSettling;
+        [SerializeField] protected TrailRenderer lineRenderer;
 
         public List<NeighbourData> NeighbourBubbles => neighbourBubbles;
         public BubbleType BubbleColor => bubbleColor;
@@ -62,6 +63,10 @@ namespace SNGames.BubbleShooter
             if(isLaunchBubble)
             {
                 isLaunchBubble = false;
+
+                if (lineRenderer != null)
+                    lineRenderer.gameObject.SetActive(true);
+
                 InitOnExecutingLaunch();
 
                 StartCoroutine(MoveBallToFinalPosition(finalPoint));

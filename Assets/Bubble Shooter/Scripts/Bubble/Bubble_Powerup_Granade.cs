@@ -24,6 +24,8 @@ namespace SNGames.BubbleShooter
 
             //Updating Level Data, as new bubble got added
             LevelData.bubblesLevelDataDictionary.Add(finalPoint, this);
+            if (lineRenderer != null)
+                lineRenderer.gameObject.SetActive(false);
 
             //Recalculating neighbour Data again for all board bubbles - because a new bubble got added to the board
             BubbleShooter_HelperFunctions.RecalculateAllBubblesNeighboursData(LevelData.bubblesLevelDataDictionary, LevelGenerator.bubbleGap);
