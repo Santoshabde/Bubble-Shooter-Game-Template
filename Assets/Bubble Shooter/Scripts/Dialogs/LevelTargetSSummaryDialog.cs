@@ -4,6 +4,7 @@ using UnityEngine;
 using SNGames.CommonModule;
 using TMPro;
 using DG.Tweening;
+using UnityEngine.UI;
 
 namespace SNGames.BubbleShooter
 {
@@ -15,6 +16,7 @@ namespace SNGames.BubbleShooter
         [SerializeField] private GoalTarget goalTarget;
         [SerializeField] private Transform targetPannelToAnimate;
         [SerializeField] private TextMeshProUGUI currentLevelInfo;
+        [SerializeField] private Image bgImage;
 
         private LevelGenData currentLevelGenData = null;
         private List<GoalTarget> spawnedGoalTargets = new List<GoalTarget>();
@@ -25,24 +27,25 @@ namespace SNGames.BubbleShooter
 
             currentLevelInfo.text = "Level: " + LocalSaveSystem.playerInGameStats.currentLevel;
 
-            targetPannelToAnimate.localScale = Vector3.zero;
-
             currentLevelGenData = LevelData.currentLevelGenData;
             InitialGoalSetUp(currentLevelGenData.targetBubbles);
 
-            //Animation part!!
-            Sequence dialogAnimationSeq = DOTween.Sequence();
-            dialogAnimationSeq.Append(targetPannelToAnimate.DOScale((Vector3.one * 1.1f), 0.4f));
-            dialogAnimationSeq.Append(targetPannelToAnimate.DOScale((Vector3.one * 0.9f), 0.2f));
-            dialogAnimationSeq.Append(targetPannelToAnimate.DOScale((Vector3.one), 0.2f));
+            StartCoroutine(DisableTheDialog());
 
-            StartCoroutine(DisbleTheDialog());
+            //Animation part!!
+            targetPannelToAnimate.localScale = Vector3.zero;
+            bgImage.color = new Color(bgImage.color.r, bgImage.color.g, bgImage.color.b, 0);
+
+            bgImage.DOFade(0.9843f, 0.4f).SetEase(Ease.InSine);
+
+            Sequence dialogAnimationSeq = DOTween.Sequence();
+            dialogAnimationSeq.Append(targetPannelToAnimate.DOScale((Vector3.one * 1.1f), 0.4f)).SetEase(Ease.InSine);
+            dialogAnimationSeq.Append(targetPannelToAnimate.DOScale((Vector3.one * 0.9f), 0.2f)).SetEase(Ease.InSine);
+            dialogAnimationSeq.Append(targetPannelToAnimate.DOScale((Vector3.one), 0.2f)).SetEase(Ease.InSine);
         }
 
         public override void OnCloseDialog()
         {
-            // targetPannelToAnimate.DOScale((Vector3.zero), 0.5f).OnComplete(() => base.OnCloseDialog());
-
             base.OnCloseDialog();
             spawnedGoalTargets.ForEach(t =>
             {
@@ -64,13 +67,17 @@ namespace SNGames.BubbleShooter
             }
         }
 
-        private IEnumerator DisbleTheDialog()
+        private IEnumerator DisableTheDialog()
         {
             yield return new WaitForSeconds(3f);
+
+            bgImage.DOFade(0, 1.2f).SetEase(Ease.InSine);
+
             Sequence dialogAnimationSeq = DOTween.Sequence();
             dialogAnimationSeq.Append(targetPannelToAnimate.DOScale((Vector3.one) * 1.1f, 0.2f));
             dialogAnimationSeq.Append(targetPannelToAnimate.DOScale((Vector3.zero), 0.5f));
-            yield return new WaitForSeconds(0.7f);
+            yield return new WaitForSeconds(0.72f);
+
             OnCloseDialog();
         }
     }

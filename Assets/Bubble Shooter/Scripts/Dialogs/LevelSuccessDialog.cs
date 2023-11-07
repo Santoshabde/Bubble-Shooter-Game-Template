@@ -13,6 +13,7 @@ namespace SNGames.BubbleShooter
         [SerializeField] private Transform parentTransform;
         [SerializeField] private GoalTarget goalTarget;
         [SerializeField] private Transform targetPannelToAnimate;
+        [SerializeField] private Image bgImage;
 
         private LevelGenData currentLevelGenData = null;
         private List<GoalTarget> spawnedGoalTargets = new List<GoalTarget>();
@@ -25,7 +26,11 @@ namespace SNGames.BubbleShooter
             InitialGoalSetUp(currentLevelGenData.targetBubbles);
 
             //Animation part!!
+            bgImage.color = new Color(bgImage.color.r, bgImage.color.g, bgImage.color.b, 0);
             targetPannelToAnimate.localScale = Vector3.zero;
+
+            bgImage.DOFade(0.9843f, 0.4f).SetEase(Ease.InSine);
+
             Sequence dialogAnimationSeq = DOTween.Sequence();
             dialogAnimationSeq.Append(targetPannelToAnimate.DOScale((Vector3.one * 1.1f), 0.4f));
             dialogAnimationSeq.Append(targetPannelToAnimate.DOScale((Vector3.one * 0.9f), 0.2f));
@@ -61,9 +66,13 @@ namespace SNGames.BubbleShooter
             //Updating Local Save Data
             LocalSaveSystem.playerInGameStats = currentPlayerInGameStats;
 
+            //Animation part
+            bgImage.DOFade(0, 1.2f).SetEase(Ease.InSine);
+
             Sequence dialogAnimationSeq = DOTween.Sequence();
             dialogAnimationSeq.Append(targetPannelToAnimate.DOScale((Vector3.one) * 1.1f, 0.2f));
             dialogAnimationSeq.Append(targetPannelToAnimate.DOScale((Vector3.zero), 0.5f));
+            dialogAnimationSeq.AppendInterval(1f);
             dialogAnimationSeq.OnComplete(() => GameManager.Instance.SwitchState(new GameStart(GameManager.Instance)));
         }
     }

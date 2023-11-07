@@ -37,7 +37,6 @@ namespace SNGames.BubbleShooter
         private Bubble finalHitBubble = null;
         private RaycastHit2D finalBubbleHit;
 
-        private Queue bubbleQueue = new Queue();
         public List<Bubble> allBubblesShot = new List<Bubble>();
 
         private void Start()
@@ -72,9 +71,11 @@ namespace SNGames.BubbleShooter
         {
             if (GameManager.Instance.currentGameStateIsInProgress)
             {
-                initialPathRenderer.enabled = ShouldEnableLineRenderer();
+                initialPathRenderer.enabled = false;
                 if (ShouldCastARayAndCheckForInput())
                 {
+                    initialPathRenderer.enabled = ShouldEnableLineRenderer();
+
                     //2 cases again here - ray cast directly to bubble (or) ray cast to wall
                     RayCastToBubblesOnBoardAndCheckForLaunchInput();  
                 }
@@ -293,13 +294,17 @@ namespace SNGames.BubbleShooter
             {
                 yield return new WaitForSeconds(0.2f);
 
-                float distanceBetween = Mathf.Abs(levelGenerator.GetNearestRowBubbleInTheGrid(refPoint).PositionID.y - distanceCalculationTransform.position.y);
+                Bubble nearestRowBubbleInTheGrid = levelGenerator.GetNearestRowBubbleInTheGrid(refPoint);
+                if (nearestRowBubbleInTheGrid != null)
+                {
+                    float distanceBetween = Mathf.Abs(nearestRowBubbleInTheGrid.PositionID.y - distanceCalculationTransform.position.y);
 
-                if (debug)
-                    Debug.Log("Initial Distance:" + distanceBetween);
+                    if (debug)
+                        Debug.Log("Initial Distance:" + distanceBetween);
 
-                float distanceToMove = distanceBetween - distanceToMaintain;
-                transform.DOMove(transform.position + new Vector3(0, distanceToMove, 0), 0.45f);
+                    float distanceToMove = distanceBetween - distanceToMaintain;
+                    transform.DOMove(transform.position + new Vector3(0, distanceToMove, 0), 0.45f);
+                }
 
                 yield return new WaitForSeconds(0.45f);
 

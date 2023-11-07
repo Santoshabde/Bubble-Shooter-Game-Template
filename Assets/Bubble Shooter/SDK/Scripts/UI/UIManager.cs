@@ -45,7 +45,11 @@ namespace SNGames.CommonModule
 
         public void CloseAllDialogs()
         {
-            inGameDialogs.ForEach(t => t.OnCloseDialog());
+            foreach (var item in inGameDialogs)
+            {
+                if (item.gameObject.activeSelf)
+                    item.OnCloseDialog();
+            }
         }
     }
 }
