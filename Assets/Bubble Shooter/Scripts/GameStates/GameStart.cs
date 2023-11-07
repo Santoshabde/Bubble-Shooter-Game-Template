@@ -51,7 +51,7 @@ public class GameStart : State
 
         gameStateManager.InGameUIManager.OpenDialog<LevelTargetSSummaryDialog>();
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3.7f);
 
         //Generate level - either random or level josn
         if (currentLevelGenData.generateRandomLevel)

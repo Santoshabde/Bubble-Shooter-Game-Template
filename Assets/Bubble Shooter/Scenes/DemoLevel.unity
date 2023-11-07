@@ -2053,6 +2053,10 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 0.9843137
       objectReference: {fileID: 0}
+    - target: {fileID: 8734294762115482444, guid: 30e541a8fab14de4387d8814c05b29c9, type: 3}
+      propertyPath: targetPannelToAnimate
+      value: 
+      objectReference: {fileID: 1186687371}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2718,6 +2722,11 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!224 &1186687371 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8308050971425035262, guid: 30e541a8fab14de4387d8814c05b29c9, type: 3}
+  m_PrefabInstance: {fileID: 776878409}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1190233510 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8734294762115482444, guid: 30e541a8fab14de4387d8814c05b29c9, type: 3}
@@ -4597,33 +4606,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Level Sucess
       objectReference: {fileID: 0}
-    - target: {fileID: 5994132647933174018, guid: d300c5980e0aa8648b07aa2d74019d30, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5994132647933174018, guid: d300c5980e0aa8648b07aa2d74019d30, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5994132647933174018, guid: d300c5980e0aa8648b07aa2d74019d30, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 4786978491026431141}
-    - target: {fileID: 5994132647933174018, guid: d300c5980e0aa8648b07aa2d74019d30, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5994132647933174018, guid: d300c5980e0aa8648b07aa2d74019d30, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnNextLevelButtonClick
-      objectReference: {fileID: 0}
-    - target: {fileID: 5994132647933174018, guid: d300c5980e0aa8648b07aa2d74019d30, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: SNGames.BubbleShooter.LevelSuccessDialog, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 5994132647933174018, guid: d300c5980e0aa8648b07aa2d74019d30, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
+    - target: {fileID: 5972794890557136111, guid: d300c5980e0aa8648b07aa2d74019d30, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

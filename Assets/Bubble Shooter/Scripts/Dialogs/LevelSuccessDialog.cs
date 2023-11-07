@@ -1,3 +1,4 @@
+using DG.Tweening;
 using SNGames.CommonModule;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace SNGames.BubbleShooter
         [SerializeField] private InGameBubblesData inGameBubbleData;
         [SerializeField] private Transform parentTransform;
         [SerializeField] private GoalTarget goalTarget;
+        [SerializeField] private Transform targetPannelToAnimate;
 
         private LevelGenData currentLevelGenData = null;
         private List<GoalTarget> spawnedGoalTargets = new List<GoalTarget>();
@@ -21,6 +23,13 @@ namespace SNGames.BubbleShooter
 
             currentLevelGenData = LevelData.currentLevelGenData;
             InitialGoalSetUp(currentLevelGenData.targetBubbles);
+
+            //Animation part!!
+            targetPannelToAnimate.localScale = Vector3.zero;
+            Sequence dialogAnimationSeq = DOTween.Sequence();
+            dialogAnimationSeq.Append(targetPannelToAnimate.DOScale((Vector3.one * 1.1f), 0.4f));
+            dialogAnimationSeq.Append(targetPannelToAnimate.DOScale((Vector3.one * 0.9f), 0.2f));
+            dialogAnimationSeq.Append(targetPannelToAnimate.DOScale((Vector3.one), 0.2f));
         }
 
         public override void OnCloseDialog()
@@ -52,7 +61,10 @@ namespace SNGames.BubbleShooter
             //Updating Local Save Data
             LocalSaveSystem.playerInGameStats = currentPlayerInGameStats;
 
-            GameManager.Instance.SwitchState(new GameStart(GameManager.Instance));
+            Sequence dialogAnimationSeq = DOTween.Sequence();
+            dialogAnimationSeq.Append(targetPannelToAnimate.DOScale((Vector3.one) * 1.1f, 0.2f));
+            dialogAnimationSeq.Append(targetPannelToAnimate.DOScale((Vector3.zero), 0.5f));
+            dialogAnimationSeq.OnComplete(() => GameManager.Instance.SwitchState(new GameStart(GameManager.Instance)));
         }
     }
 }
