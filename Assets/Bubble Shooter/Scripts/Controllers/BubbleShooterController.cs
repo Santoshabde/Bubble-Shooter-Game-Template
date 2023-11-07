@@ -44,7 +44,7 @@ namespace SNGames.BubbleShooter
             //Move your next Bubble to current bubble on triggering this event
             SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.MoveNextBubbleToCurrentBubble, MoveNextShootBubbleToCurrentShootBubble);
             //You move the level(along with camera) up and down based on the last bubble distance to your shoot point. - NOTE: Never move bubbles, bubbles positions should always be fixed
-            SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.MoveNextBubbleToCurrentBubble, () => AdjustShootPositionBasedOnLastBubbleIntheGrid(distanceCalculationTransform));
+            SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.MoveNextBubbleToCurrentBubble, AdjustShootPositionBasedOnLastBubbleIntheGrid);
 
             SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnLevelSuccess, ClearCurrentLevel);
             SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnLevelFail, ClearCurrentLevel);
@@ -61,7 +61,7 @@ namespace SNGames.BubbleShooter
         private void OnDestroy()
         {
             SNEventsController<InGameEvents>.DeregisterEvent(InGameEvents.MoveNextBubbleToCurrentBubble, MoveNextShootBubbleToCurrentShootBubble);
-            SNEventsController<InGameEvents>.DeregisterEvent(InGameEvents.MoveNextBubbleToCurrentBubble, () => AdjustShootPositionBasedOnLastBubbleIntheGrid(distanceCalculationTransform));
+            SNEventsController<InGameEvents>.DeregisterEvent(InGameEvents.MoveNextBubbleToCurrentBubble, AdjustShootPositionBasedOnLastBubbleIntheGrid);
             SNEventsController<InGameEvents>.DeregisterEvent(InGameEvents.OnLevelSuccess, ClearCurrentLevel);
             SNEventsController<InGameEvents>.DeregisterEvent(InGameEvents.OnLevelFail, ClearCurrentLevel);
             SNEventsController<InGameEvents>.DeregisterEvent(InGameEvents.OnNewLevelStart, StartNewLevel);
@@ -285,8 +285,11 @@ namespace SNGames.BubbleShooter
         }
 
         private Coroutine AdjustShootPositionBasedOnLastBubbleIntheGrid_Coroutine;
-        private void AdjustShootPositionBasedOnLastBubbleIntheGrid(Transform refPoint, bool debug = false)
+        private void AdjustShootPositionBasedOnLastBubbleIntheGrid()
         {
+            if (!GameManager.Instance.currentGameStateIsInProgress)
+                return;
+
             if (AdjustShootPositionBasedOnLastBubbleIntheGrid_Coroutine == null)
                 AdjustShootPositionBasedOnLastBubbleIntheGrid_Coroutine = StartCoroutine(AdjustShootPositionBasedOnLastBubbleIntheGrid_IEnum());
 
@@ -294,13 +297,13 @@ namespace SNGames.BubbleShooter
             {
                 yield return new WaitForSeconds(0.2f);
 
-                Bubble nearestRowBubbleInTheGrid = levelGenerator.GetNearestRowBubbleInTheGrid(refPoint);
+                Bubble nearestRowBubbleInTheGrid = levelGenerator.GetNearestRowBubbleInTheGrid(distanceCalculationTransform);
                 if (nearestRowBubbleInTheGrid != null)
                 {
                     float distanceBetween = Mathf.Abs(nearestRowBubbleInTheGrid.PositionID.y - distanceCalculationTransform.position.y);
 
-                    if (debug)
-                        Debug.Log("Initial Distance:" + distanceBetween);
+                    //if (debug)
+                     //   Debug.Log("Initial Distance:" + distanceBetween);
 
                     float distanceToMove = distanceBetween - distanceToMaintain;
                     transform.DOMove(transform.position + new Vector3(0, distanceToMove, 0), 0.45f);
