@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class ConfigRegistry : MonoBehaviour
 {
-    [SerializeField] private List<BaseScriptable> configsInGame;
-    
-    void Awake()
+    [SerializeField] private List<BaseConfig> configsInGame;
+
+    private void Awake()
     {
-        foreach (var item in configsInGame)
+        InitialiseConfigsInGame();
+    }
+
+    private void InitialiseConfigsInGame()
+    {
+        foreach (BaseConfig config in configsInGame)
         {
-            item.Init();
+            config.Refresh();
         }
     }
 }

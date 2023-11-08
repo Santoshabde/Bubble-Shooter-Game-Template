@@ -3,11 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BaseService
-{
-
-}
-
 public static class ServiceRegistry
 {
     private static Dictionary<Type, BaseService> serviceMap;
