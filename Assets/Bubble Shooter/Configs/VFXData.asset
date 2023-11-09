@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73c8551f8b1f6c5418238d4df527ca63, type: 3}
   m_Name: VFXData
   m_EditorClassIdentifier: 
-  inGameVfxData:
+  data:
   - id: Confetti
     particleEffect: {fileID: 1578469459646218, guid: 0d57e66d7df915b4aabb02005dd9f8b1, type: 3}

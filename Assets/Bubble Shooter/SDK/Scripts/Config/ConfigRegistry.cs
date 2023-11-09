@@ -11,6 +11,7 @@ public class ConfigRegistry : MonoBehaviour
         InitialiseConfigsInGame();
     }
 
+    [ContextMenu("Refresh")]
     private void InitialiseConfigsInGame()
     {
         foreach (BaseConfig config in configsInGame)

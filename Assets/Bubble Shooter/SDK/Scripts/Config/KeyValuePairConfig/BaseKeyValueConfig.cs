@@ -14,6 +14,7 @@ namespace SNGames.CommonModule
         [ContextMenu("Refresh")]
         public override void Refresh()
         {
+            Data = new Dictionary<string, T>();
             foreach (var item in data)
             {
                 Data.Add(item.ID, item);
