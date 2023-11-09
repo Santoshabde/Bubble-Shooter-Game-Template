@@ -6,7 +6,7 @@ using SNGames.CommonModule;
 [CreateAssetMenu(fileName = "VFXData", menuName = "ScriptableObjects/VFXData", order = 1)]
 public class VFXData : BaseKeyValueConfig<InGameVFXData>
 {
-    public void SpawnVFX(string id, Vector3 position, float destroyAfterSeconds)
+    public static void SpawnVFX(string id, Vector3 position, float destroyAfterSeconds)
     {
         if (Data != null 
             && Data.ContainsKey(id))

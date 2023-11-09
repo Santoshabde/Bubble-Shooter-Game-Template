@@ -382,6 +382,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   configsInGame:
   - {fileID: 11400000, guid: 6573fd2d72276c148a473ec0bae496d5, type: 2}
+  - {fileID: 11400000, guid: 30eb6f51e4b6c0046b528c2e2f12686e, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -7,34 +7,15 @@ using SNGames.CommonModule;
 namespace SNGames.BubbleShooter
 {
     [CreateAssetMenu(fileName = "LevelData", menuName = "ScriptableObjects/LevelData", order = 1)]
-    public class InGameLevelData : ScriptableObject
+    public class InGameLevelData : BaseKeyValueConfig<LevelGenData>
     {
-        [SerializeField]
-        private List<LevelGenData> levelGenData;
 
-        private Dictionary<int, LevelGenData> data;
-
-        public Dictionary<int, LevelGenData> Data
-        {
-            get
-            {
-                if(data == null)
-                {
-                    data = new Dictionary<int, LevelGenData>();
-
-                    foreach (var item in levelGenData)
-                    {
-                        data.Add(item.levelNumber, item);
-                    }
-                }
-
-                return data;
-            }
-        }
     }
 
+    #region Data structures
+
     [System.Serializable]
-    public class LevelGenData
+    public class LevelGenData : IKeyValueConfigData
     {
         public int levelNumber;
         public bool generateRandomLevel;
@@ -46,6 +27,8 @@ namespace SNGames.BubbleShooter
         public List<BubbleType> bubblesToShootOrder;
         public int targetRacoonsToSave;
         public int totalGameTimeInSeconds;
+
+        public string ID => levelNumber.ToString();
     }
 
     [System.Serializable]
@@ -54,4 +37,6 @@ namespace SNGames.BubbleShooter
         public int targetNumber;
         public BubbleType targetBubble;
     }
+
+    #endregion
 }

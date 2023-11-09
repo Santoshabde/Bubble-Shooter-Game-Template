@@ -43,7 +43,7 @@ public class GameStart : State
         int currentLevel = LocalSaveSystem.playerInGameStats.currentLevel;
 
         //Fetch that particular levelGendata
-        gameStateManager.currentLevelGenData = gameStateManager.InGameLevelData.Data[currentLevel];
+        gameStateManager.currentLevelGenData = InGameLevelData.Data[currentLevel.ToString()];
 
         currentLevelGenData = gameStateManager.currentLevelGenData;
 

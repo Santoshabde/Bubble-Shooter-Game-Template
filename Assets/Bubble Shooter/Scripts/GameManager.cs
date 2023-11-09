@@ -8,18 +8,13 @@ namespace SNGames.BubbleShooter
 {
     public class GameManager : StateMachine
     {
-        [SerializeField] private InGameLevelData levelGenerationData;
-        [SerializeField] private VFXData vfxData;
-
         [SerializeField] private LevelGenerator levelGenerator;
         [SerializeField] private ScoreController scoreController;
         [SerializeField] private InGameUIManager inGameUIManager;
 
-        public InGameLevelData InGameLevelData => levelGenerationData;
         public ScoreController ScoreController => scoreController;
         public LevelGenerator LevelGenerator => levelGenerator;
         public InGameUIManager InGameUIManager => inGameUIManager;
-        public VFXData VFXData => vfxData;
 
         public LevelGenData currentLevelGenData;
         public bool currentGameStateIsInProgress = false;

@@ -31,13 +31,13 @@ public class GameSuccess : State
     IEnumerator OnGameSuccess()
     {
         //Spawn VFX
-        gameStateManager.VFXData.SpawnVFX("Confetti", Vector3.zero, 2f);
+        VFXData.SpawnVFX("Confetti", Vector3.zero, 2f);
         yield return new WaitForSeconds(0.4f);
-        gameStateManager.VFXData.SpawnVFX("Confetti", new Vector3(1.44f, 3, 0), 2f);
+        VFXData.SpawnVFX("Confetti", new Vector3(1.44f, 3, 0), 2f);
         yield return new WaitForSeconds(0.4f);
-        gameStateManager.VFXData.SpawnVFX("Confetti", new Vector3(-1.79f, 1.77f, 0), 2f);
+        VFXData.SpawnVFX("Confetti", new Vector3(-1.79f, 1.77f, 0), 2f);
         yield return new WaitForSeconds(0.4f);
-        gameStateManager.VFXData.SpawnVFX("Confetti", new Vector3(-0.95f, -2.62f, 0), 2f);
+        VFXData.SpawnVFX("Confetti", new Vector3(-0.95f, -2.62f, 0), 2f);
         yield return new WaitForSeconds(2f);
 
         //Dialog
