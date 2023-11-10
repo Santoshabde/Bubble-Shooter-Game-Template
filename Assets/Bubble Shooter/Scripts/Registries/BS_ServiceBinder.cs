@@ -1,11 +1,18 @@
+using SNGames.CommonModule;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BS_ServiceBinder : ServiceBinder
+namespace SNGames.BubbleShooter
 {
-    protected override void BindAllServicesInGame()
+    public class BS_ServiceBinder : ServiceBinder
     {
-        //Register all in game services here
+        protected override void BindAllServicesInGame()
+        {
+            //Register all in game services here
+            ServiceRegistry.Bind(new LevelGenerator());
+
+            ServiceRegistry.Init();
+        }
     }
 }

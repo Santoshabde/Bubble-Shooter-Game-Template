@@ -261,7 +261,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!81 &1684582869
 AudioListener:
   m_ObjectHideFlags: 0
@@ -279,8 +279,8 @@ Camera:
   m_GameObject: {fileID: 1684582868}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -383,6 +383,7 @@ MonoBehaviour:
   configsInGame:
   - {fileID: 11400000, guid: 6573fd2d72276c148a473ec0bae496d5, type: 2}
   - {fileID: 11400000, guid: 30eb6f51e4b6c0046b528c2e2f12686e, type: 2}
+  - {fileID: 11400000, guid: 948900266e405a546a27cc17f1bb545c, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

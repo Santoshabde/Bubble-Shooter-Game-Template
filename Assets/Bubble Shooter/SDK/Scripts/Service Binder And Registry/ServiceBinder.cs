@@ -3,23 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Binds all services into Service Registry pool!!
-/// </summary>
-public abstract class ServiceBinder : MonoBehaviour
+namespace SNGames.CommonModule
 {
-    private void Awake()
-    {
-        BindAllServicesInGame();
-    }
-
     /// <summary>
-    /// Binds All Services at the start of the game
+    /// Binds all services into Service Registry pool!!
     /// </summary>
-    protected abstract void BindAllServicesInGame();
-
-    protected void BindService(BaseService service)
+    public abstract class ServiceBinder : MonoBehaviour
     {
-        ServiceRegistry.Bind(service);
+        private void Awake()
+        {
+            BindAllServicesInGame();
+        }
+
+        /// <summary>
+        /// Binds All Services at the start of the game
+        /// </summary>
+        protected abstract void BindAllServicesInGame();
+
+        protected void BindService(BaseService service)
+        {
+            ServiceRegistry.Bind(service);
+        }
     }
 }

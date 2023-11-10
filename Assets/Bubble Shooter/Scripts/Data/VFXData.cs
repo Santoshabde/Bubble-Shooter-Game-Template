@@ -17,6 +17,8 @@ public class VFXData : BaseKeyValueConfig<InGameVFXData>
     }
 }
 
+#region Data structures
+
 [System.Serializable]
 public struct InGameVFXData : IKeyValueConfigData
 {
@@ -26,3 +28,4 @@ public struct InGameVFXData : IKeyValueConfigData
     public GameObject particleEffect;
 }
 
+#endregion

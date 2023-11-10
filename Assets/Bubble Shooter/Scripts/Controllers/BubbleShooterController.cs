@@ -10,11 +10,9 @@ namespace SNGames.BubbleShooter
 {
     public class BubbleShooterController : MonoBehaviour
     {
-        [SerializeField] private LevelGenerator levelGenerator;
         [SerializeField] private TextMeshPro bubbleShotsLeftCountText;
         [SerializeField] private int bubbleShotsLeftCount;
         [SerializeField] private float minYTouchMousePoint;
-        [SerializeField] private InGameBubblesData inGameBubbleData;
         [SerializeField] private LineRenderer initialPathRenderer;
         [SerializeField] private float distanceToMaintain;
         [SerializeField] private Transform distanceCalculationTransform;
@@ -39,6 +37,8 @@ namespace SNGames.BubbleShooter
 
         public List<Bubble> allBubblesShot = new List<Bubble>();
 
+        private LevelGenerator levelGenerator;
+
         private void Start()
         {
             //Move your next Bubble to current bubble on triggering this event
@@ -56,6 +56,8 @@ namespace SNGames.BubbleShooter
             //bubbleShotsLeftCountText.text = bubbleShotsLeftCount.ToString();
 
             //AdjustShootPositionBasedOnLastBubbleIntheGrid(distanceCalculationTransform, true);
+
+            levelGenerator = ServiceRegistry.Get<LevelGenerator>();
         }
 
         private void OnDestroy()
@@ -88,7 +90,7 @@ namespace SNGames.BubbleShooter
         public void PlaceCurrentShootBubble()
         {
             //Choose a random color
-            Bubble randomColorBubblePrefab = inGameBubbleData.GetRandomBubbleColorPrefab();
+            Bubble randomColorBubblePrefab = InGameBubblesData.GetRandomBubbleColorPrefab();
 
             //Spawn current bubble shoot!! 
             currentlyPlacedBubble = Instantiate(randomColorBubblePrefab, currentBubbleLaunchPoint.position, Quaternion.identity);
@@ -131,7 +133,7 @@ namespace SNGames.BubbleShooter
         //Spawning the next shoot bubble
         public void PlaceNextShootBubble()
         {
-            Bubble randomColorBubblePrefab = inGameBubbleData.GetRandomBubbleColorPrefab();
+            Bubble randomColorBubblePrefab = InGameBubblesData.GetRandomBubbleColorPrefab();
 
             nextBubble = Instantiate(randomColorBubblePrefab, nextBubblePoint.position, Quaternion.identity);
             nextBubble.transform.parent = nextBubblePoint.transform;
@@ -277,7 +279,7 @@ namespace SNGames.BubbleShooter
                 powerupsPlatform.gameObject.SetActive(true);
 
                 catchedCurrentlyPlacedBubble = currentlyPlacedBubble;
-                currentlyPlacedBubble = Instantiate(inGameBubbleData.GetBubbleOfAColor(powerType), currentPowerUpLaunchPoint.position, Quaternion.identity);
+                currentlyPlacedBubble = Instantiate(InGameBubblesData.GetBubbleOfAColor(powerType), currentPowerUpLaunchPoint.position, Quaternion.identity);
                 currentlyPlacedBubble.transform.parent = currentPowerUpLaunchPoint;
                 currentlyPlacedBubble.isLaunchBubble = true;
                 currentlyPlacedBubble.gameObject.layer = LayerMask.NameToLayer("LaunchBubble");

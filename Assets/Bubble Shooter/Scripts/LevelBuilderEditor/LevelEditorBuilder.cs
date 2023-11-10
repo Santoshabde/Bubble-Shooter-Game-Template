@@ -134,7 +134,7 @@ public class LevelEditorBuilder : MonoBehaviour
         }
 
         BubbleType bubbleTypeClicked = (BubbleType)bubblrTypess;
-        currenlyActiveBubble = Instantiate(inGameBubblesData.GetBubbleOfAColor(bubbleTypeClicked));
+        currenlyActiveBubble = Instantiate(InGameBubblesData.GetBubbleOfAColor(bubbleTypeClicked));
         currenlyActiveBubble.GetComponent<Collider2D>().enabled = false;
 
         if(bubbleTypeClicked == BubbleType.NonDestructable)

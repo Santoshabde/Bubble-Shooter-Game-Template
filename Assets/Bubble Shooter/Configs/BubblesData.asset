@@ -12,27 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f588f73ec146bba43a4b4e48ac1f330e, type: 3}
   m_Name: BubblesData
   m_EditorClassIdentifier: 
-  bubblePrefabsInGame:
-  - {fileID: 6346385270583433936, guid: 842194f4879a33641bf5e88177d44dee, type: 3}
-  - {fileID: 335245049364073392, guid: 640f2233ec5df0142805cecb10716ebb, type: 3}
-  - {fileID: 4947833674392567734, guid: 55bc00cc4b85bce47923dc86e0ed1b66, type: 3}
-  - {fileID: 52718512866345437, guid: d7113261c5366c24d9620975796a5fa5, type: 3}
-  - {fileID: 3423964376077334255, guid: 7fa2ad233c1292e40b6081aec341a247, type: 3}
-  - {fileID: 1979440615413592246, guid: efe49f34b89dd1e42803ca51eacedd97, type: 3}
-  - {fileID: 1866134423520931765, guid: 1c10cc9167221144f9c0c239c44325c8, type: 3}
-  - {fileID: 4475994614213924023, guid: d5148cfdf63e8c249bff9752f921cb85, type: 3}
-  - {fileID: 1979440615413592246, guid: 80fc5785d8e68f94f9185b957ac0ff9a, type: 3}
-  idAndSprite:
-  - bubbleType: 3
-    sprite: {fileID: 21300000, guid: b40298d5e22972941a5b2785cd0e0430, type: 3}
-  - bubbleType: 0
-    sprite: {fileID: 21300000, guid: 7eae9ea1e4c281b4285a25d7e53e873b, type: 3}
-  - bubbleType: 4
-    sprite: {fileID: 21300000, guid: 686252b9a3d17f84188e50824ce8b448, type: 3}
-  - bubbleType: 6
-    sprite: {fileID: 21300000, guid: c9dc7d4331114714fa3e7322ed9596a6, type: 3}
-  - bubbleType: 2
-    sprite: {fileID: 21300000, guid: 200b9b29b7c37ac4e9f3438792d78408, type: 3}
-  - bubbleType: 1
-    sprite: {fileID: 21300000, guid: 48e0b20e6c322844c9c070dc05f05b72, type: 3}
-  scorePerBubble: 10
+  data:
+    bubblePrefabsInGame:
+    - {fileID: 6346385270583433936, guid: 842194f4879a33641bf5e88177d44dee, type: 3}
+    - {fileID: 335245049364073392, guid: 640f2233ec5df0142805cecb10716ebb, type: 3}
+    - {fileID: 4947833674392567734, guid: 55bc00cc4b85bce47923dc86e0ed1b66, type: 3}
+    - {fileID: 52718512866345437, guid: d7113261c5366c24d9620975796a5fa5, type: 3}
+    - {fileID: 3423964376077334255, guid: 7fa2ad233c1292e40b6081aec341a247, type: 3}
+    - {fileID: 1979440615413592246, guid: efe49f34b89dd1e42803ca51eacedd97, type: 3}
+    - {fileID: 1979440615413592246, guid: 80fc5785d8e68f94f9185b957ac0ff9a, type: 3}
+    - {fileID: 1866134423520931765, guid: 1c10cc9167221144f9c0c239c44325c8, type: 3}
+    - {fileID: 4475994614213924023, guid: d5148cfdf63e8c249bff9752f921cb85, type: 3}
+    idAndSprite:
+    - bubbleType: 0
+      sprite: {fileID: 21300000, guid: 7eae9ea1e4c281b4285a25d7e53e873b, type: 3}
+    - bubbleType: 1
+      sprite: {fileID: 21300000, guid: 48e0b20e6c322844c9c070dc05f05b72, type: 3}
+    - bubbleType: 2
+      sprite: {fileID: 21300000, guid: 200b9b29b7c37ac4e9f3438792d78408, type: 3}
+    - bubbleType: 3
+      sprite: {fileID: 21300000, guid: b40298d5e22972941a5b2785cd0e0430, type: 3}
+    - bubbleType: 4
+      sprite: {fileID: 21300000, guid: 686252b9a3d17f84188e50824ce8b448, type: 3}
+    - bubbleType: 5
+      sprite: {fileID: 21300000, guid: 7eae9ea1e4c281b4285a25d7e53e873b, type: 3}
+    - bubbleType: 6
+      sprite: {fileID: 21300000, guid: c9dc7d4331114714fa3e7322ed9596a6, type: 3}
+    scorePerBubble: 1

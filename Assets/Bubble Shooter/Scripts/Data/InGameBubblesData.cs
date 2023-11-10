@@ -1,26 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SNGames.CommonModule;
 
 namespace SNGames.BubbleShooter
 {
     [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/BubblesData", order = 1)]
-    public class InGameBubblesData : ScriptableObject
+    public class InGameBubblesData : BaseNonKeyValueConfig<BubblesData>
     {
-        [SerializeField] private List<Bubble> bubblePrefabsInGame;
-        [SerializeField] private List<BubbleIdAndSprite> idAndSprite;
-        [SerializeField] private int scorePerBubble;
-
-        private Dictionary<BubbleType, Bubble> bubblePrefabsData = null;
-        private Dictionary<BubbleType, Sprite> bubbleIdAndSprite = null;
-        public Dictionary<BubbleType, Bubble> BubblePrefabsData
+        //Bubble Prefabs Data
+        private static Dictionary<BubbleType, Bubble> bubblePrefabsData = null;
+        public static Dictionary<BubbleType, Bubble> BubblePrefabsData
         {
             get
             {
                 if (bubblePrefabsData == null)
                 {
                     bubblePrefabsData = new Dictionary<BubbleType, Bubble>();
-                    foreach (var bubblePrefab in bubblePrefabsInGame)
+                    foreach (var bubblePrefab in Data.bubblePrefabsInGame)
                     {
                         bubblePrefabsData.Add(bubblePrefab.BubbleColor, bubblePrefab);
                     }
@@ -30,6 +27,8 @@ namespace SNGames.BubbleShooter
             }
         }
 
+        //Bubble ID And Sprite Data
+        private Dictionary<BubbleType, Sprite> bubbleIdAndSprite = null;
         public Dictionary<BubbleType, Sprite> BubbleIdAndSprite
         {
             get
@@ -37,7 +36,7 @@ namespace SNGames.BubbleShooter
                 if (bubbleIdAndSprite == null)
                 {
                     bubbleIdAndSprite = new Dictionary<BubbleType, Sprite>();
-                    foreach (var bubblePrefab in idAndSprite)
+                    foreach (var bubblePrefab in Data.idAndSprite)
                     {
                         bubbleIdAndSprite.Add(bubblePrefab.bubbleType, bubblePrefab.sprite);
                     }
@@ -48,7 +47,8 @@ namespace SNGames.BubbleShooter
         }
 
 
-        public Bubble GetRandomBubbleColorPrefab()
+        //Helper functions for this config
+        public static Bubble GetRandomBubbleColorPrefab()
         {
             Bubble randomBubbleColor = null;
 
@@ -59,12 +59,20 @@ namespace SNGames.BubbleShooter
             return randomBubbleColor;
         }
 
-        public Bubble GetBubbleOfAColor(BubbleType bubbleType)
+        public static Bubble GetBubbleOfAColor(BubbleType bubbleType)
         {
             Bubble result = null;
-            result = bubblePrefabsInGame.Find(t => t.BubbleColor == bubbleType);
+            result = Data.bubblePrefabsInGame.Find(t => t.BubbleColor == bubbleType);
             return result;
         }
+    }
+
+    [System.Serializable]
+    public class BubblesData
+    {
+        public List<Bubble> bubblePrefabsInGame;
+        public List<BubbleIdAndSprite> idAndSprite;
+        public int scorePerBubble;
     }
 
     [System.Serializable]

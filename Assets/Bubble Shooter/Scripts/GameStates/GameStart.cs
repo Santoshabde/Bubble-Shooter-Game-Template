@@ -9,6 +9,8 @@ public class GameStart : State
     private GameManager gameStateManager;
     private LevelGenData currentLevelGenData;
 
+    private LevelGenerator levelGenerator;
+
     public GameStart(GameManager gameManager)
     {
         gameStateManager = gameManager;
@@ -18,6 +20,7 @@ public class GameStart : State
     {
         Application.targetFrameRate = 120;
 
+        levelGenerator = ServiceRegistry.Get<LevelGenerator>();
         gameStateManager.InGameUIManager.CloseAllDialogs();
 
         gameStateManager.StartCoroutine(GameStart_IEnum());
@@ -55,9 +58,9 @@ public class GameStart : State
 
         //Generate level - either random or level josn
         if (currentLevelGenData.generateRandomLevel)
-            gameStateManager.LevelGenerator?.GenerateRandomLevel(currentLevelGenData.startSpawnPosition.x, currentLevelGenData.startSpawnPosition.y, currentLevelGenData.numberOfRows, currentLevelGenData.numberOfColumns, true);
+            levelGenerator.GenerateRandomLevel(currentLevelGenData.startSpawnPosition.x, currentLevelGenData.startSpawnPosition.y, currentLevelGenData.numberOfRows, currentLevelGenData.numberOfColumns, true);
         else
-            gameStateManager.LevelGenerator?.GenerateLevelFromLevelJson(currentLevelGenData.levelJson);
+            levelGenerator.GenerateLevelFromLevelJson(currentLevelGenData.levelJson);
 
 
         //Update HUD

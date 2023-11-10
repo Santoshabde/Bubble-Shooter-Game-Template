@@ -8,21 +8,14 @@ using DG.Tweening;
 
 namespace SNGames.BubbleShooter
 {
-    public class LevelGenerator : MonoBehaviour
+    public class LevelGenerator : BaseService
     {
         public static float bubbleGap = 0.5f;
-
-        [SerializeField] private InGameBubblesData inGameBubblesData;
-        [SerializeField] private float startX;
-        [SerializeField] private float startY;
-        [SerializeField] private int initialNumberOfRows;
-        [SerializeField] private int initialNumberOfColumns;
-        [SerializeField] private Transform initialPointToSpawn;
 
         private Bubble nodeBubbleToCalculateBFS;
         private List<Bubble> allBubblesSpawnedInTheLevel = new List<Bubble>();
 
-        private void Start()
+        public override void Init()
         {
             SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnBubbleCollisionClearDataComplete, ClearTheIsolatedBubblesInLevel);
 
@@ -30,7 +23,7 @@ namespace SNGames.BubbleShooter
             SNEventsController<InGameEvents>.RegisterEvent(InGameEvents.OnLevelFail, ClearCurrentLevel);
         }
 
-        private void OnDestroy()
+        public override void Deinit()
         {
             SNEventsController<InGameEvents>.DeregisterEvent(InGameEvents.OnBubbleCollisionClearDataComplete, ClearTheIsolatedBubblesInLevel);
 
@@ -52,12 +45,12 @@ namespace SNGames.BubbleShooter
                     for (int j = 0; j <= columns; j++)
                     {
                         //Choosing Random Color bubble
-                        Bubble bubbleChoosen = inGameBubblesData.GetRandomBubbleColorPrefab();
+                        Bubble bubbleChoosen = InGameBubblesData.GetRandomBubbleColorPrefab();
 
                         Vector3 positionBubbleShouldSpawn = new Vector3(startX + (j * bubbleGap) - xOffset, startY + (i * bubbleGap), 0);
-                        Bubble instantiatedBubble = Instantiate(bubbleChoosen, shouldAnimateWhileSpawning ? initialPointToSpawn.position : positionBubbleShouldSpawn, Quaternion.identity);
+                        Bubble instantiatedBubble = GameObject.Instantiate(bubbleChoosen, shouldAnimateWhileSpawning ? new Vector3(0, -5, 0) : positionBubbleShouldSpawn, Quaternion.identity);
                         instantiatedBubble.SetPositionID(positionBubbleShouldSpawn);
-                        instantiatedBubble.transform.SetParent(transform);
+                        //instantiatedBubble.transform.SetParent(transform);
 
                         LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
                         allBubblesSpawnedInTheLevel.Add(instantiatedBubble);
@@ -68,12 +61,12 @@ namespace SNGames.BubbleShooter
                     for (int j = 0; j < columns; j++)
                     {
                         //Choosing Random Color bubble
-                        Bubble bubbleChoosen = inGameBubblesData.GetRandomBubbleColorPrefab();
+                        Bubble bubbleChoosen = InGameBubblesData.GetRandomBubbleColorPrefab();
 
                         Vector3 positionBubbleShouldSpawn = new Vector3(startX + (j * bubbleGap) + xOffset, startY + (i * bubbleGap), 0);
-                        Bubble instantiatedBubble = Instantiate(bubbleChoosen, shouldAnimateWhileSpawning ? initialPointToSpawn.position : positionBubbleShouldSpawn, Quaternion.identity);
+                        Bubble instantiatedBubble = GameObject.Instantiate(bubbleChoosen, shouldAnimateWhileSpawning ? new Vector3(0, -5, 0) : positionBubbleShouldSpawn, Quaternion.identity);
                         instantiatedBubble.SetPositionID(positionBubbleShouldSpawn);
-                        instantiatedBubble.transform.SetParent(transform);
+                        //instantiatedBubble.transform.SetParent(transform);
 
                         LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
                         allBubblesSpawnedInTheLevel.Add(instantiatedBubble);
@@ -85,7 +78,7 @@ namespace SNGames.BubbleShooter
                 AnimateBubblesToTheirPositions();
 
             //Spawn a indestructable bubble row as final row
-            Bubble indestructableBubblePrefab = inGameBubblesData.GetBubbleOfAColor(BubbleType.NonDestructable);
+            Bubble indestructableBubblePrefab = InGameBubblesData.GetBubbleOfAColor(BubbleType.NonDestructable);
             for (int i = 0; i < columns; i++)
             {
                 float xOffset = 0;
@@ -93,9 +86,9 @@ namespace SNGames.BubbleShooter
                     xOffset = xOffset = bubbleGap / 2;
 
                 Vector3 positionBubbleShouldSpawn = new Vector3(startX + (i * bubbleGap) + xOffset, startY + (rows * bubbleGap), 0);
-                Bubble instantiatedBubble = Instantiate(indestructableBubblePrefab, positionBubbleShouldSpawn, Quaternion.identity);
+                Bubble instantiatedBubble = GameObject.Instantiate(indestructableBubblePrefab, positionBubbleShouldSpawn, Quaternion.identity);
                 instantiatedBubble.SetPositionID(positionBubbleShouldSpawn);
-                instantiatedBubble.transform.SetParent(transform);
+               // instantiatedBubble.transform.SetParent(transform);
 
                 LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
                 allBubblesSpawnedInTheLevel.Add(instantiatedBubble);
@@ -117,12 +110,12 @@ namespace SNGames.BubbleShooter
 
             foreach (var bubbleInfo in bubbles)
             {
-                Bubble bubbleChoosen = inGameBubblesData.GetBubbleOfAColor(bubbleInfo.bubbleType);
+                Bubble bubbleChoosen = InGameBubblesData.GetBubbleOfAColor(bubbleInfo.bubbleType);
                 Vector3 positionBubbleShouldSpawn = bubbleInfo.bubbleSpawnedPosition;
 
-                Bubble instantiatedBubble = Instantiate(bubbleChoosen, positionBubbleShouldSpawn, Quaternion.identity);
+                Bubble instantiatedBubble = GameObject.Instantiate(bubbleChoosen, positionBubbleShouldSpawn, Quaternion.identity);
                 instantiatedBubble.SetPositionID(positionBubbleShouldSpawn);
-                instantiatedBubble.transform.SetParent(transform);
+                //instantiatedBubble.transform.SetParent(transform);
 
                 LevelData.bubblesLevelDataDictionary.Add(positionBubbleShouldSpawn, instantiatedBubble);
                 allBubblesSpawnedInTheLevel.Add(instantiatedBubble);
@@ -178,7 +171,7 @@ namespace SNGames.BubbleShooter
             foreach (var item in allBubblesSpawnedInTheLevel)
             {
                 if (item != null)
-                    Destroy(item.gameObject);
+                    GameObject.Destroy(item.gameObject);
             }
 
             allBubblesSpawnedInTheLevel.Clear();
