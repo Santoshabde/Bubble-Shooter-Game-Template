@@ -38,6 +38,8 @@ public class LevelEditorBuilder : MonoBehaviour
     [Button]
     public void GenerateRandomLevel()
     {
+        inGameBubblesData.Refresh();
+
         listOfBubbleSlots = new List<BubbleSlot>();
         for (int i = 0; i < rows; i++)
         {

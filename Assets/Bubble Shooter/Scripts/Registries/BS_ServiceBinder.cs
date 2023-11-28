@@ -9,6 +9,8 @@ namespace SNGames.BubbleShooter
     {
         protected override void BindAllServicesInGame()
         {
+            Debug.Log("Ser Called");
+
             //Register all in game services here
             ServiceRegistry.Bind(new LevelGenerator());
 

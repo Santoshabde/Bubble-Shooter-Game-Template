@@ -7,6 +7,6 @@ public class TestSceneTransition : MonoBehaviour
 {
     void Start()
     {
-        SceneManager.LoadScene("DemoLevel", LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync("DemoLevel", LoadSceneMode.Additive);
     }
 }

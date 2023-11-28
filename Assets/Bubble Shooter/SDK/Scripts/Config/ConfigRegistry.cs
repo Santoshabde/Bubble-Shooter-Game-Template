@@ -2,21 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ConfigRegistry : MonoBehaviour
+namespace SNGames.CommonModule
 {
-    [SerializeField] private List<BaseConfig> configsInGame;
-
-    private void Awake()
+    public class ConfigRegistry : MonoBehaviour
     {
-        InitialiseConfigsInGame();
-    }
+        [SerializeField] private List<BaseConfig> configsInGame;
 
-    [ContextMenu("Refresh")]
-    private void InitialiseConfigsInGame()
-    {
-        foreach (BaseConfig config in configsInGame)
+        private void Awake()
         {
-            config.Refresh();
+            Debug.Log("Con Called");
+            InitialiseConfigsInGame();
+        }
+
+        [ContextMenu("Refresh")]
+        private void InitialiseConfigsInGame()
+        {
+            foreach (BaseConfig config in configsInGame)
+            {
+                config.Refresh();
+            }
         }
     }
 }
